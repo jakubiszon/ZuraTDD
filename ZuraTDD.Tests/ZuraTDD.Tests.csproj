@@ -1,0 +1,29 @@
+﻿<Project Sdk="MSTest.Sdk/4.1.0">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <TreatWarningsAsErrors Condition="'$(Configuration)'!='Debug'">true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExampleProject\ExampleProject.csproj" />
+    <ProjectReference Include="..\ZuraTDD\ZuraTDD.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="MSTest.TestFramework" Version="4.1.0" />
+    <PackageReference Update="MSTest.TestAdapter" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Testing.Extensions.TrxReport" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>

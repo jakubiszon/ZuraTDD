@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="ExampleProject.Tests/ExampleProject.Tests.csproj" Id="f15c0ff8-7ccd-4915-8493-e5499febb546" />
+  <Project Path="ExampleProject/ExampleProject.csproj" />
+  <Project Path="ZuraTDD.Tests/ZuraTDD.Tests.csproj" Id="ccdda628-5bae-46cc-bc20-545d6beba965" />
+  <Project Path="ZuraTDD/ZuraTDD.csproj" Id="091085a7-ebe5-4a36-af66-1e3be8cfe00d" />
+</Solution>

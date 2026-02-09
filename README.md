@@ -4,7 +4,7 @@ methodology in dotnet:
 
 - It reduces boilerplate code when setting up dependencies:
     - Uses code generators to create *mocks* and *test case* objects.
-    - `TestCase` objects which expose builders letting you focus on tests logic and get boilerplate code for free.
+    - `TestCase` objects expose builders letting you focus on tests logic and get boilerplate code for free.
     - `Fake / Mock` objects use builders which help focusing on data which is relevant to the test.
     - Creating *test subject* and *fake* instances are done by the generator
       freeing you from repeating the same code in every test.
@@ -14,7 +14,7 @@ methodology in dotnet:
 - It does not add extra dependencies to your codebase. Only `Microsoft.CodeAnalysis` packages are used by this library.
 
 The codebase is still in early stages of development, but the main concepts are already implemented and can be used in tests.
-Checkout the [repository](https://github.com/jakubiszon/ZuraTDD) on github.
+Check out the [repository](https://github.com/jakubiszon/ZuraTDD) on GitHub.
 
 Limitations of this project are listed at the end of the readme.
 
@@ -81,23 +81,26 @@ public class SendEmailControllerTests
             // the idea is to specify only parameters relevant for the test
             Receives.SendEmailToCustomer(),
 
-            // we specify a dependency returning an exception
+            // GetCustomer - returning a customer
             When.CustomerRepository
                 // you can skip params unless you want to match them
                 .GetCustomer()
                 .Returns(Task.FromResult(new Customer(123, "Emma", "Nuelmacron"))),
 
+            // let's simulate SendEmail to throw
             When.EmailSender
                 .SendEmail()
                 .Throws(() => new ExampleTestException()),
 
             // in this case - we expect the tested class to propagate the exception
-            Expect.Exception<ExampleTestException>(),
+            Expect.ExceptionToBeThrown<ExampleTestException>(),
 
-            // let's verify that GetCustomer was called
+            // let's verify that GetCustomer was called exactly once
             Expect.CustomerRepository
                 .GetCustomer()
                 .WasCalled(times: 1)
+
+            // we set no return-value expectations, because the method was expected to throw
         };
 
         yield return new SendEmailControllerTestCase
@@ -111,11 +114,12 @@ public class SendEmailControllerTests
                 customerId: 123,
                 emailTemplateId: 456),
 
-            // we specify a dependency returning an exception
+            // GetCustomer - returning a customer
             When.CustomerRepository
                 .GetCustomer(123)
                 .Returns(Task.FromResult(new Customer(123, "emma.nuelmacron@example.com"))),
 
+            // SendEmail - succeeds
             When.EmailSender
                 .SendEmail()
                 .Returns(Task.CompletedTask),
@@ -125,6 +129,7 @@ public class SendEmailControllerTests
                 .GetCustomer(123)
                 .WasCalled(times: 1)
 
+            // let's confirm that a call with the right data was made to SendEmail
             Expect.EmailSender
                 .SendEmail(
                     to: "emma.nuelmacron@example.com",
@@ -132,7 +137,8 @@ public class SendEmailControllerTests
                 // WasCalled with no param checks for at lease 1 call
                 .WasCalled()
 
-            // ResultMatching type param must match the return type as decrared by the tested method.
+            // Let's check that the method returned success.
+            // note: ResultMatching type param must match the return type as declared by the tested method.
             Expect.ResultMatching<IActionResult>(
                 result => result is OkObjectResult)
         };
@@ -164,13 +170,16 @@ You can use it in your tests:
 [TestMethod]
 public void MyTest()
 {
+    // setup - is used to define behaviors
+    // buildInstance - creates an instance of IMyInterface after the setup is completed
+    // buildExpect - creates an expect object to verify calls to the IMyInterface instance
     var (setup, buildInstance, buildExpect) = new MyMock();
 
     // most specific filters go first
     setup.GetCustomer(id: 1)
         .Returns(new Customer(1, "Ivan", "Katrump"));
 
-    // you can also use expressions to match parameters value
+    // you can also use expressions to match parameters values
     setup.GetCustomer(id: new(x => x > 1 && x < 10))
         .Returns(new Customer(2, "Kama", "Laharris"));
 
@@ -179,14 +188,18 @@ public void MyTest()
     setup.GetCustomer()
         .Throws(() => new ExampleException());
 
-    // build the mocked object instance
+    // build the mocked object instance - this should always be called after setting up behaviors
     // it should be passed to tested code as a dependency
     // but here we will play with it directly to show how it works
     var myInterfaceInstance = buildInstance();
 
+    // this call matches the first behavior-setup
+    // it will return Ivan Katrump customer instance
     var ivan = myInterfaceInstance.GetCustomer(1);
     Assert.AreEqual("Ivan", ivan.FirstName);
 
+    // the following call matches the last behavior-setup
+    // and results in an exception
     Assert.ThrowsException<ExampleException>(
         () => myInterfaceInstance.GetCustomer(11));
 
@@ -202,7 +215,7 @@ public void MyTest()
 
     // parameters can be ignored when specifying expectations
     // ignoring all parameters will "count all calls to the method"
-    // NOTE: this check will fail because we called the method 2 times
+    // NOTE: this check will fail because we called the method 2 times, not 3
     expect.GetCustomer()
         .WasCalled(times: 3);
 }
@@ -233,7 +246,7 @@ This library is still in development and has some limitations:
 - All classes implementing `IMock<T>` and `ITestCase<T>` need to be declared as `partial` and `internal`.
 - Max input parameter count for mocked methods is 16 - if you really need more - contributions are welcome :D
 - No support for `Span<T>`, `ReadOnlySpan<T>` and other `ref struct` types used as mocked object method parameters.
-- No support for `dynamic` used used as mocked object method parameter.
+- No support for `dynamic` used as mocked object method parameter.
 
 Some of the above are planned in the near future, but feel free to contribute if you want to see them sooner.
 

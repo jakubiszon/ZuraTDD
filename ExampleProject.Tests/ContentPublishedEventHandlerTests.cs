@@ -1,4 +1,4 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 using static ExampleProject.Tests.ContentPublishedEventHandlerTestCase;
 
 namespace ExampleProject.Tests;
@@ -6,8 +6,7 @@ namespace ExampleProject.Tests;
 [TestClass]
 public class ContentPublishedEventHandlerTests
 {
-	[TestCases]
-	public static IEnumerable<TestCase> ExampleServiceTestCases()
+	public static IEnumerable<object[]> HandleMethodTestCases()
 	{
 		var exampleContent = new Content(
 			id: Guid.NewGuid(),
@@ -66,6 +65,38 @@ public class ContentPublishedEventHandlerTests
 				.SendEmail()
 				.Returns(Task.CompletedTask),
 
+			When.TemplateEngine
+				.RenderTemplate()
+				.Returns(Task.FromResult(exampleMessageContent)),
+
+			Expect.EmailSender
+				.SendEmail(to: new(s => s.Length > 0))
+				.WasCalled(),
+
+			//Expect.EmailSender
+			//	.SendEmail(
+			//		to: "email@example.com",
+			//		body: exampleMessageContent)
+			//	.WasCalled(),
+
+			Expect.EmailSender
+				.SendEmailSync()
+				.WasNotCalled()
+		);
+
+		yield return new ContentPublishedEventHandlerTestCase(
+			name: "Sends email to customers when content is published.",
+
+			Receives.Handle(exampleContent),
+
+			When.CustomerRepository
+				.ListByInterests(topics: null)
+				.Returns(Task.FromResult(customerList)),
+
+			When.EmailSender
+				.SendEmail()
+				.Returns(Task.CompletedTask),
+
 			When.EmailSender
 				.SendEmailSync()
 				.Throws(new Exception("Whoopsie!!!")),
@@ -91,8 +122,8 @@ public class ContentPublishedEventHandlerTests
 	}
 
 	[TestMethod]
-	[TestCaseRunner(nameof(ExampleServiceTestCases))]
-	public async Task ExampleTestAsync(TestCase testCase)
+	[DynamicData(nameof(HandleMethodTestCases))]
+	public async Task HandleTests(TestCase testCase)
 	{
 		await testCase.RunTestAsync();
 	}

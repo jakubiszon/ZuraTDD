@@ -1,80 +1,163 @@
 # ZuraTDD
-A testing library designed to reduce friction in red-green-refactor
+A testing / mocking library designed to reduce friction in red-green-refactor
 methodology in dotnet:
 
-- Reduces boilerplate code when setting up dependencies:
-    - Uses code generators to create mocks and test case objects.
-    - Generated mocking methods match signatures of mocked types.
-    - But they allow passing parameters which matter and ignoring the rest.
-- Expresses conditions and expectations clearly.
-- Makes tests serve as documentation for the codebase.
-- Can be used with MSTest, NUnit, xUnit and any other test framework.
+- It reduces boilerplate code when setting up dependencies:
+    - Uses code generators to create *mocks* and *test case* objects.
+    - `TestCase` objects which expose builders letting you focus on tests logic and get boilerplate code for free.
+    - `Fake / Mock` objects use builders which help focusing on data which is relevant to the test.
+    - Creating *test subject* and *fake* instances are done by the generator
+      freeing you from repeating the same code in every test.
+- It allows expressing conditions and expectations clearly.
+- It helps making tests serve as documentation for the codebase.
+- It can be used with MSTest, NUnit, xUnit or any other test framework.
+- It does not add extra dependencies to your codebase. Only `Microsoft.CodeAnalysis` packages are used by this library.
+
+The codebase is still in early stages of development, but the main concepts are already implemented and can be used in tests.
+Checkout the [repository](https://github.com/jakubiszon/ZuraTDD) on github.
+
+Limitations of this project are listed at the end of the readme.
 
 ## Test Cases
-You can use ZuraTDD to create test cases which set up mocks and expectations in a clear way.
+You can use ZuraTDD to create `TestCase` classes.
+Your test-case classes will receive auto-generated test *builders* which help you express:
+- method called and tested on the class which is the subject of the test-case - defined using `Receives` builder
+- test-subject dependency behaviors - defined using `When` builder
+- expectations for test-subject's interactions with its dependencies as well as expectations for
+  the result returned from the tested method - defined with `Expect` builder
 
 ```csharp
-// Declare a partial class which inherits from TestCase<T>
-// You say what you want to test and get
-public partial class MyConstrollerTestCase
-    : TestCase<MyController>
+// Declare an internal partial class which implements ITestCase<T>
+// The type parameter is the class to test.
+internal partial class SendEmailControllerTestCase
+    : ITestCase<SendEmailController>
 {
 }
 ```
 
-Now you get auto-generated code for setting up mocks.
-You can now write tests like this:
+If the `SendEmailController` has following signature:
+```csharp
+public class SendEmailController(
+    // generated dependencies will use names used by constructor parameters
+    ICustomerRepository customerRepository,
+    IEmailSender emailSender)
+{
+    Task<IActionResult> SendEmailToCustomer(
+        int customerId,
+        int emailTemplateId,
+        Dictionary<string, string> templateParameters)
+    { ... }
+}
+```
+
+Now you get auto-generated code for setting up mocks and can now write tests like this:
 
 ```csharp
-// static using makes it easy to access the Received, When and Expect classes.
-using static MyConstrollerTestCase;
+// static import - easy access to "Received", "When" and "Expect" classes
+// which were generated for the test case
+using static SendEmailControllerTestCase;
+using ZuraTDD;
 
 [TestClass]
-public class MyControllerTests
+public class SendEmailControllerTests
 {
     [TestMethod]
-    [DynamicData(nameof(HandleTestsData), DynamicDataSourceType.Method)]]
-    public async Task HandleTests(MyConstrollerTestCase testCase)
+    [DynamicData(nameof(Handle_TestsData))]
+    public async Task SendEmailToCustomer_Tests(TestCase testCase)
     {
         await testCase.RunTestAsync();
     }
 
-    public static IEnumerable<object[]> HandleTestsData()
+    public static IEnumerable<object[]> SendEmailToCustomer_TestsData()
     {
-        yield return new object[]
+        // you can yield return instances of SendEmailControllerTestCase directly
+        // they are automatically converted to object[]
+        yield return new SendEmailControllerTestCase
         {
-            new MyConstrollerTestCase
-            {
-                name: "example test name",
+            name: "SendEmailToCustomer throws when EmailSender throws.",
 
-                // first - specify what call the test subject receives
-                Receives.Handle(),
+            // first - specify what call the test subject receives
+            // you can skip parameters - default value will be used
+            // the idea is to specify only parameters relevant for the test
+            Receives.SendEmailToCustomer(),
 
-                When.CustomerRepository
-                    .GetCustomer() // you can skip params unless you want to match them
-                    .Throws<ExampleTestException>(),
+            // we specify a dependency returning an exception
+            When.CustomerRepository
+                // you can skip params unless you want to match them
+                .GetCustomer()
+                .Returns(Task.FromResult(new Customer(123, "Emma", "Nuelmacron"))),
 
-                Expect.Exception<ExampleTestException>(),
+            When.EmailSender
+                .SendEmail()
+                .Throws(() => new ExampleTestException()),
 
-                Expect.EmailSender
-                    .SendEmail()
-                    .
-            }
+            // in this case - we expect the tested class to propagate the exception
+            Expect.Exception<ExampleTestException>(),
+
+            // let's verify that GetCustomer was called
+            Expect.CustomerRepository
+                .GetCustomer()
+                .WasCalled(times: 1)
+        };
+
+        yield return new SendEmailControllerTestCase
+        {
+            name: "SendEmailToCustomer sends an email using customer data.",
+
+            // first - specify what call the test subject receives
+            // you can skip parameters - default value will be used
+            // the idea is to specify only parameters relevant for the test
+            Receives.SendEmailToCustomer(
+                customerId: 123,
+                emailTemplateId: 456),
+
+            // we specify a dependency returning an exception
+            When.CustomerRepository
+                .GetCustomer(123)
+                .Returns(Task.FromResult(new Customer(123, "emma.nuelmacron@example.com"))),
+
+            When.EmailSender
+                .SendEmail()
+                .Returns(Task.CompletedTask),
+
+            // let's verify that GetCustomer was called
+            Expect.CustomerRepository
+                .GetCustomer(123)
+                .WasCalled(times: 1)
+
+            Expect.EmailSender
+                .SendEmail(
+                    to: "emma.nuelmacron@example.com",
+                    emailTemplateId: 456)
+                // WasCalled with no param checks for at lease 1 call
+                .WasCalled()
+
+            // ResultMatching type param must match the return type as decrared by the tested method.
+            Expect.ResultMatching<IActionResult>(
+                result => result is OkObjectResult)
         };
     }
 }
 ```
 
 ## Mocking
-You can use ZuraTDD to mock objects directly.
+You can also use ZuraTDD to mock objects directly. You will get the same kind of builders as the ones used for dependencies in the `When` builder of the `TestCase` objects.
 
 ```csharp
-// Declare a partial implementing IMock<T>.
+// Declare an internal partial class implementing IMock<T>.
 internal partial class MyMock
     : IMock<IMyInterface>
 {
 }
 ```
+Assuming the `IMyInterface` has the following signature:
+```csharp
+public interface IMyInterface
+{
+    Customer GetCustomer(int id);
+}
+```
+
 
 You can use it in your tests:
 ```csharp
@@ -85,27 +168,30 @@ public void MyTest()
 
     // most specific filters go first
     setup.GetCustomer(id: 1)
-        .Returns(new Customer(1, "Ivan", "Catrump"));
+        .Returns(new Customer(1, "Ivan", "Katrump"));
 
-    // you can use any expression to filter parameters, not just values
+    // you can also use expressions to match parameters value
     setup.GetCustomer(id: new(x => x > 1 && x < 10))
-        .Returns(new Customer(2, "Kamma", "Laharris"));
+        .Returns(new Customer(2, "Kama", "Laharris"));
 
-    // the widest filters should go last
+    // the widest filters / "match all" should go last
     // all parameters can be skipped if you don't want to match them
     setup.GetCustomer()
         .Throws(() => new ExampleException());
 
+    // build the mocked object instance
+    // it should be passed to tested code as a dependency
+    // but here we will play with it directly to show how it works
+    var myInterfaceInstance = buildInstance();
 
-    var sut = buildInstance();
-
-    var ivan = sut.GetCustomer(1);
+    var ivan = myInterfaceInstance.GetCustomer(1);
     Assert.AreEqual("Ivan", ivan.FirstName);
 
     Assert.ThrowsException<ExampleException>(
-        () => sut.GetCustomer(11));
+        () => myInterfaceInstance.GetCustomer(11));
 
-
+    // build expect object - it allows checking calls and parameter values
+    // which the mocked object received
     var expect = buildExpect();
     expect.GetCustomer(id: new(x => x < 20)
         .WasCalled(times: 2);
@@ -115,6 +201,7 @@ public void MyTest()
         .WasNotCalled();
 
     // parameters can be ignored when specifying expectations
+    // ignoring all parameters will "count all calls to the method"
     // NOTE: this check will fail because we called the method 2 times
     expect.GetCustomer()
         .WasCalled(times: 3);
@@ -122,6 +209,13 @@ public void MyTest()
 ```
 ## Documentation
 
+Installation is simple - just add the package to your test project:
+```sh
+# Install from NuGet.org
+dotnet add package ZuraTDD
+```
+
+Documentation topics:
 - [Behaviors](./Documentation/Behaviors.md)
 - [Matching calls](./Documentation/CallMatching.md)
 - [Expectations](./Documentation/Expect.md) ⚠️ section under construction
@@ -136,7 +230,8 @@ This library is still in development and has some limitations:
 - No indexer or property support in mocked objects yet.
 - No support for generic methods yet.
 - All classes implementing `IMock<T>` and `ITestCase<T>` need to be placed in the same namespace.
-- Max input parameter count for mocked methods is 16 - if you really need more contributions are welcome :D
+- All classes implementing `IMock<T>` and `ITestCase<T>` need to be declared as `partial` and `internal`.
+- Max input parameter count for mocked methods is 16 - if you really need more - contributions are welcome :D
 - No support for `Span<T>`, `ReadOnlySpan<T>` and other `ref struct` types used as mocked object method parameters.
 - No support for `dynamic` used used as mocked object method parameter.
 
@@ -144,3 +239,6 @@ Some of the above are planned in the near future, but feel free to contribute if
 
 ## Contributing
 Contributions are welcome! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines.
+
+## License
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details

@@ -1,4 +1,4 @@
-﻿using ZuraTDD.Generator.DataModel;
+using ZuraTDD.Generator.DataModel;
 using System.Linq;
 
 namespace ZuraTDD.Generator;
@@ -10,10 +10,11 @@ internal partial class TemplateProcessor
 		var serviceDeclarations = spec.Services.Select(s =>
 			$$"""
 				/// <summary>
-				/// Substitute for <see cref="{{s.DeclaringNamespace}}.{{s.ServiceTypeName}}" />.
+				/// Mock for the "{{s.ServicePropertyName}}" parameter of the test subject constructor.
+				/// Returns an instance of <see cref="{{s.FullyQualifiedName}}" />.
 				/// </summary>
-				public {{s.DeclaringNamespace}}.{{s.ServiceTypeName}} {{s.ServicePropertyName}}
-					=> ({{s.DeclaringNamespace}}.{{s.ServiceTypeName}})fakeServices["{{s.ServicePropertyName}}"];
+				public {{s.FullyQualifiedName}} {{s.ServicePropertyName}}
+					=> ({{s.FullyQualifiedName}})fakeServices["{{s.ServicePropertyName}}"];
 			""");
 
 		var strServiceDeclarations = string.Join("\n\n", serviceDeclarations);
@@ -38,7 +39,7 @@ internal partial class TemplateProcessor
 			namespace {{spec.OutputNamespace}};
 
 			/// <summary>
-			/// Services used by the test cases for <see cref="{{spec.TestSubjectClassName}}" />.
+			/// Services used by the test cases for <see cref="{{spec.TestSubjectFullyQualifiedName}}" />.
 			/// </summary>
 			internal class {{spec.ServicesClassName}} : ITestSubjectServices
 			{

@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +24,8 @@ internal class TestCaseSpecification
 		OutputNamespace = typeSymbol.ContainingNamespace.ToDisplayString();
 		TestCaseClassName = typeSymbol.Name;
 		TestSubjectClassName = testSubjectTypeName;
+		TestSubjectFullyQualifiedClassName = testSubjectType.ToDisplayString(
+			SymbolDisplayFormat.FullyQualifiedFormat);
 
 		Methods = Functions.ExtractPublicMethods(testSubjectType);
 
@@ -37,6 +39,8 @@ internal class TestCaseSpecification
 	public string TestCaseClassName { get; set; } = string.Empty;
 
 	public string TestSubjectClassName { get; set; } = string.Empty;
+
+	public string TestSubjectFullyQualifiedClassName { get; }
 
 	public IReadOnlyList<MethodSpecification> Methods { get; set; }
 

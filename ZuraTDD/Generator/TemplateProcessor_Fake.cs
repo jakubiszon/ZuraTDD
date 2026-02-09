@@ -21,7 +21,7 @@ internal partial class TemplateProcessor
 			namespace {{service.OutputNamespace}};
 
 			/// <summary>
-			/// A fake implementation of <see cref="{{service.FullyQualifiedName}}" />.
+			/// A mock implementation of <see cref="{{service.FullyQualifiedName}}" />.
 			/// </summary>
 			internal class {{service.ServiceFakeTypeName}}
 				: FakeService

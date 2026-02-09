@@ -37,7 +37,7 @@ internal partial class TemplateProcessor
 			/// in order to simplify access to "Receives", "When" and "Expect" static classes.
 			/// </summary>
 			internal partial class {{testCase.TestCaseClassName}}
-				: TestCase<{{testCase.TestSubjectClassName}}, {{testCase.ServicesClass.ServicesClassName}}>
+				: TestCase<{{testCase.TestSubjectFullyQualifiedClassName}}, {{testCase.ServicesClass.ServicesClassName}}>
 			{
 				public {{testCase.TestCaseClassName}}(
 					string name,
@@ -49,9 +49,9 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Gets an instance of the class being tested.
 				/// </summary>
-				public override {{testCase.TestSubjectClassName}} GetTestSubject()
+				public override {{testCase.TestSubjectFullyQualifiedClassName}} GetTestSubject()
 				{
-					return new {{testCase.TestSubjectClassName}}({{constructorArgs}});
+					return new {{testCase.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
 				}
 
 				/// <summary>

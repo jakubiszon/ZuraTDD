@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,6 +20,8 @@ internal class ServicesClassSpecification
 		OutputNamespace = outputNamespace;
 		ServicesClassName = $"{testSubjectType.Name}Services";
 		TestSubjectClassName = testSubjectTypeName;
+		TestSubjectFullyQualifiedName = testSubjectType.ToDisplayString(
+			SymbolDisplayFormat.FullyQualifiedFormat);
 
 		Services = testSubjectType
 			?.Constructors
@@ -30,11 +32,13 @@ internal class ServicesClassSpecification
 			?? [];
 	}
 
-	public string OutputNamespace { get; } = string.Empty;
+	public string OutputNamespace { get; }
 
-	public string ServicesClassName { get; } = string.Empty;
+	public string ServicesClassName { get; }
 
-	public string TestSubjectClassName { get; } = string.Empty;
+	public string TestSubjectClassName { get; }
+
+	public string TestSubjectFullyQualifiedName { get; }
 
 	public IReadOnlyList<ServiceSpecification> Services { get; }
 }

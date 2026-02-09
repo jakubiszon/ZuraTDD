@@ -30,7 +30,8 @@ public class ContentPublishedEventHandlerTests
 
 			Receives.Handle(exampleContent),
 
-			When.CustomerRepository.ListByInterests(topics: null)
+			When.CustomerRepository
+				.ListByInterests(topics: null)
 				.Throws(new TestException()),
 
 			Expect.ExceptionToBeThrown<TestException>()

@@ -1,22 +1,28 @@
 # ZuraTDD
-A testing / mocking library designed to reduce friction in red-green-refactor
-methodology in dotnet:
 
-- It reduces boilerplate code when setting up dependencies:
+A testing / mocking library designed to write concise, declarative tests in dotnet.
+
+
+![Simple, declarative test](./Documentation/example-test.png)
+
+
+What ZuraTDD does for you:
+- It reduces boilerplate code when setting up tests:
     - Uses code generators to create *mocks* and *test case* objects.
-    - `TestCase` objects expose builders letting you focus on tests logic and get boilerplate code for free.
-    - `Fake / Mock` objects use builders which help focusing on data which is relevant to the test.
-    - Creating *test subject* and *fake* instances are done by the generator
+    - `TestCase` objects expose builders letting you focus purely on tests logic.
+    - `Mock` objects use builders to help focusing on data which is relevant to the test.
+    - Creating *test subject* and *fake* instances is done by the generator
       freeing you from repeating the same code in every test.
 - It allows expressing conditions and expectations clearly.
 - It helps making tests serve as documentation for the codebase.
 - It can be used with MSTest, NUnit, xUnit or any other test framework.
+- It makes it much easier to employ red-green-refactor TDD approach in your development process.
 - It does not add extra dependencies to your codebase. Only `Microsoft.CodeAnalysis` packages are used by this library.
 
 The codebase is still in early stages of development, but the main concepts are already implemented and can be used in tests.
-Check out the [repository](https://github.com/jakubiszon/ZuraTDD) on GitHub.
+Some of the limitations of this project are listed at the end of the readme.
 
-Limitations of this project are listed at the end of the readme.
+Check out the [repository](https://github.com/jakubiszon/ZuraTDD) on GitHub.
 
 ## Test Cases
 You can use ZuraTDD to create `TestCase` classes.
@@ -90,7 +96,7 @@ public class SendEmailControllerTests
             // let's simulate SendEmail to throw
             When.EmailSender
                 .SendEmail()
-                .Throws(() => new ExampleTestException()),
+                .Throws(new ExampleTestException()),
 
             // in this case - we expect the tested class to propagate the exception
             Expect.ExceptionToBeThrown<ExampleTestException>(),

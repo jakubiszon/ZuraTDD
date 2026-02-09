@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -120,6 +121,11 @@ public abstract class TestCase
 		{
 			throw new Exception("The objects referenced with the [TestCases] attribute must be of type TestCase.");
 		}
+	}
+
+	public static implicit operator object[](TestCase testCase)
+	{
+		return new object[] { testCase };
 	}
 }
 

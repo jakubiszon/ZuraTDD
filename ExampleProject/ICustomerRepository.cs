@@ -1,6 +1,6 @@
-﻿namespace ExampleProject;
+namespace ExampleProject;
 
-internal interface ICustomerRepository
+public interface ICustomerRepository
 {
 	Task<List<Customer>> ListAll();
 

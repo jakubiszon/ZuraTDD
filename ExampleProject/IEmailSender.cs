@@ -1,6 +1,6 @@
-﻿namespace ExampleProject;
+namespace ExampleProject;
 
-internal interface IEmailSender
+public interface IEmailSender
 {
 	Task SendEmail(
 		string to,

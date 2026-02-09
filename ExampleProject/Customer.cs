@@ -1,6 +1,6 @@
-﻿namespace ExampleProject;
+namespace ExampleProject;
 
-internal class Customer
+public class Customer
 {
 	public Guid Id { get; }
 

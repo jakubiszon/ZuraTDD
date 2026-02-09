@@ -1,6 +1,6 @@
-﻿namespace ExampleProject;
+namespace ExampleProject;
 
-internal class ContentPublishedEventHandler
+internal class ContentPublishedEventHandler : IContentPublishedEventHandler
 {
 	private readonly ICustomerRepository customerRepository;
 	private readonly IEmailSender emailSender;

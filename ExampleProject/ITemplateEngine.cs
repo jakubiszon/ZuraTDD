@@ -1,6 +1,6 @@
-﻿namespace ExampleProject;
+namespace ExampleProject;
 
-internal interface ITemplateEngine
+public interface ITemplateEngine
 {
 	Task<string> RenderTemplate(
 		int templateId,

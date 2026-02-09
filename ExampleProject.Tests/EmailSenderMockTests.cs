@@ -1,5 +1,8 @@
-﻿namespace ExampleProject.Tests;
+namespace ExampleProject.Tests;
 
+/// <summary>
+/// This class is used to verify mocking code generated for <see cref="IEmailSender"/>.
+/// </summary>
 [TestClass]
 public class EmailSenderMockTests
 {

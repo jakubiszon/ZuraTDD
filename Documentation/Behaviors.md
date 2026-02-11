@@ -1,6 +1,5 @@
-# ZuraTDD mock behaviors
-This document presents details related to setting up method behaviors.
-
+# ZuraTDD - mock behaviors
+*Behaviors* in short are the things that mocked objects do when their methods are called.
 
 ## Definitions
 There are 3 types of behaviors:
@@ -9,7 +8,7 @@ There are 3 types of behaviors:
 - `Throws` - used to throw exceptions from mocked object methods.
 - `Invokes` - especially useful when your mocked object receives a delegate which it needs to call.
 
-Behaviors are chained into ***BehaviorSetup*** objects which also use filter values to determine whether the specific setup should be used.
+Behaviors are chained into ***BehaviorSetup*** objects which also use [filter values](./CallMatching.md) to determine whether the specific setup should be used.
 
 ```csharp
 // a declaration of a BehaviorSetup, filtering calls with tenantId == 1 and customerId > 0
@@ -22,6 +21,36 @@ setup.SomeMethod(
     .Returns(new SomeObject());
 ```
 
+## Getting behavior builders
+You can aquire behavior builders in multiple ways:
+- When using `Mock` objects - you get a `setup` object for your mocks:
+  ```csharp
+  // first you need to define what will be mocked
+  internal partial class MyMock : IMock<IMyInterface>
+  {
+      // nothing more to do, mocking code will be generated
+      // the class MyMock will be available in all tests
+  }
+
+  // then in test methods you can do:
+  var (setup, buildInstance, buildExpect) = new MyMock();
+  ```
+- When using `TestCase` objects - you get named mock setup objects inside the `When` builder:
+  ```csharp
+  internal partial class MyTestCase : ITestCase<MyClass>
+  {
+      // nothing more to do, test-case code will be generated
+  }
+
+  // using static MyTestCase <- this is recommended to access "When" builder easily
+  // in your test methods
+  var testCase = new MyTestCase(
+      // setup behaviors in MyTestCase constructor
+      // "When" will contain named setup objecte of
+      // all dependencies used by "MyClass"
+      When....
+  );
+  ```
 
 ## Creating behaviors of the 3 types
 `Invokes` behaviors can be constructed by passing a parameterless `Action` or an `Action` which takes perameters identical to the mocked method:

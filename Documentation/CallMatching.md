@@ -1,14 +1,14 @@
-# ZuraTDD parameter matching
+# ZuraTDD - matching method calls
 
 ZuraTDD was designed to make parameter matching as simple as possible.
 The generated mock-setup objects use method headers (almost) identical to those of the mocked objects.
 The key differences are:
 
 - You can skip any parameter you don't want to match - this results in the system matching any value used in the actual calls.
-- The params accept value constraints `ValueConstraint<T>`. This allows passing direct values or expressions which evaluate the value.
+- The parameters use value constraint types - `ValueConstraint<T>`. This allows passing direct values or expressions which evaluate the value.
 
 ## Example
-Let's consider a very simple interface to mock:
+Let's consider a simple interface to mock:
 ```csharp
 public interface ITemplateRepository
 {
@@ -24,7 +24,7 @@ public interface ITemplateRepository
 }
 ```
 
-ZuraTDD will generate a setup object with following methods:
+ZuraTDD will generate a setup object with following methods<sup>1</sup>:
 ```csharp
 Task<Template> Get( ValueConstraint<int>? id = null )
 
@@ -36,6 +36,9 @@ Task Insert(
 
 Task Delete( ValueConstraint<int>? id = null )
 ```
+
+1. The actual method return types are more complex as they need to quote the exact input and output type parameters of the method. Here the original return types were shown to keep the example simple.
+
 
 ## Creating ValueConstraint objects
 ```csharp
@@ -52,6 +55,10 @@ setup.Delete()
 setup.Delete( new( x => x < 0 ))
     .Returns( Task.FromException( new Exception( "the id must not be begative" )));
 ```
+
+Note: The `.Returns` method used above is defining the [behavior](./Behaviors.md)
+of the mocked method triggered when the call is matched.
+
 
 ## Ambiguous overloads
 In the `ITemplateRepository` defined in the previous sections there are two `Get` methods.
@@ -103,7 +110,7 @@ setup.ExampleMethod( null )
     ... // behavior setup
 ```
 
-If you need to create behavior matching a null you need to make sure the `null` is wrapped in a `ValueConstraint<>`.
+If you need to create behavior matching a `null` you need to make sure the `null` is wrapped in a `ValueConstraint<>`.
 
 ```csharp
 // you can cast the null to the type to match

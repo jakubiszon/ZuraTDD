@@ -1,5 +1,4 @@
 using ZuraTDD;
-using ZuraTDD.Integrations;
 using static ExampleProject.Tests.ContentPublishedEventHandlerTestCase;
 
 namespace ExampleProject.Tests;
@@ -124,7 +123,6 @@ public class ContentPublishedEventHandlerTests
 		await testCase.RunTestAsync();
 	}
 
-	[RunWithMSTest("Throws when CustomerRepository.ListByInterests throws.")]
 	public static TestCase ThrowsTest => new ContentPublishedEventHandlerTestCase(
 		name: "Throws when CustomerRepository.ListByInterests throws.",
 

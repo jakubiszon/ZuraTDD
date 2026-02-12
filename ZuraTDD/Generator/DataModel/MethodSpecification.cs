@@ -50,6 +50,7 @@ internal class MethodSpecification
 				Type = p.Type.ToDisplayString(),
 				Name = p.Name,
 				TypeofType = p.Type.ToDisplayString(TypeOfFormat),
+				IsReferenceType = p.Type.IsReferenceType,
 			})
 			.ToList();
 		Token = GenerateMethodToken(MethodName, hasOverloads, Parameters);

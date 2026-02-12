@@ -1,6 +1,6 @@
 # ZuraTDD
 
-A testing / mocking library designed to write concise, declarative tests in dotnet.
+A testing / mocking library designed to write concise, declarative **unit-tests** in dotnet.
 
 
 ![Simple, declarative test](./Documentation/example-test.png)

@@ -30,5 +30,9 @@ public class ContentPublishController : ControllerBase
 			return StatusCode(500, new { error = ex.Message });
 		}
 	}
-}
 
+	public int Add(int x, int y)
+	{
+		return x + y;
+	}
+}

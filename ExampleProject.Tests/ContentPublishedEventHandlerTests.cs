@@ -1,4 +1,5 @@
 using ZuraTDD;
+using ZuraTDD.Integrations;
 using static ExampleProject.Tests.ContentPublishedEventHandlerTestCase;
 
 namespace ExampleProject.Tests;
@@ -6,15 +7,15 @@ namespace ExampleProject.Tests;
 [TestClass]
 public class ContentPublishedEventHandlerTests
 {
+	private static readonly Content exampleContent = new(
+		id: Guid.NewGuid(),
+		title: "title",
+		body: "body",
+		topics: ["topic"],
+		url: "http://exaple.com");
+
 	public static IEnumerable<object[]> HandleMethodTestCases()
 	{
-		var exampleContent = new Content(
-			id: Guid.NewGuid(),
-			title: "title",
-			body: "body",
-			topics: ["topic"],
-			url: "http://exaple.com");
-
 		var customerList = new List<Customer>
 		{
 			new(
@@ -66,19 +67,13 @@ public class ContentPublishedEventHandlerTests
 				.SendEmail()
 				.Returns(Task.CompletedTask),
 
-			When.TemplateEngine
-				.RenderTemplate()
-				.Returns(Task.FromResult(exampleMessageContent)),
+			//When.TemplateEngine
+			//	.RenderTemplate()
+			//	.Returns(Task.FromResult(exampleMessageContent)),
 
 			Expect.EmailSender
 				.SendEmail(to: new(s => s.Length > 0))
 				.WasCalled(),
-
-			//Expect.EmailSender
-			//	.SendEmail(
-			//		to: "email@example.com",
-			//		body: exampleMessageContent)
-			//	.WasCalled(),
 
 			Expect.EmailSender
 				.SendEmailSync()
@@ -102,9 +97,9 @@ public class ContentPublishedEventHandlerTests
 				.SendEmailSync()
 				.Throws(new Exception("Whoopsie!!!")),
 
-			When.TemplateEngine
-				.RenderTemplate()
-				.Returns(Task.FromResult(exampleMessageContent)),
+			//When.TemplateEngine
+			//	.RenderTemplate()
+			//	.Returns(Task.FromResult(exampleMessageContent)),
 
 			Expect.EmailSender
 				.SendEmail(to: new(s => s.Length > 0))
@@ -128,4 +123,17 @@ public class ContentPublishedEventHandlerTests
 	{
 		await testCase.RunTestAsync();
 	}
+
+	[RunWithMSTest("Throws when CustomerRepository.ListByInterests throws.")]
+	public static TestCase ThrowsTest => new ContentPublishedEventHandlerTestCase(
+		name: "Throws when CustomerRepository.ListByInterests throws.",
+
+		Receives.Handle(exampleContent),
+
+		When.CustomerRepository
+			.ListByInterests(topics: null)
+			.Throws(new TestException()),
+
+		Expect.ExceptionToBeThrown<TestException>()
+	);
 }

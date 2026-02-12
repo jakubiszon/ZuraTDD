@@ -1,4 +1,4 @@
-﻿using ExampleProject;
+using ExampleProject;
 using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
@@ -25,8 +25,8 @@ internal partial class ContentPublishedEventHandlerTestCase
 	{
 		return new ExampleProject.ContentPublishedEventHandler(
 			this.Services.CustomerRepository,
-			this.Services.EmailSender,
-			this.Services.TemplateEngine);
+			this.Services.EmailSender/*,
+			this.Services.TemplateEngine*/);
 	}
 
 	/// <summary>

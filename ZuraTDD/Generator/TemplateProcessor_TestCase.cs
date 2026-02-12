@@ -104,7 +104,7 @@ static file class Functions
 		TestCaseSpecification testCase,
 		MethodSpecification method)
 	{
-		var parameterDeclarations = method.Parameters.Select(p => $"{p.Type}? {p.Name} = default");
+		var parameterDeclarations = method.Parameters.Select(p => $"{ReceivesParameterType(p)} {p.Name} = default");
 		var parameterList = string.Join(", ", parameterDeclarations);
 
 		var parameterNames = method.Parameters.Select(p => p.Name);
@@ -113,7 +113,7 @@ static file class Functions
 		return
 			$$"""
 					/// <summary>
-					/// Defines a call to the {{method.MethodName}} method.
+					/// Defines a call to the <see cref="{{testCase.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method
 					/// </summary>
 					public static {{method.PrepareReceiveSpecificationType()}}
 						{{method.MethodName}}({{parameterList}})
@@ -124,6 +124,18 @@ static file class Functions
 						#pragma warning restore CS8604
 					}
 			""";
+	}
+
+	private static string ReceivesParameterType(ParameterSpecification parameter)
+	{
+		if(parameter.IsReferenceType)
+		{
+			return parameter.TypeofType + "?";
+		}
+		else
+		{
+			return parameter.TypeofType;
+		}
 	}
 
 	public static string PrepareServiceWhenCode(ServiceSpecification service)

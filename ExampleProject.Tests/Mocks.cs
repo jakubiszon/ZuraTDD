@@ -18,3 +18,7 @@ internal partial class AcceptNullMock : IMock<IAcceptNull>
 internal partial class ActionServiceMock : IMock<IActionService>
 {
 }
+
+internal partial class FuncServiceMock : IMock<IFuncService>
+{
+}

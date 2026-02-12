@@ -20,6 +20,7 @@ Feel free to open discussions about them if you have any comments.
 - TODOs - they are scattered across the codebase
 - Add indexer support for mocked objects.
 - Add property support for mocked objects.
+- Add event support for mocked objects.
 - Add support for generic methods in mocked objects.
 - Add support for generic parameters in mocked objects.
 - Add support for generic methods in test case classes.

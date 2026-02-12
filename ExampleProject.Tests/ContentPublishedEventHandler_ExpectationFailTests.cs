@@ -1,4 +1,4 @@
-﻿using ZuraTDD.Exceptions;
+using ZuraTDD.Exceptions;
 using static ExampleProject.Tests.ContentPublishedEventHandlerTestCase;
 
 namespace ExampleProject.Tests;
@@ -41,9 +41,9 @@ public class ContentPublishedEventHandler_ExpectationFailTests
 				.SendEmail()
 				.Returns(Task.CompletedTask),
 
-			When.TemplateEngine
-				.RenderTemplate()
-				.Returns(Task.FromResult("whatever :D")),
+			//When.TemplateEngine
+			//	.RenderTemplate()
+			//	.Returns(Task.FromResult("whatever :D")),
 
 			// expect a string shorter than zero to be used
 			Expect.EmailSender
@@ -51,8 +51,7 @@ public class ContentPublishedEventHandler_ExpectationFailTests
 				.WasCalled()
 		);
 
-		await Assert.ThrowsExactlyAsync<ExpectationFailed>(
-			() => testCase.RunTestAsync());
+		await Assert.ThrowsExactlyAsync<ExpectationFailed>(testCase.RunTestAsync);
 	}
 
 	[TestMethod]
@@ -71,9 +70,9 @@ public class ContentPublishedEventHandler_ExpectationFailTests
 				.SendEmail()
 				.Returns(Task.CompletedTask),
 
-			When.TemplateEngine
-				.RenderTemplate()
-				.Returns(Task.FromResult("whatever :D")),
+			//When.TemplateEngine
+			//	.RenderTemplate()
+			//	.Returns(Task.FromResult("whatever :D")),
 
 			// expect multiple calls to SendEmail
 			Expect.EmailSender

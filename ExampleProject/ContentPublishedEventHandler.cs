@@ -4,16 +4,16 @@ internal class ContentPublishedEventHandler : IContentPublishedEventHandler
 {
 	private readonly ICustomerRepository customerRepository;
 	private readonly IEmailSender emailSender;
-	private readonly ITemplateEngine templateEngine;
+	//private readonly ITemplateEngine templateEngine;
 
 	public ContentPublishedEventHandler(
 		ICustomerRepository customerRepository,
-		IEmailSender emailSender,
-		ITemplateEngine templateEngine)
+		IEmailSender emailSender)
+		//ITemplateEngine templateEngine)
 	{
 		this.customerRepository = customerRepository;
 		this.emailSender = emailSender;
-		this.templateEngine = templateEngine;
+		//this.templateEngine = templateEngine;
 	}
 
 	public async Task Handle(Content content)

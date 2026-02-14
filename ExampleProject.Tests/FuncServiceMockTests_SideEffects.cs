@@ -1,3 +1,4 @@
+using ZuraTDD;
 using static ExampleProject.Tests.ExampleValues;
 
 namespace ExampleProject.Tests;

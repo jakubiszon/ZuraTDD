@@ -60,7 +60,7 @@ public class ContentPublishedEventHandlerTests
 
 			When.CustomerRepository
 				.ListByInterests(topics: null)
-				.Returns(Task.FromResult(customerList)),
+				.ReturnsInTask(customerList),
 
 			When.EmailSender
 				.SendEmail()

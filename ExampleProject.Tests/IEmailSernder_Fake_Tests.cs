@@ -1,4 +1,6 @@
-﻿namespace ExampleProject.Tests;
+using ZuraTDD;
+
+namespace ExampleProject.Tests;
 
 /// <summary>
 /// The class constains tests of the auto-generated fake for IEmailSender.

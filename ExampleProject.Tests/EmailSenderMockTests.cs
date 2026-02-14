@@ -1,3 +1,5 @@
+using ZuraTDD;
+
 namespace ExampleProject.Tests;
 
 /// <summary>

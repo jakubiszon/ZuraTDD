@@ -11,7 +11,7 @@
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 
 		<PackageId>ZuraTDD</PackageId>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<Description>
 			Mock and TestCase generator reducing testing boilerplate.
 			This library is designed to make red-green-refactor methodology easier in .NET.

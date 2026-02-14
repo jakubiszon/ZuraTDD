@@ -115,9 +115,13 @@ static file class Functions
 
 	private static string PrepareCallSpecificationType(MethodSpecification methodSpecification)
 	{
-		return methodSpecification.MethodType == MethodType.Void
-			? $"ActionBehaviorBuilder{methodSpecification.GetGenericParamsString()}"
-			: $"FuncBehaviorBuilder{methodSpecification.GetGenericParamsString()}";
+		return methodSpecification.MethodType switch
+		{
+			MethodType.Void => $"ActionBehaviorBuilder{methodSpecification.GetGenericParamsString()}",
+			MethodType.TaskOfT => $"FuncTaskOfBehaviorBuilder{methodSpecification.GetAsyncMethodGenericParamsString()}",
+			MethodType.ValueTaskOfT => $"FuncValueTaskOfBehaviorBuilder{methodSpecification.GetAsyncMethodGenericParamsString()}",
+			_ => $"FuncBehaviorBuilder{methodSpecification.GetGenericParamsString()}",
+		};
 	}
 
 	private static string PrepareParameterList(MethodSpecification method)

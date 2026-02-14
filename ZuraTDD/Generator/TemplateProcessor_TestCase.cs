@@ -113,7 +113,7 @@ static file class Functions
 		return
 			$$"""
 					/// <summary>
-					/// Defines a call to the <see cref="{{testCase.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method
+					/// Defines a call to the <see cref="{{testCase.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method.
 					/// </summary>
 					public static {{method.PrepareReceiveSpecificationType()}}
 						{{method.MethodName}}({{parameterList}})

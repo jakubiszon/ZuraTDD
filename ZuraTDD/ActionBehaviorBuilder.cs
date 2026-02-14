@@ -4,14 +4,11 @@ using System.Reflection;
 namespace ZuraTDD;
 
 /// <summary>
-/// Behavior builder for methods with zero parameters and void return type.
+/// Behavior builder for void methods with zero input parameters.
 /// </summary>
 public class ActionBehaviorBuilder
 	: BehaviorBuilder
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	/// <param name="methodInfo"></param>
 	/// <param name="setupProcessor">Setup processor called when <see cref="BehaviorBuilder.ToBehaviorSetup" /> is called.</param>
 	public ActionBehaviorBuilder(
@@ -19,14 +16,6 @@ public class ActionBehaviorBuilder
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, new([]), setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action>(action);
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder Throws(Exception exception)
@@ -37,6 +26,9 @@ public class ActionBehaviorBuilder
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 1 input parameter.
+/// </summary>
 public class ActionBehaviorBuilder<Tin>
 	: BehaviorBuilder
 {
@@ -46,14 +38,6 @@ public class ActionBehaviorBuilder<Tin>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<Tin> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<Tin>>(_ => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<Tin> Invokes(
@@ -80,6 +64,9 @@ public class ActionBehaviorBuilder<Tin>
 }
 
 
+/// <summary>
+/// Behavior builder for void methods with 2 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2>
 	: BehaviorBuilder
 {
@@ -89,14 +76,6 @@ public class ActionBehaviorBuilder<T1, T2>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2>>((p1, p2) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2> Invokes(
@@ -122,6 +101,9 @@ public class ActionBehaviorBuilder<T1, T2>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 3 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3>
 	: BehaviorBuilder
 {
@@ -131,14 +113,6 @@ public class ActionBehaviorBuilder<T1, T2, T3>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3>>((p1, p2, p3) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3> Invokes(
@@ -164,6 +138,9 @@ public class ActionBehaviorBuilder<T1, T2, T3>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 4 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4>
 	: BehaviorBuilder
 {
@@ -173,14 +150,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4>>((p1, p2, p3, p4) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4> Invokes(
@@ -206,6 +175,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 5 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5>
 	: BehaviorBuilder
 {
@@ -215,14 +187,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5>>((p1, p2, p3, p4, p5) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5> Invokes(
@@ -248,6 +212,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 6 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6>
 	: BehaviorBuilder
 {
@@ -257,14 +224,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6>>((p1, p2, p3, p4, p5, p6) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6> Invokes(
@@ -290,6 +249,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 7 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7>
 	: BehaviorBuilder
 {
@@ -299,14 +261,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7>>((p1, p2, p3, p4, p5, p6, p7) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7> Invokes(
@@ -332,6 +286,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 8 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8>
 	: BehaviorBuilder
 {
@@ -341,14 +298,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8>>((p1, p2, p3, p4, p5, p6, p7, p8) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8> Invokes(
@@ -374,6 +323,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 9 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	: BehaviorBuilder
 {
@@ -383,14 +335,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((p1, p2, p3, p4, p5, p6, p7, p8, p9) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9> Invokes(
@@ -416,6 +360,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 10 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 	: BehaviorBuilder
 {
@@ -425,14 +372,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Invokes(
@@ -458,6 +397,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 11 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 	: BehaviorBuilder
 {
@@ -467,14 +409,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Invokes(
@@ -500,6 +434,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 12 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 	: BehaviorBuilder
 {
@@ -509,14 +446,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Invokes(
@@ -542,6 +471,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 13 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 	: BehaviorBuilder
 {
@@ -551,14 +483,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Invokes(
@@ -584,6 +508,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 14 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 	: BehaviorBuilder
 {
@@ -593,14 +520,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Invokes(
@@ -626,6 +545,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 15 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 	: BehaviorBuilder
 {
@@ -635,14 +557,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Invokes(
@@ -668,6 +582,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	}
 }
 
+/// <summary>
+/// Behavior builder for void methods with 16 input parameters.
+/// </summary>
 public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
 	: BehaviorBuilder
 {
@@ -677,14 +594,6 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-	}
-
-	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Invokes(
-		Action action)
-	{
-		var behavior = new SideEffectBehavior<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>>((p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16) => action());
-		this.Add(behavior);
-		return this;
 	}
 
 	public ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Invokes(

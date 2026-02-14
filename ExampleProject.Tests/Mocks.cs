@@ -22,3 +22,7 @@ internal partial class ActionServiceMock : IMock<IActionService>
 internal partial class FuncServiceMock : IMock<IFuncService>
 {
 }
+
+internal partial class AsyncMethodsMock : IMock<IAsyncMethods>
+{
+}

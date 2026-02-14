@@ -1,3 +1,4 @@
+using ZuraTDD;
 using ZuraTDD.Exceptions;
 using static ExampleProject.Tests.ContentPublishedEventHandlerTestCase;
 

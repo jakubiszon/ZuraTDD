@@ -17,16 +17,16 @@ public class BehaviorSetupRunner
 	/// <summary>
 	/// Maps method delegates to their behavior setups.
 	/// </summary>
-	private Dictionary<MethodInfo, List<BehaviorSetup>> configuredSetups;
+	private readonly Dictionary<MethodInfo, List<BehaviorSetup>> configuredSetups;
 
 	public BehaviorSetupRunner()
 	{
-		this.configuredSetups = new();
+		this.configuredSetups = [];
 	}
 
 	public BehaviorSetupRunner(IEnumerable<BehaviorSetup> behaviorSetups)
 	{
-		this.configuredSetups = new();
+		this.configuredSetups = [];
 		foreach(var setup in behaviorSetups)
 		{
 			this.Add(setup);
@@ -37,7 +37,7 @@ public class BehaviorSetupRunner
 	{
 		if (!this.configuredSetups.ContainsKey(behaviorSetup.Method))
 		{
-			this.configuredSetups[behaviorSetup.Method] = new List<BehaviorSetup>();
+			this.configuredSetups[behaviorSetup.Method] = [];
 		}
 
 		this.configuredSetups[behaviorSetup.Method].Add(behaviorSetup);

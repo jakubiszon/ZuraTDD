@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +51,26 @@ internal static class Functions
 		};
 	}
 
+	public static string GetAsyncMethodGenericParamsString(this MethodSpecification method)
+	{
+		return method switch
+		{
+			{ MethodType: MethodType.TaskOfT, Parameters: { Count: 0 } }
+				=> $"<{method.AwaitedType}>",
+
+			{ MethodType: MethodType.TaskOfT, Parameters: { Count: > 0 } }
+				=> $"<{string.Join(", ", method.Parameters.Select(p => p.Type))}, {method.AwaitedType}>",
+
+			{ MethodType: MethodType.ValueTaskOfT, Parameters: { Count: 0 } }
+				=> $"<{method.AwaitedType}>",
+
+			{ MethodType: MethodType.ValueTaskOfT, Parameters: { Count: > 0 } }
+				=> $"<{string.Join(", ", method.Parameters.Select(p => p.Type))}, {method.AwaitedType}>",
+
+			_ => throw new NotImplementedException("This method is only implemented for TaskOfT at the moment."),
+		};
+	}
+
 	public static string GetParamValuesString(this MethodSpecification method)
 	{
 		if (method.Parameters.Count == 0)
@@ -73,7 +93,7 @@ internal static class Functions
 			{ MethodType: MethodType.TaskOfT } => $"Task.FromResult<{method.AwaitedType}>(default({method.AwaitedType})!)",
 
 			{ MethodType: MethodType.ValueTask } => "new ValueTask()",
-			{ MethodType: MethodType.ValueTaskOfT } => $"new ValueTask{method.AwaitedType}(default({method.AwaitedType})!)",
+			{ MethodType: MethodType.ValueTaskOfT } => $"new ValueTask<{method.AwaitedType}>(default({method.AwaitedType})!)",
 
 			{ ReturnType: "char" } => "char.MinValue",
 			{ ReturnType: "string" } => "string.Empty",

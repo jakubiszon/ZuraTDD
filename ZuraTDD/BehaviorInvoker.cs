@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -520,6 +520,10 @@ public class BehaviorInvoker
 				var sideEffectAction = sideEffect.SideEffectAction;
 				invocation(sideEffectAction);
 			}
+			else if (behavior is SideEffectBehavior<Action> simpleSideEffect)
+			{
+				simpleSideEffect.SideEffectAction();
+			}
 		}
 	}
 
@@ -539,8 +543,13 @@ public class BehaviorInvoker
 			{
 				this.lastUsedBehaviorIndex = idx;
 				var exceptionFactory = throwBehavior.ExceptionFactory;
-				var exception = exceptionFactoryInvocation(exceptionFactory);
-				throw exception;
+				throw exceptionFactoryInvocation(exceptionFactory);
+			}
+			else if (behavior is ThrowBehavior<Func<Exception>> simpleThrowBehavior)
+			{
+				this.lastUsedBehaviorIndex = idx;
+				var exceptionFactory = simpleThrowBehavior.ExceptionFactory;
+				throw exceptionFactory();
 			}
 		}
 	}
@@ -562,14 +571,25 @@ public class BehaviorInvoker
 			{
 				this.lastUsedBehaviorIndex = idx;
 				var exceptionFactory = throwBehavior.ExceptionFactory;
-				var exception = exceptionFactoryInvocation(exceptionFactory);
-				throw exception;
+				throw exceptionFactoryInvocation(exceptionFactory);
+			}
+			else if (behavior is ThrowBehavior<Func<Exception>> simpleThrowBehavior)
+			{
+				this.lastUsedBehaviorIndex = idx;
+				var exceptionFactory = simpleThrowBehavior.ExceptionFactory;
+				throw exceptionFactory();
 			}
 			else if (behavior is ReturnBehavior<TValueFactory> returnBehavior)
 			{
 				this.lastUsedBehaviorIndex = idx;
 				var valueFactory = returnBehavior.ValueFactory;
 				return (FuncReturnValue<Tout>)valueFactoryInvocation(valueFactory);
+			}
+			else if (behavior is ReturnBehavior<Func<Tout>> simpleReturnBehavior)
+			{
+				this.lastUsedBehaviorIndex = idx;
+				var simpleReturValueFactory = simpleReturnBehavior.ValueFactory;
+				return (FuncReturnValue<Tout>)simpleReturValueFactory();
 			}
 		}
 

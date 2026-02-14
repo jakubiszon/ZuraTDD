@@ -116,6 +116,31 @@ Calling `.GetStringBtyId` will execute the following:
 - All calls where `id > 0` but different from `123` will return `"example-greater-than-zero"`.
 - All other values will fall into the last `BehaviorSetup`. This setup accepts all values but the calls with positive `id` will never reach it because of the earlier setups.
 
+## Asynchronous behaviors
+There is a difference between the two:
+```csharp
+// this one throws immediately when the TaskMethod is called
+// even if the returned Task is not immediately awaited
+setup.TaskMethod()
+    .Throws(new Exception());
+
+// this one will only throw when the returned task is awaited
+setup.TaskMethod()
+    .ThrowsFromTask(new Exception());
+```
+
+The methods `ThrowsFromTask` as well as `ThrowsFromValueTask` use return behaviors under the hood as they need to return the exception wrapped in `Task` or `ValueTask`.
+
+```csharp
+// Same results can be achieved by using `Resurns` the following way:
+setup.TaskMethod()
+    .Returns(Task.FromException(new Exception()));
+
+// ValueTask uses slightly different syntax:
+setup.ValueTaskMethod()
+    .Returns(new ValueTask(Task.FromException(new Exception())));
+```
+
 
 ## Best practices and recommendations
 - If you need to use `.Invokes` - always declare it before `.Throws` and `.Returns`.
@@ -123,3 +148,4 @@ Calling `.GetStringBtyId` will execute the following:
 - Less specific filters should come next
 - "Catch all" / unfiltered behavior should be created last.
 - A non-filtering chain with an `.Invokes` behavior can be declared first. It can be useful if you have many setups declared but want all calls to invoke the same side-effect first.
+- Use `.ThrowsFromTask` and `.ThrowsFromValueTask` methods to simulate asynchronous methods throwing when being awaited.

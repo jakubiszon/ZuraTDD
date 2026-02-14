@@ -32,7 +32,7 @@ public class ExpectedException<TException> : IExpectedException
 		{
 			var actualType = testResult.Exception.GetType().Name;
 			throw new ExpectationFailed(
-				$"An exception of type {exceptionType} was expected an incompatible exception of type {actualType} was thrown.");
+				$"An exception of type {exceptionType} was expected but an incompatible exception of type {actualType} was thrown.");
 		}
 	}
 }

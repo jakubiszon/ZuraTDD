@@ -93,6 +93,25 @@ setup.Parse( (ValueConstraint<TextReader>?)null )
     ... // behavior setup
 ```
 
+Another problem to keep in mind - if one of the overloads has no parameters
+it will be the one which you will always match unless you specify a param.
+
+```csharp
+// if we mock this interface
+public interface IAnotherExample
+{
+    void DoSomething();
+    void DoSomething( string input );
+}
+
+// calling DoSomething without params - always matches the first overload
+setup.DoSomething().Invokes( ... );
+
+// if you want to match the parametrized overload - specify the param
+// if you want to match all values - just pass a null
+setup.DoSomething( null );
+```
+
 
 ## Matching `null`
 Let's consider the following abstraction

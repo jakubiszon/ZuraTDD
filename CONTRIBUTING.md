@@ -18,6 +18,7 @@ Below there is a list of ideas to implement or consider in future versions.
 Feel free to open discussions about them if you have any comments.
 
 - TODOs - they are scattered across the codebase
+- Add support for passing delegates as test subject dependencies - in such case, the mock needs to be a method instead of an object.
 - Add indexer support for mocked objects.
 - Add property support for mocked objects.
 - Add event support for mocked objects.

@@ -4,7 +4,7 @@ using static ExampleProject.Tests.ContentPublishedEventHandlerTestCase;
 namespace ExampleProject.Tests;
 
 [TestClass]
-public class ContentPublishedEventHandlerTests
+public partial class ContentPublishedEventHandlerTests
 {
 	private static readonly Content exampleContent = new(
 		id: Guid.NewGuid(),
@@ -13,15 +13,14 @@ public class ContentPublishedEventHandlerTests
 		topics: ["topic"],
 		url: "http://exaple.com");
 
+	private static Customer exampleCustomer = new(
+		id: Guid.NewGuid(),
+		name: "name",
+		email: "email@example.com");
+
 	public static IEnumerable<object[]> HandleMethodTestCases()
 	{
-		var customerList = new List<Customer>
-		{
-			new(
-				id: Guid.NewGuid(),
-				name: "name",
-				email: "email@example.com"),
-		};
+		List<Customer> customerList = [exampleCustomer];
 
 		string exampleMessageContent = $"Example message - {Guid.NewGuid()}";
 
@@ -123,9 +122,31 @@ public class ContentPublishedEventHandlerTests
 		await testCase.RunTestAsync();
 	}
 
-	public static TestCase ThrowsTest => new ContentPublishedEventHandlerTestCase(
-		name: "Throws when CustomerRepository.ListByInterests throws.",
+	[ZuraTest<ContentPublishedEventHandlerTestCase>(
+		"Handle - sends email to customers when content is published.")]
+	public ITestPart[] HandleStandardBehaviors => [
+		Receives.Handle(exampleContent),
 
+		When.CustomerRepository
+			.ListByInterests(topics: null)
+			.ReturnsInTask(new List<Customer> {exampleCustomer }),
+
+		When.EmailSender
+			.SendEmail()
+			.Returns(Task.CompletedTask),
+
+		Expect.EmailSender
+			.SendEmail(to: new(s => s.Length > 0))
+			.WasCalled(),
+
+		Expect.EmailSender
+			.SendEmailSync()
+			.WasNotCalled()
+	];
+
+	[ZuraTest<ContentPublishedEventHandlerTestCase>(
+		"Throws when CustomerRepository.ListByInterests throws.")]
+	public ITestPart[] ThrowsTest_WhenListByInterestsThrows() => [
 		Receives.Handle(exampleContent),
 
 		When.CustomerRepository
@@ -133,5 +154,23 @@ public class ContentPublishedEventHandlerTests
 			.Throws(new TestException()),
 
 		Expect.ExceptionToBeThrown<TestException>()
-	);
+	];
+
+	// this is a demonstration of reusing test parts defined in another method
+	// the highlight of this test is that it only needs to specify the deviation from the standard behavior
+	// and the expectation of the test
+	[ZuraTest<ContentPublishedEventHandlerTestCase>(
+		"Throws when EmailSender.SendEmail throws.")]
+	public ITestPart[] ThrowsTest1() => [
+		Receives.Handle(exampleContent),
+
+		When.EmailSender
+			.SendEmail()
+			.Throws(new TestException()),
+
+		..HandleStandardBehaviors
+			.BehaviorsOnly(),
+
+		Expect.ExceptionToBeThrown<TestException>()
+	];
 }

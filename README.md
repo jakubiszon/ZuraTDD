@@ -237,10 +237,12 @@ dotnet add package ZuraTDD
 Documentation topics:
 - [Behaviors](./Documentation/Behaviors.md)
 - [Matching calls](./Documentation/CallMatching.md)
+- [`ZuraTest` attribute](./Documentation/ZuraTest.md) ⚠️ section under construction
 - [Expectations](./Documentation/Expect.md) ⚠️ section under construction
 - [Mocking](./Documentation/Mocking.md) ⚠️ section under construction
 - [Test Cases](./Documentation/TestCases.md) ⚠️ section under construction
 - [Code navigation](./Documentation/Navigation.md) ⚠️ section under construction
+- [IDE errors](./Documentation/IDEErrors.md) ⚠️ section under construction
 
 
 ## Limitations

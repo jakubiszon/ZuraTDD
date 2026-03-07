@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ZuraTDD;
@@ -147,5 +149,13 @@ public static class MethodBehaviorBuilderExtensions
 
 		builder.Add(behavior);
 		return builder;
+	}
+
+	/// <summary>
+	/// Returns only the behavior builders from the collection of test parts.
+	/// </summary>
+	public static IEnumerable<BehaviorBuilder> BehaviorsOnly(this IEnumerable<ITestPart> testParts)
+	{
+		return testParts.OfType<BehaviorBuilder>();
 	}
 }

@@ -15,12 +15,16 @@ public class TestGenerator : IIncrementalGenerator
 {
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
+		var metadataSource = context.CompilationProvider
+			.Select((c, _) => new CompilationMetadata(c));
+
 		var validatedMethodsProvider = context.SyntaxProvider
 			.CreateSyntaxProvider(
 				predicate: IsMethod,
 				transform: AsMethodSymbol)
 			.Where(methodSymbol => methodSymbol != null)
-			.Combine(context.CompilationProvider)
+			.Combine(metadataSource)
+			.Where(pair => pair.Right.IsValid())
 			.Select((pair, _) => ValidateSourceMethod(pair.Left!, pair.Right));
 
 		var validatedPropertiesProvider = context.SyntaxProvider
@@ -28,7 +32,8 @@ public class TestGenerator : IIncrementalGenerator
 				predicate: IsProperty,
 				transform: AsPropertySymbol)
 			.Where(propertySymbol => propertySymbol != null)
-			.Combine(context.CompilationProvider)
+			.Combine(metadataSource)
+			.Where(pair => pair.Right.IsValid())
 			.Select((pair, _) => ValidateSourceProperty(pair.Left!, pair.Right));
 
 		context.RegisterSourceOutput(
@@ -114,7 +119,9 @@ public class TestGenerator : IIncrementalGenerator
 	/// <item>Method must return <see cref="IEnumerable{ITestPart}" /> or <see cref="ITestPart" />[]</item>
 	/// </list>
 	/// </summary>
-	private static ZuraTestAnalysis ValidateSourceMethod(IMethodSymbol methodSymbol, Compilation compilation)
+	private static ZuraTestAnalysis ValidateSourceMethod(
+		IMethodSymbol methodSymbol,
+		CompilationMetadata metadata)
 	{
 		var methodSyntaxRef = methodSymbol.DeclaringSyntaxReferences.FirstOrDefault();
 
@@ -123,11 +130,7 @@ public class TestGenerator : IIncrementalGenerator
 
 		var methodSyntax = methodSyntaxRef.GetSyntax() as MethodDeclarationSyntax;
 
-		var zuraTestAttr = methodSymbol.GetAttributes()
-			.FirstOrDefault(attr =>
-				attr.AttributeClass?.ContainingNamespace.ToDisplayString() == nameof(ZuraTDD) &&
-				attr.AttributeClass.Name == nameof(ZuraTest<>));
-
+		var zuraTestAttr = GetZuraTestAttribute(methodSymbol);
 		if (zuraTestAttr == null)
 			return new ZuraTestAnalysis();
 
@@ -144,9 +147,8 @@ public class TestGenerator : IIncrementalGenerator
 		if (zuraTestAttr.AttributeClass?.TypeArguments.Length > 0)
 		{
 			var typeArgument = zuraTestAttr.AttributeClass.TypeArguments[0];
-			var iTestCaseInterface = compilation.GetTypeByMetadataName("ZuraTDD.ITestCase`1");
 
-			if (!ImplementsInterface(typeArgument, iTestCaseInterface))
+			if (!ImplementsInterface(typeArgument, metadata.ZuraTDD_ITestCase))
 			{
 				var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectTypeArgument(typeArgument, location);
 				return new ZuraTestAnalysis(diagnosticMessage);
@@ -155,14 +157,18 @@ public class TestGenerator : IIncrementalGenerator
 
 		// Check if method returns IEnumerable<ITestPart> or ITestPart[]
 		var returnType = methodSymbol.ReturnType;
-		var isValidReturnType = IsValidTestPartReturnType(returnType, compilation);
+		var isValidReturnType = IsValidTestPartReturnType(returnType, metadata);
 		if (!isValidReturnType)
 		{
 			var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectReturnType(methodSymbol, location);
 			return new ZuraTestAnalysis(diagnosticMessage);
 		}
 
-		var testSpecification = new TestSpecification(methodSymbol, zuraTestAttr);
+		var testSpecification = new TestSpecification(
+			methodSymbol,
+			zuraTestAttr,
+			metadata.TestFramework);
+
 		return new ZuraTestAnalysis(testSpecification);
 	}
 
@@ -174,7 +180,9 @@ public class TestGenerator : IIncrementalGenerator
 	/// <item>Property must return <see cref="IEnumerable{ITestPart}" /> or <see cref="ITestPart" />[]</item>
 	/// </list>
 	/// </summary>
-	private static ZuraTestAnalysis ValidateSourceProperty(IPropertySymbol propertySymbol, Compilation compilation)
+	private static ZuraTestAnalysis ValidateSourceProperty(
+		IPropertySymbol propertySymbol,
+		CompilationMetadata metadata)
 	{
 		var propertySyntaxRef = propertySymbol.DeclaringSyntaxReferences.FirstOrDefault();
 
@@ -183,11 +191,7 @@ public class TestGenerator : IIncrementalGenerator
 
 		var propertySyntax = propertySyntaxRef.GetSyntax() as MethodDeclarationSyntax;
 
-		var zuraTestAttr = propertySymbol.GetAttributes()
-			.FirstOrDefault(attr =>
-				attr.AttributeClass?.ContainingNamespace.ToDisplayString() == nameof(ZuraTDD) &&
-				attr.AttributeClass.Name == nameof(ZuraTest<>));
-
+		var zuraTestAttr = GetZuraTestAttribute(propertySymbol);
 		if (zuraTestAttr == null)
 			return new ZuraTestAnalysis();
 
@@ -204,9 +208,8 @@ public class TestGenerator : IIncrementalGenerator
 		if (zuraTestAttr.AttributeClass?.TypeArguments.Length > 0)
 		{
 			var typeArgument = zuraTestAttr.AttributeClass.TypeArguments[0];
-			var iTestCaseInterface = compilation.GetTypeByMetadataName("ZuraTDD.ITestCase`1");
 
-			if (!ImplementsInterface(typeArgument, iTestCaseInterface))
+			if (!ImplementsInterface(typeArgument, metadata.ZuraTDD_ITestCase))
 			{
 				var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectTypeArgument(typeArgument, location);
 				return new ZuraTestAnalysis(diagnosticMessage);
@@ -215,14 +218,18 @@ public class TestGenerator : IIncrementalGenerator
 
 		// Check if property returns IEnumerable<ITestPart> or ITestPart[]
 		var returnType = propertySymbol.Type;
-		var isValidReturnType = IsValidTestPartReturnType(returnType, compilation);
+		var isValidReturnType = IsValidTestPartReturnType(returnType, metadata);
 		if (!isValidReturnType)
 		{
 			var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectReturnType(propertySymbol, location);
 			return new ZuraTestAnalysis(diagnosticMessage);
 		}
 
-		var testSpecification = new TestSpecification(propertySymbol, zuraTestAttr);
+		var testSpecification = new TestSpecification(
+			propertySymbol,
+			zuraTestAttr,
+			metadata.TestFramework);
+
 		return new ZuraTestAnalysis(testSpecification);
 	}
 
@@ -244,37 +251,74 @@ public class TestGenerator : IIncrementalGenerator
 		return false;
 	}
 
-	private static bool IsValidTestPartReturnType(ITypeSymbol returnType, Compilation compilation)
+	private static bool IsValidTestPartReturnType(ITypeSymbol returnType, CompilationMetadata metadata)
 	{
-		var iTestPartInterface = compilation.GetTypeByMetadataName("ZuraTDD.ITestPart");
-
 		// Check for ITestPart[]
 		if (returnType is IArrayTypeSymbol arrayType)
 		{
 			return SymbolEqualityComparer.Default.Equals(
 				arrayType.ElementType,
-				iTestPartInterface);
+				metadata.ZuraTDD_ITestPart);
 		}
 
 		// Check for IEnumerable<ITestPart>
 		if (returnType is INamedTypeSymbol namedType)
 		{
-			var enumerableInterface = compilation.GetTypeByMetadataName("System.Collections.Generic.IEnumerable`1");
-
-			if (enumerableInterface != null &&
-				SymbolEqualityComparer.Default.Equals(
+			if (SymbolEqualityComparer.Default.Equals(
 					namedType.OriginalDefinition,
-					enumerableInterface))
+					metadata.System_Collections_Generic_IEnumerable))
 			{
 				if (namedType.TypeArguments.Length > 0)
 				{
 					return SymbolEqualityComparer.Default.Equals(
 						namedType.TypeArguments[0],
-						iTestPartInterface);
+						metadata.ZuraTDD_ITestPart);
 				}
 			}
 		}
 
 		return false;
+	}
+
+	private static AttributeData? GetZuraTestAttribute(ISymbol memberSymbol)
+	{
+		return memberSymbol.GetAttributes()
+			.FirstOrDefault(attr =>
+				attr.AttributeClass?.ContainingNamespace.ToDisplayString() == nameof(ZuraTDD) &&
+				attr.AttributeClass.Name == nameof(ZuraTest<>));
+	}
+
+	private class CompilationMetadata
+	{
+		public INamedTypeSymbol? ZuraTDD_ITestCase { get; }
+
+		public INamedTypeSymbol? ZuraTDD_ITestPart { get; }
+
+		public TestFramework TestFramework { get; }
+
+		public INamedTypeSymbol? System_Collections_Generic_IEnumerable { get; }
+
+		public CompilationMetadata(Compilation compilation)
+		{
+			ZuraTDD_ITestCase = compilation.GetTypeByMetadataName("ZuraTDD.ITestCase`1");
+			ZuraTDD_ITestPart = compilation.GetTypeByMetadataName("ZuraTDD.ITestPart");
+			System_Collections_Generic_IEnumerable = compilation.GetTypeByMetadataName("System.Collections.Generic.IEnumerable`1");
+			TestFramework = DetectFramework(compilation);
+		}
+
+		private TestFramework DetectFramework(Compilation compilation)
+		{
+			if(compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
+				return TestFramework.XUnit;
+
+			return TestFramework.MsTest;
+		}
+
+		public bool IsValid()
+		{
+			return ZuraTDD_ITestCase != null
+				&& ZuraTDD_ITestPart != null
+				&& System_Collections_Generic_IEnumerable != null;
+		}
 	}
 }

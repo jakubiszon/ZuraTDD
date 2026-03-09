@@ -122,6 +122,10 @@ public partial class ContentPublishedEventHandlerTests
 		await testCase.RunTestAsync();
 	}
 
+	/// <summary>
+	/// Defines and tests the standard "happy path" for the
+	/// <see cref="ContentPublishedEventHandler.Handle" />
+	/// </summary>
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
 		"Handle - sends email to customers when content is published.")]
 	public ITestPart[] HandleStandardBehaviors => [
@@ -152,6 +156,9 @@ public partial class ContentPublishedEventHandlerTests
 		When.CustomerRepository
 			.ListByInterests(topics: null)
 			.Throws(new TestException()),
+
+		..HandleStandardBehaviors
+			.BehaviorsOnly(),
 
 		Expect.ExceptionToBeThrown<TestException>()
 	];

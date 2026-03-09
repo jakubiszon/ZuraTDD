@@ -40,15 +40,19 @@ internal class TestSpecification
 	/// </summary>
 	public string TestCaseClassName { get; }
 
+	public TestFramework TestFramework { get; }
+
 	public TestSpecification(
 		IMethodSymbol methodSymbol,
-		AttributeData attributeData)
+		AttributeData attributeData,
+		TestFramework testFramework)
 	{
 		TestName = attributeData.ConstructorArguments[0].Value as string ?? "Unnamed test";
 		OutputNamespace = methodSymbol.ContainingNamespace.ToDisplayString();
 		OutputTypeName = methodSymbol.ContainingType.Name;
 		TestPartSourceName = methodSymbol.Name;
 		IsSourceMethod = true;
+		TestFramework = testFramework;
 
 		TestCaseClassName = attributeData
 			.AttributeClass
@@ -59,13 +63,15 @@ internal class TestSpecification
 
 	public TestSpecification(
 		IPropertySymbol propertySymbol,
-		AttributeData attributeData)
+		AttributeData attributeData,
+		TestFramework testFramework)
 	{
 		TestName = attributeData.ConstructorArguments[0].Value as string ?? "Unnamed test";
 		OutputNamespace = propertySymbol.ContainingNamespace.ToDisplayString();
 		OutputTypeName = propertySymbol.ContainingType.Name;
 		TestPartSourceName = propertySymbol.Name;
 		IsSourceMethod = false;
+		TestFramework = testFramework;
 
 		TestCaseClassName = attributeData
 			.AttributeClass

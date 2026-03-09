@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.4.1" />
+    <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
   </ItemGroup>
 
 </Project>

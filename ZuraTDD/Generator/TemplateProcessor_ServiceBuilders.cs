@@ -73,9 +73,24 @@ internal partial class TemplateProcessor
 
 			internal class {{service.ServiceTypeName}}_StaticBuilder : {{service.ServiceTypeName}}_BehaviorBuilder
 			{
+				private readonly string serviceName;
+
 				public {{service.ServiceTypeName}}_StaticBuilder(string serviceName)
 					: base(new BehaviorSetupOwnerName(serviceName))
 				{
+					this.serviceName = serviceName;
+				}
+
+				/// <summary>
+				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
+				/// </summary>
+				/// <param name="instance">Instance of {{service.ServiceTypeName}} used as dependency.</param>
+				public NamedDependency<{{service.FullyQualifiedName}}> Is(
+					{{service.FullyQualifiedName}} instance)
+				{
+					return new (
+						instance,
+						this.serviceName);
 				}
 			}
 			""";

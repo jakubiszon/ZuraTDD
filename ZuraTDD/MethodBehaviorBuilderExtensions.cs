@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -154,8 +155,18 @@ public static class MethodBehaviorBuilderExtensions
 	/// <summary>
 	/// Returns only the behavior builders from the collection of test parts.
 	/// </summary>
-	public static IEnumerable<BehaviorBuilder> BehaviorsOnly(this IEnumerable<ITestPart> testParts)
+	[Obsolete("Use OnlyDependencySetup instead.")]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public static IEnumerable<IDependencySetup> BehaviorsOnly(this IEnumerable<ITestPart> testParts)
 	{
-		return testParts.OfType<BehaviorBuilder>();
+		return testParts.OfType<IDependencySetup>();
+	}
+
+	/// <summary>
+	/// Returns only the dependency setup objects from the collection of test parts.
+	/// </summary>
+	public static IEnumerable<IDependencySetup> OnlyDependencySetup(this IEnumerable<ITestPart> testParts)
+	{
+		return testParts.OfType<IDependencySetup>();
 	}
 }

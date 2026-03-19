@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace ZuraTDD;
 
@@ -9,8 +7,8 @@ namespace ZuraTDD;
 /// Base class inherited by FuncBehaviorBuilder and ActionBehaviorBuilder classes.
 /// </summary>
 public abstract class BehaviorBuilder
-	: ITestPart
-	, IBehaviorBuilder
+	: IBehaviorBuilder
+	, IDependencySetup
 {
 	public MethodInfo Method { get; }
 

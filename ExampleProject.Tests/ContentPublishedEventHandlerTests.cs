@@ -158,7 +158,7 @@ public partial class ContentPublishedEventHandlerTests
 			.Throws(new TestException()),
 
 		..HandleStandardBehaviors
-			.BehaviorsOnly(),
+			.OnlyDependencySetup(),
 
 		Expect.ExceptionToBeThrown<TestException>()
 	];
@@ -176,7 +176,7 @@ public partial class ContentPublishedEventHandlerTests
 			.Throws(new TestException()),
 
 		..HandleStandardBehaviors
-			.BehaviorsOnly(),
+			.OnlyDependencySetup(),
 
 		Expect.ExceptionToBeThrown<TestException>()
 	];

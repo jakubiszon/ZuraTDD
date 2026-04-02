@@ -127,7 +127,7 @@ public partial class ContentPublishedEventHandlerTests
 	/// <see cref="ContentPublishedEventHandler.Handle" />
 	/// </summary>
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Handle - sends email to customers when content is published.")]
+		"ZuraTest - Handle - sends email to customers when content is published.")]
 	public ITestPart[] HandleStandardBehaviors => [
 		Receives.Handle(exampleContent),
 
@@ -149,7 +149,7 @@ public partial class ContentPublishedEventHandlerTests
 	];
 
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Throws when CustomerRepository.ListByInterests throws.")]
+		"ZuraTest - Throws when CustomerRepository.ListByInterests throws.")]
 	public ITestPart[] ThrowsTest_WhenListByInterestsThrows() => [
 		Receives.Handle(exampleContent),
 
@@ -167,7 +167,7 @@ public partial class ContentPublishedEventHandlerTests
 	// the highlight of this test is that it only needs to specify the deviation from the standard behavior
 	// and the expectation of the test
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Throws when EmailSender.SendEmail throws.")]
+		"ZuraTest - Throws when EmailSender.SendEmail throws.")]
 	public ITestPart[] ThrowsTest1() => [
 		Receives.Handle(exampleContent),
 

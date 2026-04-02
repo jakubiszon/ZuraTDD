@@ -65,4 +65,30 @@ public class EmailSenderMockTests
 			to: "email@example.com")
 			.WasCalled();
 	}
+
+	[TestMethod]
+	public void MockObject_SetupMultipleSideEffects()
+	{
+		var (setup, buildInstance, buildExpect) = new EmailSenderMock();
+		bool sideEffectCalled_1 = false;
+		bool sideEffectCalled_2 = false;
+
+		setup.SendEmailSync()
+			.Invokes(() => sideEffectCalled_1 = true)
+			.Invokes(() => sideEffectCalled_2 = true);
+
+		var instance = buildInstance();
+		instance.SendEmailSync(
+			to: "email@example.com",
+			subject: "very important message",
+			body: "sorry it's just spam :D");
+
+		Assert.IsTrue(sideEffectCalled_1);
+		Assert.IsTrue(sideEffectCalled_2);
+
+		var expect = buildExpect();
+		expect.SendEmailSync(
+			to: "email@example.com")
+			.WasCalled();
+	}
 }

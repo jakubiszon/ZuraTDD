@@ -42,5 +42,5 @@ internal class ContentPublishedEventHandlerServices : ITestSubjectServices
 	public ExampleProject.IEmailSender EmailSender
 		=> (ExampleProject.IEmailSender)fakeServices["EmailSender"];
 
-	public FakeService this[string name] => fakeServices[name];
+	public object this[string name] => fakeServices[name];
 }

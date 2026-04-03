@@ -1,4 +1,4 @@
-﻿namespace ZuraTDD.Tests.Example;
+namespace ZuraTDD.Tests.Example;
 
 internal class IEmailSender_Builder
 	: IEmailSender_BehaviorBuilder
@@ -14,6 +14,8 @@ internal class IEmailSender_Builder
 		var collector = base.behaviorSetupProcessor as BehaviorSetupCollector;
 
 		return new IEmailSender_Fake(
-			collector!.BuildSetupCollection());
+			collector!
+				.BuildSetupCollection()
+				.OfType<BehaviorSetup>());
 	}
 }

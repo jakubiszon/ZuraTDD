@@ -1,4 +1,4 @@
-﻿using ExampleProject;
+using ExampleProject;
 using static ZuraTDD.Tests.Example.ContentPublishedEventHandlerTestCase;
 
 namespace ZuraTDD.Tests.Example;
@@ -6,7 +6,6 @@ namespace ZuraTDD.Tests.Example;
 [TestClass]
 public partial class ContentPublishedEventHandlerTests
 {
-	//[TestCases]
 	internal static IEnumerable<ContentPublishedEventHandlerTestCase> Handle_TestCases()
 	{
 		var exampleContent = new Content(

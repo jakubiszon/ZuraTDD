@@ -3,11 +3,11 @@ using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 
-internal class ICustomerRepository_StaticBuilder : ICustomerRepository_BehaviorBuilder
+internal class ICustomerRepository_NamedInstanceBuilder : ICustomerRepository_BehaviorBuilder
 {
 	private string serviceName;
 
-	public ICustomerRepository_StaticBuilder(string serviceName)
+	public ICustomerRepository_NamedInstanceBuilder(string serviceName)
 		: base(new BehaviorSetupOwnerName(serviceName))
 	{
 		this.serviceName = serviceName;

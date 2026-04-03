@@ -1,4 +1,4 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 
@@ -7,6 +7,16 @@ internal class IEmailSender_Expect : IEmailSender_ExpectBuilder
 	public IEmailSender_Expect(
 		FakeService existingFake)
 		: base(new ExpectedServiceCallImmediateProcessor(existingFake))
+	{
+	}
+}
+
+internal class IEmailSender_ExpectStaticBuilder
+	: IEmailSender_ExpectBuilder
+{
+	public IEmailSender_ExpectStaticBuilder(
+		string serviceName)
+		: base(new ExpectedServiceCallOwnerName(serviceName))
 	{
 	}
 }

@@ -1,10 +1,10 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 
-internal class IEmailSender_StaticBuilder : IEmailSender_BehaviorBuilder
+internal class IEmailSender_NamedInstanceBuilder : IEmailSender_BehaviorBuilder
 {
-	public IEmailSender_StaticBuilder(string serviceName)
+	public IEmailSender_NamedInstanceBuilder(string serviceName)
 		: base(new BehaviorSetupOwnerName(serviceName))
 	{
 	}

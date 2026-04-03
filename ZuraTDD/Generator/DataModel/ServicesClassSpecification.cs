@@ -23,11 +23,11 @@ internal class ServicesClassSpecification
 		TestSubjectFullyQualifiedName = testSubjectType.ToDisplayString(
 			SymbolDisplayFormat.FullyQualifiedFormat);
 
-		Services = testSubjectType
+		Dependencies = testSubjectType
 			?.Constructors
 			.FirstOrDefault()
 			?.Parameters
-			.Select(p => new ServiceSpecification(outputNamespace, p))
+			.Select(p => new DependencySpecification(outputNamespace, p))
 			.ToList()
 			?? [];
 	}
@@ -40,5 +40,5 @@ internal class ServicesClassSpecification
 
 	public string TestSubjectFullyQualifiedName { get; }
 
-	public IReadOnlyList<ServiceSpecification> Services { get; }
+	public IReadOnlyList<DependencySpecification> Dependencies { get; }
 }

@@ -17,7 +17,7 @@ public abstract class TestCase
 
 	public ITestedMethodCall ReceivedCall { get; }
 
-	public IReadOnlyList<BehaviorSetup> WhenConditions { get; }
+	public IReadOnlyList<INamedDependencySetup> WhenConditions { get; }
 
 	public IReadOnlyList<ITestResultExpectation> Expectations { get; }
 
@@ -50,8 +50,9 @@ public abstract class TestCase
 				$"Test case '{name}' must start with a tested method call.");
 
 		this.WhenConditions = testParts!
-			.OfType<BehaviorBuilder>()
-			.Select(builder => builder.ToBehaviorSetup())
+			.OfType<IDependencyConfiguration>()
+			.Select(condition => condition.Build())
+			.OfType<INamedDependencySetup>()
 			.ToArray();
 
 		this.Expectations = testParts!
@@ -131,27 +132,31 @@ public abstract class TestCase
 
 public abstract class TestCase<TestSubject, TestSubjectServices>
 	: TestCase, ITestCase<TestSubject>
-	where TestSubjectServices : class, ITestSubjectServices, new()
+	where TestSubjectServices : class, ITestSubjectServices
 {
 	public TestCase(
 		string name,
 		params ITestPart[] testParts)
 		: base(name, testParts)
 	{
-		// TODO: create services instance using the When conditions
+		this.Services = BuildTestSubjectServices(base.WhenConditions);
 	}
 
 	/// <summary>
 	/// The services available to the test case.
 	/// </summary>
-	public TestSubjectServices Services { get; } = new();
+	public TestSubjectServices Services { get; }
 
-	public abstract TestSubject GetTestSubject();
+	/// <summary>
+	/// Gets an instance of the tested class.
+	/// </summary>
+	public abstract TestSubject GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups);
+
+	protected abstract TestSubjectServices BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups);
 
 	public override async Task RunTestAsync()
 	{
-		var testSubject = GetTestSubject();
-		this.Services.ApplyBehaviors(this.WhenConditions);
+		var testSubject = GetTestSubject(this.WhenConditions);
 
 		TestResult<TestSubjectServices, object?> testResult;
 		try

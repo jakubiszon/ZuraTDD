@@ -27,9 +27,12 @@ public class BehaviorSetupRunner
 	public BehaviorSetupRunner(IEnumerable<BehaviorSetup> behaviorSetups)
 	{
 		this.configuredSetups = [];
-		foreach(var setup in behaviorSetups)
+		if (behaviorSetups != null)
 		{
-			this.Add(setup);
+			foreach (var setup in behaviorSetups)
+			{
+				this.Add(setup);
+			}
 		}
 	}
 

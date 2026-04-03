@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ZuraTDD;
@@ -30,16 +30,17 @@ public class BehaviorSetupCollector : IBehaviorSetupProcessor
 
 	public void BuildInitiated(BehaviorBuilder behaviorSetup)
 	{
+		// this is needed for manual service building to collect all behavior setups which need to be built
 		this.builders.Add(behaviorSetup);
 	}
 
 	/// <summary>
 	/// Converts all recorded builders to behavior setups.
 	/// </summary>
-	public IReadOnlyList<BehaviorSetup> BuildSetupCollection()
+	public IReadOnlyList<IDependencySetup> BuildSetupCollection()
 	{
 		return builders
-			.Select(builder => builder.ToBehaviorSetup())
+			.Select(builder => builder.Build())
 			.ToList();
 	}
 }

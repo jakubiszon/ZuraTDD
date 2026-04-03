@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace ZuraTDD;
@@ -7,7 +7,7 @@ namespace ZuraTDD;
 /// An object which defines a set of filter values and a chain of behaviors
 /// to apply when the filters match.
 /// </summary>
-public class BehaviorSetup : ITestPart
+public class BehaviorSetup : IDependencySetup
 {
 	internal BehaviorSetup(
 		MethodInfo methodInfo,

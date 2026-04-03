@@ -8,7 +8,7 @@ internal partial class TemplateProcessor
 	/// <summary>
 	/// Generates code for the static class containing MethodInfo tokens for all public methods of the service.
 	/// </summary>
-	public static string ServiceMethodsClassCode(ServiceSpecification service)
+	public static string ServiceMethodsClassCode(DependencySpecification service)
 	{
 		var methodsTokens = service.Methods
 			.Select(m => Functions.ServiceMethodToken(service, m));
@@ -38,7 +38,7 @@ internal partial class TemplateProcessor
 
 static file class Functions
 {
-	public static string ServiceMethodToken(ServiceSpecification service, MethodSpecification method)
+	public static string ServiceMethodToken(DependencySpecification service, MethodSpecification method)
 	{
 		return
 			$$"""

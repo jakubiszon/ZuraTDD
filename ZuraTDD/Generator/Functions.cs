@@ -164,6 +164,20 @@ internal static class Functions
 			.ToList();
 	}
 
+	//public static List<PropertySpecification> ExtractProperties(INamedTypeSymbol? typeSymbol)
+	//{
+	//	if (typeSymbol == null) return [];
+
+	//	var allProperties = typeSymbol
+	//		.GetMembers()
+	//		.OfType<IPropertySymbol>()
+	//		.Where(p => p.DeclaredAccessibility == Accessibility.Public && !p.IsStatic)
+	//		.ToList();
+
+	//	// TODO
+	//	return [];
+	//}
+
 	public static string PrependNotEmpty(this string? input, string prepend)
 	{
 		return string.IsNullOrEmpty(input)

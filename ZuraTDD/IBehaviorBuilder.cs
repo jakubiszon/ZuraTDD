@@ -1,6 +1,6 @@
 namespace ZuraTDD;
 
-public interface IBehaviorBuilder
+public interface IBehaviorBuilder : IDependencyConfiguration
 {
 	void Add(IBehavior behavior);
 }

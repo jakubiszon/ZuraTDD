@@ -5,7 +5,7 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string GenerateFakeServiceCode(ServiceSpecification service)
+	public static string GenerateFakeServiceCode(DependencySpecification service)
 	{
 		var methods = service.Methods
 			.Select(m => Functions.GenerateFakeMethod(service, m));
@@ -47,7 +47,7 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string GenerateFakeMethod(
-		ServiceSpecification service,
+		DependencySpecification service,
 		MethodSpecification method)
 	{
 		var paramValues = method.GetParamValuesString();

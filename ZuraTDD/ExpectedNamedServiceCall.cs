@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Reflection;
+using ZuraTDD.Exceptions;
 
 namespace ZuraTDD;
 
@@ -21,7 +22,13 @@ public class ExpectedNamedServiceCall : ExpectedServiceCall, ITestResultExpectat
 
 	public void Verify(ITestResult testResult)
 	{
-		var service = testResult.Services[ServiceName];
+		var service = testResult.Services[ServiceName] as FakeService;
+
+		if (service == null)
+		{
+			throw new IncorrectConfiguration($"The dependency '{ServiceName}' is not configured for 'Expect'. If you used 'When.{ServiceName}.Is()' to configure an instance you cannot use `Expect.{ServiceName}`.");
+		}
+
 		base.Verify(service);
 	}
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ internal class MockObjectSpecification
 	/// <summary>
 	/// Returns the specification of the service being mocked.
 	/// </summary>
-	public ServiceSpecification MockedTypeSpecification { get; }
+	public DependencySpecification MockedTypeSpecification { get; }
 
 	public MockObjectSpecification(
 		INamedTypeSymbol typeSymbol)
@@ -37,7 +37,7 @@ internal class MockObjectSpecification
 			?.TypeArguments[0] as INamedTypeSymbol
 			?? throw new InvalidOperationException("Test case type does not implement IMock<T>");
 
-		MockedTypeSpecification = new ServiceSpecification(
+		MockedTypeSpecification = new DependencySpecification(
 			OutputNamespace,
 			mockedType);
 	}

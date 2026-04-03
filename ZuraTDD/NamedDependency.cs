@@ -1,6 +1,17 @@
 namespace ZuraTDD;
 
 /// <summary>
+/// An abstract, type-less instance of a dependency and a name.
+/// The dependency will be passed to a test-subject as a specific param matching the name.
+/// </summary>
+public interface INamedDependencyInstance
+	: INamedDependencySetup
+	, IDependencyConfiguration
+{
+	object? Instance { get; }
+}
+
+/// <summary>
 /// An object used to pass a dependency instance directly without mocking it.
 /// <br />When is it needed:
 /// <list type="bullet">
@@ -10,15 +21,22 @@ namespace ZuraTDD;
 /// </list>
 /// </summary>
 /// <typeparam name="T">Type of object used as a dependency.</typeparam>
-public class NamedDependency<T> : IDependencySetup
+public class NamedDependency<T> : INamedDependencyInstance
 {
 	public T Instance { get; }
 
-	public string ServiceName { get; }
+	public string DependencyName { get; }
+
+	object? INamedDependencyInstance.Instance => Instance;
 
 	public NamedDependency(T instance, string serviceName)
 	{
 		this.Instance = instance;
-		this.ServiceName = serviceName;
+		this.DependencyName = serviceName;
+	}
+
+	public IDependencySetup Build()
+	{
+		return this;
 	}
 }

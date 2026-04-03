@@ -165,8 +165,17 @@ public static class MethodBehaviorBuilderExtensions
 	/// <summary>
 	/// Returns only the dependency setup objects from the collection of test parts.
 	/// </summary>
-	public static IEnumerable<IDependencySetup> OnlyDependencySetup(this IEnumerable<ITestPart> testParts)
+	public static IEnumerable<IDependencyConfiguration> OnlyDependencySetup(this IEnumerable<ITestPart> testParts)
 	{
-		return testParts.OfType<IDependencySetup>();
+		return testParts.OfType<IDependencyConfiguration>();
+	}
+
+	public static IEnumerable<BehaviorSetup> OnlyBehaviorsWithName(
+		this IEnumerable<INamedDependencySetup> dependencySetup,
+		string dependencyName)
+	{
+		return dependencySetup
+			.Where(dependency => dependency.DependencyName == dependencyName)
+			.OfType<BehaviorSetup>();
 	}
 }

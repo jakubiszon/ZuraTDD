@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 
 namespace ZuraTDD.Generator;
 
 /// <summary>
 /// Represents a source file to be generated.
 /// </summary>
-internal record SourceFileGenerator
+internal record SourceFileToGenerate
 {
 	public string FileName { get; }
 
 	public Func<string> GeneratorFunction { get; }
 
-	public SourceFileGenerator(
+	public SourceFileToGenerate(
 		string fileName,
 		Func<string> generatorFunction)
 	{

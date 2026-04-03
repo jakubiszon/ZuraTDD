@@ -1,11 +1,11 @@
-﻿using ZuraTDD.Generator.DataModel;
+using ZuraTDD.Generator.DataModel;
 using System.Linq;
 
 namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string GenerateExpectServiceCode(ServiceSpecification service)
+	public static string GenerateExpectServiceCode(DependencySpecification service)
 	{
 		var methods = service.Methods
 			.Select(method => Functions.ServiceBuilderMethodCode(service, method));
@@ -62,7 +62,7 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string ServiceBuilderMethodCode(
-		ServiceSpecification service,
+		DependencySpecification service,
 		MethodSpecification method)
 	{
 		return

@@ -1,18 +1,19 @@
 using System.Collections.Generic;
+using System.Net.Sockets;
 using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
 
 /// <summary>
-/// Defines a service accepted as one constructor parameters by the test subject class.
+/// Defines a dependency accepted as one constructor parameters by the test subject class.
 /// </summary>
-internal class ServiceSpecification // TODO: rename it
+internal class DependencySpecification
 {
 	/// <summary>
 	/// Constructor used when a service is mocked using IMock&lt;T&gt; interface.
 	/// </summary>
 	/// <param name="typeSymbol">Symbol which was declares as implementing the <see cref="IMock{TService}"/> interface.</param>
-	public ServiceSpecification(
+	public DependencySpecification(
 		string outputNamespace,
 		INamedTypeSymbol mockedType)
 	{
@@ -22,6 +23,7 @@ internal class ServiceSpecification // TODO: rename it
 		ServiceTypeName = mockedType.Name;
 		DeclaringNamespace = mockedType.ContainingNamespace.ToDisplayString();
 		FullyQualifiedName = mockedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
+		IsInterface = mockedType.TypeKind == TypeKind.Interface;
 
 		// TODO: use inheritance to apply this field only to services used by TestCase<T>
 		ServicePropertyName = string.Empty;
@@ -32,7 +34,7 @@ internal class ServiceSpecification // TODO: rename it
 	/// <summary>
 	/// Constructor used when a service is defined as a parameter of the test subject's constructor.
 	/// </summary>
-	public ServiceSpecification(
+	public DependencySpecification(
 		string outputNamespace,
 		IParameterSymbol param)
 	{
@@ -41,6 +43,7 @@ internal class ServiceSpecification // TODO: rename it
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
 		ServicePropertyName = param.Name.ToString().Capitalize();
 		FullyQualifiedName = param.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
+		IsInterface = param.Type.TypeKind == TypeKind.Interface;
 		
 		Methods = Functions.ExtractPublicMethods(param.Type as INamedTypeSymbol);
 	}
@@ -84,4 +87,9 @@ internal class ServiceSpecification // TODO: rename it
 	/// List of all public methods of the service type.
 	/// </summary>
 	public IReadOnlyList<MethodSpecification> Methods { get; }
+
+	/// <summary>
+	/// Returns true if the dependency is an interface and can be mocked.
+	/// </summary>
+	public bool IsInterface { get; }
 }

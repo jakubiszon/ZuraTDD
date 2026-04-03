@@ -10,7 +10,7 @@ public class ActionBehaviorBuilder
 	: BehaviorBuilder
 {
 	/// <param name="methodInfo"></param>
-	/// <param name="setupProcessor">Setup processor called when <see cref="BehaviorBuilder.ToBehaviorSetup" /> is called.</param>
+	/// <param name="setupProcessor">Setup processor called when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public ActionBehaviorBuilder(
 		MethodInfo methodInfo,
 		IBehaviorSetupProcessor setupProcessor)

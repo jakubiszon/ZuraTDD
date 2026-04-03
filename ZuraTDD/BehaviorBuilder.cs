@@ -8,7 +8,6 @@ namespace ZuraTDD;
 /// </summary>
 public abstract class BehaviorBuilder
 	: IBehaviorBuilder
-	, IDependencySetup
 {
 	public MethodInfo Method { get; }
 
@@ -38,7 +37,7 @@ public abstract class BehaviorBuilder
 		this.behaviors.Add(behavior);
 	}
 
-	public BehaviorSetup ToBehaviorSetup()
+	public IDependencySetup Build()
 	{
 		return this.SetupProcessor.Build(this);
 	}

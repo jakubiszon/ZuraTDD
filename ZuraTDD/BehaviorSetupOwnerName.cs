@@ -1,4 +1,4 @@
-﻿namespace ZuraTDD;
+namespace ZuraTDD;
 
 /// <summary>
 /// Defines a behavior setup processor that does nothing but
@@ -17,7 +17,7 @@ public class BehaviorSetupOwnerName : IBehaviorSetupProcessor
 	public BehaviorSetup Build(
 		BehaviorBuilder builder)
 	{
-		return new BehaviorSetupServiceAssignment(
+		return new NamedDependencyBehaviorSetup(
 			builder.Method,
 			builder.ValueSetConstraint,
 			builder.Behaviors,

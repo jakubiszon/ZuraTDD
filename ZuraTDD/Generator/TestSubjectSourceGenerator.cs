@@ -76,7 +76,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			.Equals(interface1.OriginalDefinition, interface2);
 	}
 
-	private ImmutableArray<SourceFileGenerator> ProcessCandidateClass(
+	private ImmutableArray<SourceFileToGenerate> ProcessCandidateClass(
 		(ClassDeclarationSyntax, Compilation) pair)
 	{
 		var (candidate, compilation) = pair;
@@ -85,7 +85,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		var typeSymbol = model.GetDeclaredSymbol(candidate) as INamedTypeSymbol;
 	
 		if (typeSymbol == null)
-			return ImmutableArray<SourceFileGenerator>.Empty;
+			return ImmutableArray<SourceFileToGenerate>.Empty;
 
 		// Get interfaces
 		var testCaseInterface = compilation.GetTypeByMetadataName("ZuraTDD.ITestCase`1");
@@ -98,14 +98,14 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		if (isTestCase && isMock)
 		{
 			//OutputMultipleGeneratorsNotAllowedDiagnostic(context, candidate, typeSymbol);
-			return ImmutableArray<SourceFileGenerator>.Empty;
+			return ImmutableArray<SourceFileToGenerate>.Empty;
 		}
 
 		if(!isPartial)
 		{
 			//string interfaceName = isTestCase ? "ITestCase<T>" : "IMock<T>";
 			//OutputSymbolNotPartialDiagnostic(context, candidate, typeSymbol, interfaceName);
-			return ImmutableArray<SourceFileGenerator>.Empty;
+			return ImmutableArray<SourceFileToGenerate>.Empty;
 		}
 
 		if (isTestCase)
@@ -122,7 +122,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		}
 		else
 		{
-			return ImmutableArray<SourceFileGenerator>.Empty;
+			return ImmutableArray<SourceFileToGenerate>.Empty;
 		}
 	}
 
@@ -142,32 +142,10 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			TemplateProcessor.PrepareServicesClassCode,
 			testCaseSpecification.ServicesClass);
 
-		foreach (var service in testCaseSpecification.ServicesClass.Services)
+		foreach (var service in testCaseSpecification.ServicesClass.Dependencies)
 		{
-			files.AddFile(
-				$"{service.ServiceMethodsTypeName}.generated.cs",
-				TemplateProcessor.ServiceMethodsClassCode,
-				service);
-
-			files.AddFile(
-				$"{service.ServiceTypeName}_Builders.generated.cs",
-				TemplateProcessor.ServiceBuilderClassesCode,
-				service);
-
-			files.AddFile(
-				$"{service.ServiceTypeName}_StaticBuilder.generated.cs",
-				TemplateProcessor.ServiceStaticBuilderCode,
-				service);
-
-			files.AddFile(
-				$"{service.ServiceTypeName}_Fake.generated.cs",
-				TemplateProcessor.GenerateFakeServiceCode,
-				service);
-
-			files.AddFile(
-				$"{service.ServiceTypeName}_Expect.generated.cs",
-				TemplateProcessor.GenerateExpectServiceCode,
-				service);
+			var filesToAdd = GenerateDependencyCode(service);
+			files.AddFiles(filesToAdd.GetFilesToGenerate());
 		}
 
 		return files;
@@ -176,34 +154,88 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 	private SourceFilesToCreate GenerateMockCode(
 		INamedTypeSymbol typeSymbol)
 	{
-		SourceFilesToCreate files = new ();
 		var mockSpecification = new MockObjectSpecification(typeSymbol);
-		var mockedType = mockSpecification.MockedTypeSpecification;
+		var dependencySpecification = mockSpecification.MockedTypeSpecification;
+
+		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{mockedType.ServiceMethodsTypeName}.generated.cs",
+			$"{dependencySpecification.ServiceMethodsTypeName}.generated.cs",
 			TemplateProcessor.ServiceMethodsClassCode,
-			mockedType);
+			dependencySpecification);
 
 		files.AddFile(
-			$"{mockedType.ServiceTypeName}_Builders.generated.cs",
+			$"{dependencySpecification.ServiceTypeName}_Builders.generated.cs",
 			TemplateProcessor.ServiceBuilderClassesCode,
-			mockedType);
+			dependencySpecification);
 
 		files.AddFile(
-			$"{mockedType.ServiceTypeName}_Fake.generated.cs",
+			$"{dependencySpecification.ServiceTypeName}_Fake.generated.cs",
 			TemplateProcessor.GenerateFakeServiceCode,
-			mockedType);
+			dependencySpecification);
 
 		files.AddFile(
-			$"{mockedType.ServiceTypeName}_Expect.generated.cs",
+			$"{dependencySpecification.ServiceTypeName}_Expect.generated.cs",
 			TemplateProcessor.GenerateExpectServiceCode,
-			mockedType);
+			dependencySpecification);
 
 		files.AddFile(
 			$"{mockSpecification.TypeName}.generated.cs",
 			TemplateProcessor.GenerateMockCode,
 			mockSpecification);
+
+		return files;
+	}
+
+	private SourceFilesToCreate GenerateDependencyCode(DependencySpecification dependencySpecification)
+	{
+		return dependencySpecification.IsInterface
+			? GenerateAbstractDependencyCode(dependencySpecification)
+			: GenerateConcreteDependencyCode(dependencySpecification);
+	}
+
+	private SourceFilesToCreate GenerateConcreteDependencyCode(
+		DependencySpecification dependencySpecification)
+	{
+		SourceFilesToCreate files = new ();
+
+		files.AddFile(
+			$"{dependencySpecification.ServiceTypeName}_IsOnly_Builder.generated.cs",
+			TemplateProcessor.ServiceStaticBuilderCode,
+			dependencySpecification);
+
+		return files;
+	}
+
+	private SourceFilesToCreate GenerateAbstractDependencyCode(
+		DependencySpecification dependencySpecification)
+	{
+		SourceFilesToCreate files = new ();
+
+		files.AddFile(
+			$"{dependencySpecification.ServiceMethodsTypeName}.generated.cs",
+			TemplateProcessor.ServiceMethodsClassCode,
+			dependencySpecification);
+
+		files.AddFile(
+			$"{dependencySpecification.ServiceTypeName}_Builders.generated.cs",
+			TemplateProcessor.ServiceBuilderClassesCode,
+			dependencySpecification);
+
+		files.AddFile(
+			$"{dependencySpecification.ServiceTypeName}_NamedInstanceBuilder.generated.cs",
+			TemplateProcessor.ServiceStaticBuilderCode,
+			dependencySpecification);
+
+		files.AddFile(
+			$"{dependencySpecification.ServiceTypeName}_Fake.generated.cs",
+			TemplateProcessor.GenerateFakeServiceCode,
+			dependencySpecification);
+
+		files.AddFile(
+			$"{dependencySpecification.ServiceTypeName}_Expect.generated.cs",
+			TemplateProcessor.GenerateExpectServiceCode,
+			dependencySpecification);
 
 		return files;
 	}
@@ -247,9 +279,9 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 	}
 }
 
-internal class SourceFileComparer : IEqualityComparer<SourceFileGenerator>
+internal class SourceFileComparer : IEqualityComparer<SourceFileToGenerate>
 {
-	public bool Equals(SourceFileGenerator x, SourceFileGenerator y)
+	public bool Equals(SourceFileToGenerate x, SourceFileToGenerate y)
 	{
 		if (ReferenceEquals(x, y))
 			return true;
@@ -260,7 +292,7 @@ internal class SourceFileComparer : IEqualityComparer<SourceFileGenerator>
 		return x.FileName == y.FileName;
 	}
 
-	public int GetHashCode(SourceFileGenerator obj)
+	public int GetHashCode(SourceFileToGenerate obj)
 	{
 		return obj.FileName.GetHashCode();
 	}

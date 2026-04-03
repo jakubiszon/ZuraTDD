@@ -7,16 +7,18 @@ internal partial class TemplateProcessor
 {
 	public static string PrepareTestCaseClassCode(TestCaseSpecification testCase)
 	{
-		var services = testCase.ServicesClass.Services;
+		var services = testCase.ServicesClass.Dependencies;
 		var constructorArgs = string.Join(",", services.Select(s => $"\n\t\t\tthis.Services.{s.ServicePropertyName}"));
 
 		var receives = testCase.Methods.Select(method => Functions.PrepareReceivesCode(testCase, method));
 		var receivesCode = string.Join("\n\n", receives);
 
-		var whenServices = testCase.ServicesClass.Services.Select(Functions.PrepareServiceWhenCode);
+		var whenServices = testCase.ServicesClass.Dependencies.Select(Functions.PrepareServiceWhenCode);
 		var whenCode = string.Join("\n\n", whenServices);
 
-		var expectServices = testCase.ServicesClass.Services.Select(Functions.PrepareExpectServiceCode);
+		var expectServices = testCase.ServicesClass.Dependencies
+			.Where(dependency => dependency.IsInterface)
+			.Select(Functions.PrepareExpectServiceCode);
 		var expectServicesCode = string.Join("\n\n", expectServices);
 
 		// TODO: the class should match whatever access modifiers are used in their declaration
@@ -49,9 +51,16 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Gets an instance of the class being tested.
 				/// </summary>
-				public override {{testCase.TestSubjectFullyQualifiedClassName}} GetTestSubject()
+				public override {{testCase.TestSubjectFullyQualifiedClassName}}
+					GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
 					return new {{testCase.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
+				}
+
+				protected override {{testCase.ServicesClass.ServicesClassName}}
+					BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups)
+				{
+					return new(dependencySetups);
 				}
 
 				/// <summary>
@@ -138,7 +147,7 @@ static file class Functions
 		}
 	}
 
-	public static string PrepareServiceWhenCode(ServiceSpecification service)
+	public static string PrepareServiceWhenCode(DependencySpecification service)
 	{
 		return
 			$$"""
@@ -146,12 +155,12 @@ static file class Functions
 					/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.ServiceTypeName}}" />
 					/// which will be passed as "{{service.ServicePropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{service.ServiceTypeName}}_StaticBuilder {{service.ServicePropertyName}}
-						=> new {{service.ServiceTypeName}}_StaticBuilder("{{service.ServicePropertyName}}");
+					internal static {{service.ServiceTypeName}}_NamedInstanceBuilder {{service.ServicePropertyName}}
+						=> new {{service.ServiceTypeName}}_NamedInstanceBuilder("{{service.ServicePropertyName}}");
 			""";
 	}
 
-	public  static string PrepareExpectServiceCode(ServiceSpecification service)
+	public  static string PrepareExpectServiceCode(DependencySpecification service)
 	{
 		return
 			$$"""

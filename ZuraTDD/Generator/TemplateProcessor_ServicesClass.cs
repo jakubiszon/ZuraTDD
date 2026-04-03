@@ -107,9 +107,11 @@ static file class Functions
 							.OfType<NamedDependency<{{dependency.FullyQualifiedName}}>>()
 							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.ServicePropertyName}}");
 
+						#pragma warning disable CS8603 // Possible null reference return.
 						return valueSetup != null
 							? valueSetup.Instance
 							: default;
+						#pragma warning restore CS8603 // Possible null reference return.
 					}
 				}
 			""";

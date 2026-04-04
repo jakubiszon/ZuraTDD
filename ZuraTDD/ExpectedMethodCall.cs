@@ -6,15 +6,15 @@ namespace ZuraTDD;
 
 /// <summary>
 /// A call to a specific method and with specific value constraints
-/// expected to be found in a CallTracker.
+/// expected to be found in a <see cref="CallTracker"/>.
 /// </summary>
-public class ExpectedCall
+public class ExpectedMethodCall
 {
 	private MethodInfo method;
 	private ValueSetConstraint valueSetConstraint;
 	private int? exactCallNumber;
 
-	public ExpectedCall(
+	public ExpectedMethodCall(
 		MethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? exactCallNumber)

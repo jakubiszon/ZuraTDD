@@ -28,7 +28,7 @@ internal partial class TemplateProcessor
 			{
 				public {{service.ExpectTypeName}}(
 					MockedObject existingFake)
-					: base(new ExpectedServiceCallImmediateProcessor(existingFake))
+					: base(new ExpectedDependencyCallImmediateProcessor(existingFake))
 				{
 				}
 			}
@@ -38,7 +38,7 @@ internal partial class TemplateProcessor
 			{
 				public {{service.MockedTypeName}}_ExpectStaticBuilder(
 					string serviceName)
-					: base(new ExpectedServiceCallOwnerName(serviceName))
+					: base(new ExpectedDependencyCallNameProcessor(serviceName))
 				{
 				}
 			}

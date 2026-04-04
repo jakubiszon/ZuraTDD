@@ -6,7 +6,7 @@ internal class IEmailSender_Expect : IEmailSender_ExpectBuilder
 {
 	public IEmailSender_Expect(
 		MockedObject existingFake)
-		: base(new ExpectedServiceCallImmediateProcessor(existingFake))
+		: base(new ExpectedDependencyCallImmediateProcessor(existingFake))
 	{
 	}
 }
@@ -16,7 +16,7 @@ internal class IEmailSender_ExpectStaticBuilder
 {
 	public IEmailSender_ExpectStaticBuilder(
 		string serviceName)
-		: base(new ExpectedDependencyCall_NameProcessor(serviceName))
+		: base(new ExpectedDependencyCallNameProcessor(serviceName))
 	{
 	}
 }

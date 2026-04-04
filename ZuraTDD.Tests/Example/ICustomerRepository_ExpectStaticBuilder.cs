@@ -12,7 +12,7 @@ internal class ICustomerRepository_Expect
 {
 	public ICustomerRepository_Expect(
 		MockedObject existingFake)
-		: base(new ExpectedServiceCallImmediateProcessor(existingFake))
+		: base(new ExpectedDependencyCallImmediateProcessor(existingFake))
 	{
 	}
 }
@@ -22,7 +22,7 @@ internal class ICustomerRepository_ExpectStaticBuilder
 {
 	public ICustomerRepository_ExpectStaticBuilder(
 		string serviceName)
-		: base(new ExpectedDependencyCall_NameProcessor(serviceName))
+		: base(new ExpectedDependencyCallNameProcessor(serviceName))
 	{
 	}
 }

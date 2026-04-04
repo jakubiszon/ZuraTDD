@@ -3,7 +3,7 @@ using ZuraTDD.Exceptions;
 
 namespace ZuraTDD;
 
-public class ExpectedNamedDependencyCall : ExpectedDependencyCall, ITestResultExpectation
+public class ExpectedNamedDependencyCall : ExpectedMockedObjectMethodCall, ITestResultExpectation
 {
 	/// <summary>
 	/// Identifies the dependency name which should verify the expected call.

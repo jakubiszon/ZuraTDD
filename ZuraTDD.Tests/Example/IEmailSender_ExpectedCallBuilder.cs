@@ -5,7 +5,7 @@ namespace ZuraTDD.Tests.Example;
 public class IEmailSender_StaticExpectedCallBuilder : IEmailSender_ExpectedCallBuilder
 {
 	public IEmailSender_StaticExpectedCallBuilder(string serviceName)
-		: base(new ExpectedDependencyCall_NameProcessor(serviceName))
+		: base(new ExpectedDependencyCallNameProcessor(serviceName))
 	{
 	}
 }

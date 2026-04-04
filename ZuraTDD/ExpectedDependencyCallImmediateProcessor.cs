@@ -6,23 +6,23 @@ namespace ZuraTDD;
 /// A processor which immediately verifies expected service calls
 /// in the specified <see cref="MockedObject" />.
 /// </summary>
-public class ExpectedServiceCallImmediateProcessor
+public class ExpectedDependencyCallImmediateProcessor
 	: IExpectedDependencyCallProcessor
 {
 	private readonly MockedObject mockedObject;
 
-	public ExpectedServiceCallImmediateProcessor(
+	public ExpectedDependencyCallImmediateProcessor(
 		MockedObject mockedObject)
 	{
 		this.mockedObject = mockedObject;
 	}
 
-	public ExpectedDependencyCall Process(
+	public ExpectedMockedObjectMethodCall Process(
 		MethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount)
 	{
-		var expectedCall = new ExpectedDependencyCall(
+		var expectedCall = new ExpectedMockedObjectMethodCall(
 			method,
 			valueSetConstraint,
 			expectedCallCount);

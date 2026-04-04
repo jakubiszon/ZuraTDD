@@ -1,4 +1,4 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 using ZuraTDD.Exceptions;
 using ZuraTDD.Tests.Example;
 using System.Reflection;
@@ -13,7 +13,7 @@ public class ExpectedCallTests
 	[TestMethod]
 	public void Verify_ExpectingZeroCalls_WhenNoCallsTracked_DoesNotThrow()
 	{
-		var expectedCall = new ExpectedCall(
+		var expectedCall = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([]),
 			exactCallNumber: 0);
@@ -27,7 +27,7 @@ public class ExpectedCallTests
 	[TestMethod]
 	public void Verify_ExpectingZeroCalls_WhenNoMatchingCallsTracked_DoesNotThrow()
 	{
-		var expectedCall = new ExpectedCall(
+		var expectedCall = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([]),
 			exactCallNumber: 0);
@@ -41,7 +41,7 @@ public class ExpectedCallTests
 	[TestMethod]
 	public void Verify_ExpectingCalls_WhenNoMatchingCallsTracked_Throws()
 	{
-		var expectedCall = new ExpectedCall(
+		var expectedCall = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([]),
 			null);
@@ -58,22 +58,22 @@ public class ExpectedCallTests
 		tracker.ReceiveCall(exampleMethod, [1]);
 		tracker.ReceiveCall(exampleMethod, [2]);
 
-		var expectedAnyCallsWithOne = new ExpectedCall(
+		var expectedAnyCallsWithOne = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(1)]),
 			exactCallNumber: null);
 
-		var expectedNoCallsWithThree = new ExpectedCall(
+		var expectedNoCallsWithThree = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(3)]),
 			exactCallNumber: 0);
 
-		var expectedSingleCallWithTwo = new ExpectedCall(
+		var expectedSingleCallWithTwo = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(2)]),
 			exactCallNumber: 1);
 
-		var expectedTwoCallsWithPositiveNumbers = new ExpectedCall(
+		var expectedTwoCallsWithPositiveNumbers = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(x => x > 0)]),
 			exactCallNumber: 2);
@@ -93,22 +93,22 @@ public class ExpectedCallTests
 		tracker.ReceiveCall(exampleMethod, [1]);
 		tracker.ReceiveCall(exampleMethod, [2]);
 
-		var expectedAnyCallsWithFive = new ExpectedCall(
+		var expectedAnyCallsWithFive = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(5)]),
 			exactCallNumber: null);
 
-		var expectedNoCallsWithOne = new ExpectedCall(
+		var expectedNoCallsWithOne = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(1)]),
 			exactCallNumber: 0);
 
-		var expectedTwoCallWithTwo = new ExpectedCall(
+		var expectedTwoCallWithTwo = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(2)]),
 			exactCallNumber: 2);
 
-		var expectedNoCallsWithPositiveNumbers = new ExpectedCall(
+		var expectedNoCallsWithPositiveNumbers = new ExpectedMethodCall(
 			method: exampleMethod,
 			valueSetConstraint: new ValueSetConstraint([new ValueConstraint<int>(x => x > 0)]),
 			exactCallNumber: 0);
@@ -139,7 +139,7 @@ public class ExpectedCallTests
 			subject: "Hello",
 			body: "This is a test email.");
 
-		var expectedThreeEmails = new ExpectedCall(
+		var expectedThreeEmails = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(),
@@ -148,7 +148,7 @@ public class ExpectedCallTests
 			]),
 			exactCallNumber: 3);
 
-		var expectedThreeHellos = new ExpectedCall(
+		var expectedThreeHellos = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(),
@@ -157,7 +157,7 @@ public class ExpectedCallTests
 			]),
 			exactCallNumber: 3);
 
-		var expectedEmailToRobson = new ExpectedCall(
+		var expectedEmailToRobson = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(email => email.StartsWith("robson@")),
@@ -166,7 +166,7 @@ public class ExpectedCallTests
 			]),
 			exactCallNumber: null);
 
-		var expectedExampleComEmails = new ExpectedCall(
+		var expectedExampleComEmails = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(email => email.EndsWith("@example.com")),
@@ -203,7 +203,7 @@ public class ExpectedCallTests
 			subject: "Hello",
 			body: "This is a test email.");
 
-		var expectedZeroEmails = new ExpectedCall(
+		var expectedZeroEmails = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(),
@@ -212,7 +212,7 @@ public class ExpectedCallTests
 			]),
 			exactCallNumber: 0); // there are 3 calls, should fail
 
-		var expectedFourHellos = new ExpectedCall(
+		var expectedFourHellos = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(),
@@ -221,7 +221,7 @@ public class ExpectedCallTests
 			]),
 			exactCallNumber: 4); // should fail as the number is 3
 
-		var expectedEmailToJurko = new ExpectedCall(
+		var expectedEmailToJurko = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(email => email.StartsWith("jurko@")), // no matching email
@@ -230,7 +230,7 @@ public class ExpectedCallTests
 			]),
 			exactCallNumber: null);
 
-		var expectedAnyByeByeEmails = new ExpectedCall(
+		var expectedAnyByeByeEmails = new ExpectedMethodCall(
 			method: IEmailSender_Methods.SendEmailSync,
 			valueSetConstraint: new ValueSetConstraint([
 				new ValueConstraint<string>(),

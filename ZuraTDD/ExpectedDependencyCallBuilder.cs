@@ -31,7 +31,7 @@ public class ExpectedDependencyCallBuilder
 		this.valueSetConstraint = new ValueSetConstraint(valueConstraints);
 	}
 
-	public ExpectedDependencyCall WasNotCalled()
+	public ExpectedMockedObjectMethodCall WasNotCalled()
 	{
 		return processor.Process(
 			this.method,
@@ -39,7 +39,7 @@ public class ExpectedDependencyCallBuilder
 			0);
 	}
 
-	public ExpectedDependencyCall WasCalled()
+	public ExpectedMockedObjectMethodCall WasCalled()
 	{
 		return processor.Process(
 			this.method,
@@ -47,7 +47,7 @@ public class ExpectedDependencyCallBuilder
 			null);
 	}
 
-	public ExpectedDependencyCall WasCalled(int times)
+	public ExpectedMockedObjectMethodCall WasCalled(int times)
 	{
 		return processor.Process(
 			this.method,

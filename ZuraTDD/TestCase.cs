@@ -139,13 +139,13 @@ public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 		params ITestPart[] testParts)
 		: base(name, testParts)
 	{
-		this.Services = BuildTestSubjectServices(base.WhenConditions);
+		this.Dependencies = BuildTestSubjectServices(base.WhenConditions);
 	}
 
 	/// <summary>
 	/// The services available to the test case.
 	/// </summary>
-	public TTestSubjectDependencies Services { get; }
+	public TTestSubjectDependencies Dependencies { get; }
 
 	/// <summary>
 	/// Gets an instance of the tested class.
@@ -164,7 +164,7 @@ public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 			var callResult = await base.ReceivedCall.CallAsync(testSubject!);
 
 			testResult = new TestResult<TTestSubjectDependencies, object?>(
-				dependencies: this.Services,
+				dependencies: this.Dependencies,
 				exception: null,
 				result: callResult);
 
@@ -172,7 +172,7 @@ public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 		catch (Exception ex)
 		{
 			testResult = new TestResult<TTestSubjectDependencies, object?>(
-				dependencies: this.Services,
+				dependencies: this.Dependencies,
 				exception: ex,
 				result: null);
 		}

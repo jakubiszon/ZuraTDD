@@ -7,16 +7,16 @@ internal partial class TemplateProcessor
 {
 	public static string PrepareTestCaseClassCode(TestCaseSpecification testCase)
 	{
-		var services = testCase.ServicesClass.Dependencies;
-		var constructorArgs = string.Join(",", services.Select(s => $"\n\t\t\tthis.Services.{s.DependencyPropertyName}"));
+		var dependencies = testCase.DependenciesClass.Dependencies;
+		var constructorArgs = string.Join(",", dependencies.Select(s => $"\n\t\t\tthis.Dependencies.{s.DependencyPropertyName}"));
 
 		var receives = testCase.Methods.Select(method => Functions.PrepareReceivesCode(testCase, method));
 		var receivesCode = string.Join("\n\n", receives);
 
-		var whenServices = testCase.ServicesClass.Dependencies.Select(Functions.PrepareServiceWhenCode);
+		var whenServices = testCase.DependenciesClass.Dependencies.Select(Functions.PrepareServiceWhenCode);
 		var whenCode = string.Join("\n\n", whenServices);
 
-		var expectServices = testCase.ServicesClass.Dependencies
+		var expectServices = testCase.DependenciesClass.Dependencies
 			.Where(dependency => dependency.IsInterface)
 			.Select(Functions.PrepareExpectServiceCode);
 		var expectServicesCode = string.Join("\n\n", expectServices);
@@ -39,7 +39,7 @@ internal partial class TemplateProcessor
 			/// in order to simplify access to "Receives", "When" and "Expect" static classes.
 			/// </summary>
 			internal partial class {{testCase.TestCaseClassName}}
-				: TestCase<{{testCase.TestSubjectFullyQualifiedClassName}}, {{testCase.ServicesClass.ServicesClassName}}>
+				: TestCase<{{testCase.TestSubjectFullyQualifiedClassName}}, {{testCase.DependenciesClass.DependenciesClassName}}>
 			{
 				public {{testCase.TestCaseClassName}}(
 					string name,
@@ -57,7 +57,7 @@ internal partial class TemplateProcessor
 					return new {{testCase.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
 				}
 
-				protected override {{testCase.ServicesClass.ServicesClassName}}
+				protected override {{testCase.DependenciesClass.DependenciesClassName}}
 					BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
 					return new(dependencySetups);

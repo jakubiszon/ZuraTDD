@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace ZuraTDD;
 
-public class ExpectedServiceCall : ITestPart
+public class ExpectedDependencyCall : ITestPart
 {
 	private readonly MethodInfo method;
 	private readonly ValueSetConstraint valueSetConstraint;
 	private readonly int? expectedCallCount;
 
-	public ExpectedServiceCall(
+	public ExpectedDependencyCall(
 		MethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount)
@@ -19,10 +19,10 @@ public class ExpectedServiceCall : ITestPart
 		this.expectedCallCount = expectedCallCount;
 	}
 
-	public void Verify(FakeService service)
+	public void Verify(MockedObject mockedObject)
 	{
-		if (service == null)
-			throw new ArgumentNullException(nameof(service));
+		if (mockedObject == null)
+			throw new ArgumentNullException(nameof(mockedObject));
 
 		// prepare the expected call object
 		var expectedCall = new ExpectedCall(
@@ -31,6 +31,6 @@ public class ExpectedServiceCall : ITestPart
 			this.expectedCallCount);
 
 		// verify or throw
-		expectedCall.Verify(service.CallTracker);
+		expectedCall.Verify(mockedObject.CallTracker);
 	}
 }

@@ -28,7 +28,7 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// This class lists methods of <see cref="{{service.FullyQualifiedName}}" />.
 			/// </summary>
-			internal static class {{service.ServiceMethodsTypeName}}
+			internal static class {{service.MockedTypeMethodsTypeName}}
 			{
 			{{strTokens}}
 			}
@@ -42,7 +42,7 @@ static file class Functions
 	{
 		return
 			$$"""
-				public static readonly MethodInfo {{method.Token}} = typeof({{service.DeclaringNamespace}}.{{service.ServiceTypeName}}).GetMethod(
+				public static readonly MethodInfo {{method.Token}} = typeof({{service.DeclaringNamespace}}.{{service.MockedTypeName}}).GetMethod(
 					"{{method.MethodName}}",
 					[{{ServiceMethodTokenTypeParams(method)}}])!;
 			""";

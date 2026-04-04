@@ -130,9 +130,9 @@ public abstract class TestCase
 	}
 }
 
-public abstract class TestCase<TestSubject, TestSubjectServices>
+public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 	: TestCase, ITestCase<TestSubject>
-	where TestSubjectServices : class, ITestSubjectServices
+	where TTestSubjectDependencies : class, ITestSubjectDependencies
 {
 	public TestCase(
 		string name,
@@ -145,34 +145,34 @@ public abstract class TestCase<TestSubject, TestSubjectServices>
 	/// <summary>
 	/// The services available to the test case.
 	/// </summary>
-	public TestSubjectServices Services { get; }
+	public TTestSubjectDependencies Services { get; }
 
 	/// <summary>
 	/// Gets an instance of the tested class.
 	/// </summary>
 	public abstract TestSubject GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups);
 
-	protected abstract TestSubjectServices BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups);
+	protected abstract TTestSubjectDependencies BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups);
 
 	public override async Task RunTestAsync()
 	{
 		var testSubject = GetTestSubject(this.WhenConditions);
 
-		TestResult<TestSubjectServices, object?> testResult;
+		TestResult<TTestSubjectDependencies, object?> testResult;
 		try
 		{
 			var callResult = await base.ReceivedCall.CallAsync(testSubject!);
 
-			testResult = new TestResult<TestSubjectServices, object?>(
-				services: this.Services,
+			testResult = new TestResult<TTestSubjectDependencies, object?>(
+				dependencies: this.Services,
 				exception: null,
 				result: callResult);
 
 		}
 		catch (Exception ex)
 		{
-			testResult = new TestResult<TestSubjectServices, object?>(
-				services: this.Services,
+			testResult = new TestResult<TTestSubjectDependencies, object?>(
+				dependencies: this.Services,
 				exception: ex,
 				result: null);
 		}

@@ -7,7 +7,7 @@ namespace ZuraTDD.Generator.DataModel;
 /// <summary>
 /// Defines a method specification used in code generation.
 /// The method belongs either to an object marked as a TestCase
-/// or to one of the generated fake services.
+/// or to one of the generated mock-object-classes.
 /// </summary>
 internal class MethodSpecification
 {

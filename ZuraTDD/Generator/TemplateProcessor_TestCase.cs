@@ -8,7 +8,7 @@ internal partial class TemplateProcessor
 	public static string PrepareTestCaseClassCode(TestCaseSpecification testCase)
 	{
 		var services = testCase.ServicesClass.Dependencies;
-		var constructorArgs = string.Join(",", services.Select(s => $"\n\t\t\tthis.Services.{s.ServicePropertyName}"));
+		var constructorArgs = string.Join(",", services.Select(s => $"\n\t\t\tthis.Services.{s.DependencyPropertyName}"));
 
 		var receives = testCase.Methods.Select(method => Functions.PrepareReceivesCode(testCase, method));
 		var receivesCode = string.Join("\n\n", receives);
@@ -152,11 +152,11 @@ static file class Functions
 		return
 			$$"""
 					/// <summary>
-					/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.ServiceTypeName}}" />
-					/// which will be passed as "{{service.ServicePropertyName}}" to the test subject.
+					/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.MockedTypeName}}" />
+					/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{service.ServiceTypeName}}_NamedInstanceBuilder {{service.ServicePropertyName}}
-						=> new {{service.ServiceTypeName}}_NamedInstanceBuilder("{{service.ServicePropertyName}}");
+					internal static {{service.MockedTypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
+						=> new {{service.MockedTypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
 			""";
 	}
 
@@ -165,11 +165,11 @@ static file class Functions
 		return
 			$$"""
 					/// <summary>
-					/// A builder producing expectations for <see cref="{{service.DeclaringNamespace}}.{{service.ServiceTypeName}}" />
-					/// which will be passed as "{{service.ServicePropertyName}}" to the test subject.
+					/// A builder producing expectations for <see cref="{{service.DeclaringNamespace}}.{{service.MockedTypeName}}" />
+					/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{service.ServiceTypeName}}_ExpectStaticBuilder {{service.ServicePropertyName}}
-						=> new {{service.ServiceTypeName}}_ExpectStaticBuilder("{{service.ServicePropertyName}}");
+					internal static {{service.MockedTypeName}}_ExpectStaticBuilder {{service.DependencyPropertyName}}
+						=> new {{service.MockedTypeName}}_ExpectStaticBuilder("{{service.DependencyPropertyName}}");
 			""";
 	}
 }

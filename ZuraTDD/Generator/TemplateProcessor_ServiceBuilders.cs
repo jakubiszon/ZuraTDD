@@ -26,15 +26,15 @@ internal partial class TemplateProcessor
 			/// Instance builder of <see cref="{{service.FullyQualifiedName}}" />.
 			/// </summary>
 			internal class {{service.BuilderTypeName}}
-				: {{service.ServiceTypeName}}_BehaviorBuilder
-				, IBuild<{{service.ServiceFakeTypeName}}>
+				: {{service.MockedTypeName}}_BehaviorBuilder
+				, IBuild<{{service.MockedFakeTypeName}}>
 			{
 				public {{service.BuilderTypeName}}()
 					: base(new BehaviorSetupCollector())
 				{
 				}
 
-				public {{service.ServiceFakeTypeName}} BuildInstance()
+				public {{service.MockedFakeTypeName}} BuildInstance()
 				{
 					var collector = base.behaviorSetupProcessor as BehaviorSetupCollector;
 
@@ -48,10 +48,10 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// Abstract builder of <see cref="{{service.FullyQualifiedName}}" />.
 			/// </summary>
-			internal abstract class {{service.ServiceTypeName}}_BehaviorBuilder
-				: FakeServiceBuilder
+			internal abstract class {{service.MockedTypeName}}_BehaviorBuilder
+				: MockedObjectBuilder
 			{
-				public {{service.ServiceTypeName}}_BehaviorBuilder(
+				public {{service.MockedTypeName}}_BehaviorBuilder(
 					IBehaviorSetupProcessor behaviorSetupProcessor)
 					: base(behaviorSetupProcessor)
 				{
@@ -65,11 +65,9 @@ internal partial class TemplateProcessor
 	public static string ServiceStaticBuilderCode(
 		DependencySpecification service)
 	{
-		// TODO should this logic be kept here or in the invoking class?
-		if (service.IsInterface)
-			return ServiceStaticAbstractBuilderCode(service);
-		else
-			return ServiceStaticIsOnlyBuilderCode(service);
+		return service.IsInterface
+			? ServiceStaticAbstractBuilderCode(service)
+			: ServiceStaticIsOnlyBuilderCode(service);
 	}
 
 	private static string ServiceStaticAbstractBuilderCode(
@@ -83,11 +81,11 @@ internal partial class TemplateProcessor
 
 			namespace {{service.OutputNamespace}};
 
-			internal class {{service.ServiceTypeName}}_NamedInstanceBuilder : {{service.ServiceTypeName}}_BehaviorBuilder
+			internal class {{service.MockedTypeName}}_NamedInstanceBuilder : {{service.MockedTypeName}}_BehaviorBuilder
 			{
 				private readonly string serviceName;
 
-				public {{service.ServiceTypeName}}_NamedInstanceBuilder(string serviceName)
+				public {{service.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
 					: base(new BehaviorSetupOwnerName(serviceName))
 				{
 					this.serviceName = serviceName;
@@ -96,7 +94,7 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
 				/// </summary>
-				/// <param name="instance">Instance of {{service.ServiceTypeName}} used as dependency.</param>
+				/// <param name="instance">Instance of {{service.MockedTypeName}} used as dependency.</param>
 				public NamedDependency<{{service.FullyQualifiedName}}> Is(
 					{{service.FullyQualifiedName}} instance)
 				{
@@ -122,11 +120,11 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// A builder of a class which is not possible to mock. It only exposes the "Is" method.
 			/// </summary>
-			internal class {{service.ServiceTypeName}}_NamedInstanceBuilder
+			internal class {{service.MockedTypeName}}_NamedInstanceBuilder
 			{
 				private readonly string serviceName;
 
-				public {{service.ServiceTypeName}}_NamedInstanceBuilder(string serviceName)
+				public {{service.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
 				{
 					this.serviceName = serviceName;
 				}
@@ -134,7 +132,7 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
 				/// </summary>
-				/// <param name="instance">Instance of {{service.ServiceTypeName}} used as dependency.</param>
+				/// <param name="instance">Instance of {{service.MockedTypeName}} used as dependency.</param>
 				public NamedDependency<{{service.FullyQualifiedName}}> Is(
 					{{service.FullyQualifiedName}} instance)
 				{
@@ -166,13 +164,13 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Creates behavior builder for <see cref="{{service.ServiceTypeName}}.{{method.MethodName}}" />.
+				/// Creates behavior builder for <see cref="{{service.MockedTypeName}}.{{method.MethodName}}" />.
 				/// </summary>
 				public {{PrepareCallSpecificationType(method)}}
 					{{method.MethodName}}({{PrepareParameterList(method)}})
 				{
 					return new(
-						{{service.ServiceMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
+						{{service.MockedTypeMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
 						this.behaviorSetupProcessor);
 				}
 			""";

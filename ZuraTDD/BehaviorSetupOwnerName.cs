@@ -2,7 +2,7 @@ namespace ZuraTDD;
 
 /// <summary>
 /// Defines a behavior setup processor that does nothing but
-/// stores a name which can later be used to identify the service which
+/// stores a name which can later be used to identify the dependency which
 /// should receive the behavior.
 /// </summary>
 public class BehaviorSetupOwnerName : IBehaviorSetupProcessor

@@ -11,7 +11,7 @@ internal class ICustomerRepository_Expect
 	: ICustomerRepository_ExpectBuilder
 {
 	public ICustomerRepository_Expect(
-		FakeService existingFake)
+		MockedObject existingFake)
 		: base(new ExpectedServiceCallImmediateProcessor(existingFake))
 	{
 	}
@@ -22,17 +22,17 @@ internal class ICustomerRepository_ExpectStaticBuilder
 {
 	public ICustomerRepository_ExpectStaticBuilder(
 		string serviceName)
-		: base(new ExpectedServiceCallOwnerName(serviceName))
+		: base(new ExpectedDependencyCall_NameProcessor(serviceName))
 	{
 	}
 }
 
 internal class ICustomerRepository_ExpectBuilder
 {
-	private IExpectedServiceCallProcessor processor;
+	private IExpectedDependencyCallProcessor processor;
 
 	protected ICustomerRepository_ExpectBuilder(
-		IExpectedServiceCallProcessor processor)
+		IExpectedDependencyCallProcessor processor)
 	{
 		this.processor = processor;
 	}
@@ -40,7 +40,7 @@ internal class ICustomerRepository_ExpectBuilder
 	/// <summary>
 	/// Builds call expectations for <see cref="ICustomerRepository.ListAll" />.
 	/// </summary>
-	public ExpectedServiceCallBuilder ListAll()
+	public ExpectedDependencyCallBuilder ListAll()
 	{
 		return new(
 			ICustomerRepository_Methods.ListAll,
@@ -53,7 +53,7 @@ internal class ICustomerRepository_ExpectBuilder
 	/// <summary>
 	/// Builds call expectations for <see cref="ICustomerRepository.ListByInterests" />.
 	/// </summary>
-	public ExpectedServiceCallBuilder ListByInterests(
+	public ExpectedDependencyCallBuilder ListByInterests(
 		ValueConstraint<string>? topic = null)
 	{
 		return new(
@@ -67,7 +67,7 @@ internal class ICustomerRepository_ExpectBuilder
 	/// <summary>
 	/// Builds call expectations for <see cref="ICustomerRepository.ListByInterests" />.
 	/// </summary>
-	public ExpectedServiceCallBuilder ListByInterests(
+	public ExpectedDependencyCallBuilder ListByInterests(
 		ValueConstraint<System.Collections.Generic.List<string>>? topics = null)
 	{
 		return new(

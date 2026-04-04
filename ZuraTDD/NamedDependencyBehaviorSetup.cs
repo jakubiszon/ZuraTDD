@@ -5,7 +5,7 @@ namespace ZuraTDD;
 
 /// <summary>
 /// Defines a behavior setup that holds a name of a service to which it should be assigned to.
-/// The name will identify a service within an instance of <see cref="ITestSubjectServices"/>.
+/// The name will identify a service within an instance of <see cref="ITestSubjectDependencies"/>.
 /// </summary>
 internal class NamedDependencyBehaviorSetup
 	: BehaviorSetup

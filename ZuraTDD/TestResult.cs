@@ -4,34 +4,34 @@ namespace ZuraTDD;
 
 public interface ITestResult
 {
-	public ITestSubjectServices Services { get; }
+	public ITestSubjectDependencies Dependencies { get; }
 
 	public Exception? Exception { get; }
 
 	public object? Result { get; }
 }
 
-public class TestResult<TServices, TResult>
+public class TestResult<TTestSubjectDependencies, TResult>
 	: ITestResult
-	where TServices : class, ITestSubjectServices
+	where TTestSubjectDependencies : class, ITestSubjectDependencies
 {
-	public TServices? Services { get; }
+	public TTestSubjectDependencies? Dependencies { get; }
 
 	public Exception? Exception { get; }
 
 	public TResult? Result { get; }
 
-	ITestSubjectServices ITestResult.Services => Services!;
+	ITestSubjectDependencies ITestResult.Dependencies => Dependencies!;
 
 	object? ITestResult.Result => Result;
 
 	public TestResult(
-		ITestSubjectServices services,
+		ITestSubjectDependencies dependencies,
 		Exception? exception,
 		TResult? result)
 	{
-		this.Services = services as TServices
-			?? throw new ArgumentException($"Invalid service type: {services.GetType().FullName}");
+		this.Dependencies = dependencies as TTestSubjectDependencies
+			?? throw new ArgumentException($"Invalid service type: {dependencies.GetType().FullName}");
 
 		this.Exception = exception;
 		this.Result = result;

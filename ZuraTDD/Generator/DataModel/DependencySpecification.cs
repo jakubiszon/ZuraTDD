@@ -10,9 +10,9 @@ namespace ZuraTDD.Generator.DataModel;
 internal class DependencySpecification
 {
 	/// <summary>
-	/// Constructor used when a service is mocked using IMock&lt;T&gt; interface.
+	/// Constructor used when a type is mocked using IMock&lt;T&gt; interface.
 	/// </summary>
-	/// <param name="typeSymbol">Symbol which was declares as implementing the <see cref="IMock{TService}"/> interface.</param>
+	/// <param name="typeSymbol">Symbol which was declares as implementing the <see cref="IMock{TType}"/> interface.</param>
 	public DependencySpecification(
 		string outputNamespace,
 		INamedTypeSymbol mockedType)
@@ -20,28 +20,28 @@ internal class DependencySpecification
 		string mockedTypeName = mockedType.ToDisplayString();
 
 		OutputNamespace = outputNamespace;
-		ServiceTypeName = mockedType.Name;
+		MockedTypeName = mockedType.Name;
 		DeclaringNamespace = mockedType.ContainingNamespace.ToDisplayString();
 		FullyQualifiedName = mockedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
 		IsInterface = mockedType.TypeKind == TypeKind.Interface;
 
 		// TODO: use inheritance to apply this field only to services used by TestCase<T>
-		ServicePropertyName = string.Empty;
+		DependencyPropertyName = string.Empty;
 		
 		Methods = Functions.ExtractPublicMethods(mockedType);
 	}
 
 	/// <summary>
-	/// Constructor used when a service is defined as a parameter of the test subject's constructor.
+	/// Constructor used when a type is passed as a constructor parameter of a test subject.
 	/// </summary>
 	public DependencySpecification(
 		string outputNamespace,
 		IParameterSymbol param)
 	{
 		OutputNamespace = outputNamespace;
-		ServiceTypeName = param.Type.Name;
+		MockedTypeName = param.Type.Name;
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
-		ServicePropertyName = param.Name.ToString().Capitalize();
+		DependencyPropertyName = param.Name.ToString().Capitalize();
 		FullyQualifiedName = param.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
 		IsInterface = param.Type.TypeKind == TypeKind.Interface;
 		
@@ -51,22 +51,22 @@ internal class DependencySpecification
 	/// <summary>
 	/// Name of the mocked type without the namespace.
 	/// </summary>
-	public string ServiceTypeName { get; }
+	public string MockedTypeName { get; }
 
 	/// <summary>
 	/// Gets the fully qualified name of the object, including its namespace or containing context.
 	/// </summary>
 	public string FullyQualifiedName { get; }
 
-	public string ServiceFakeTypeName => $"{ServiceTypeName}_Fake";
+	public string MockedFakeTypeName => $"{MockedTypeName}_Fake";
 
-	public string ServiceMethodsTypeName => $"{ServiceTypeName}_Methods";
+	public string MockedTypeMethodsTypeName => $"{MockedTypeName}_Methods";
 
-	public string BuilderTypeName => $"{ServiceTypeName}_Builder";
+	public string BuilderTypeName => $"{MockedTypeName}_Builder";
 
-	public string ExpectTypeName => $"{ServiceTypeName}_Expect";
+	public string ExpectTypeName => $"{MockedTypeName}_Expect";
 
-	public string MockTypeName => $"{ServiceTypeName}_Mock";
+	public string MockTypeName => $"{MockedTypeName}_Mock";
 
 	/// <summary>
 	/// Namespace containing the mocked type.
@@ -79,12 +79,12 @@ internal class DependencySpecification
 	public string OutputNamespace { get; }
 
 	/// <summary>
-	/// Name of the property in the services class generated for the test cases which reference the test subject.
+	/// Name of the property in the TestSubjecyDependencies class generated for the test cases which reference the test subject.
 	/// </summary>
-	public string ServicePropertyName { get; }
+	public string DependencyPropertyName { get; }
 
 	/// <summary>
-	/// List of all public methods of the service type.
+	/// List of all public methods of the mocked type.
 	/// </summary>
 	public IReadOnlyList<MethodSpecification> Methods { get; }
 

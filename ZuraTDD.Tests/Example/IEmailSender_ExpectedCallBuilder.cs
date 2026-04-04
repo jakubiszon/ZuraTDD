@@ -1,26 +1,26 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 
 public class IEmailSender_StaticExpectedCallBuilder : IEmailSender_ExpectedCallBuilder
 {
 	public IEmailSender_StaticExpectedCallBuilder(string serviceName)
-		: base(new ExpectedServiceCallOwnerName(serviceName))
+		: base(new ExpectedDependencyCall_NameProcessor(serviceName))
 	{
 	}
 }
 
 public abstract class IEmailSender_ExpectedCallBuilder
 {
-	private readonly IExpectedServiceCallProcessor processor;
+	private readonly IExpectedDependencyCallProcessor processor;
 
 	public IEmailSender_ExpectedCallBuilder(
-		IExpectedServiceCallProcessor processor)
+		IExpectedDependencyCallProcessor processor)
 	{
 		this.processor = processor;
 	}
 
-	public ExpectedServiceCallBuilder SendEmail(
+	public ExpectedDependencyCallBuilder SendEmail(
 		ValueConstraint<string>? to = null,
 		ValueConstraint<string>? subject = null,
 		ValueConstraint<string>? body = null)
@@ -35,7 +35,7 @@ public abstract class IEmailSender_ExpectedCallBuilder
 			this.processor);
 	}
 
-	public ExpectedServiceCallBuilder SendEmailSync(
+	public ExpectedDependencyCallBuilder SendEmailSync(
 		ValueConstraint<string>? to = null,
 		ValueConstraint<string>? subject = null,
 		ValueConstraint<string>? body = null)

@@ -8,7 +8,7 @@ namespace ZuraTDD.Generator;
 /// </summary>
 internal class SourceFilesToCreate
 {
-	private Dictionary<string, SourceFileToGenerate> sourceGenerators = new();
+	private readonly Dictionary<string, SourceFileToGenerate> sourceGenerators = [];
 
 	/// <summary>
 	/// Adds a source file with the specified name and content generator function,

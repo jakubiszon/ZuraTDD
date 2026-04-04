@@ -1,10 +1,10 @@
-﻿using ExampleProject;
+using ExampleProject;
 using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 
 internal class ICustomerRepository_Fake
-	: FakeService
+	: MockedObject
 	, ICustomerRepository
 {
 	public ICustomerRepository_Fake(

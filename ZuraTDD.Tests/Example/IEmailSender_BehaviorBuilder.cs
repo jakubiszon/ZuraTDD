@@ -1,4 +1,4 @@
-﻿using ExampleProject;
+using ExampleProject;
 
 namespace ZuraTDD.Tests.Example;
 
@@ -6,7 +6,7 @@ namespace ZuraTDD.Tests.Example;
 /// A behavior builder for <see cref="IEmailSender_Fake" />
 /// Method definitions are generated based on the method signatures of <see cref="IEmailSender" />.
 /// </summary>
-internal abstract class IEmailSender_BehaviorBuilder : FakeServiceBuilder
+internal abstract class IEmailSender_BehaviorBuilder : MockedObjectBuilder
 {
 	public IEmailSender_BehaviorBuilder(IBehaviorSetupProcessor behaviorSetupProcessor)
 		: base(behaviorSetupProcessor)

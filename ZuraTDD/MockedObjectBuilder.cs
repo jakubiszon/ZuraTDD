@@ -1,10 +1,10 @@
-﻿namespace ZuraTDD;
+namespace ZuraTDD;
 
-public abstract class FakeServiceBuilder
+public abstract class MockedObjectBuilder
 {
 	protected readonly IBehaviorSetupProcessor behaviorSetupProcessor;
 
-	protected FakeServiceBuilder(IBehaviorSetupProcessor behaviorSetupProcessor)
+	protected MockedObjectBuilder(IBehaviorSetupProcessor behaviorSetupProcessor)
 	{
 		this.behaviorSetupProcessor = behaviorSetupProcessor;
 	}

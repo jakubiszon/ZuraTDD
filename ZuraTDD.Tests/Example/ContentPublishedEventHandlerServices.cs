@@ -10,20 +10,20 @@ namespace ZuraTDD.Tests.Example;
 /// <summary>
 /// Services used by the test cases for <see cref="global::ExampleProject.ContentPublishedEventHandler" />.
 /// </summary>
-internal class ContentPublishedEventHandlerServices : ITestSubjectServices
+internal class ContentPublishedEventHandlerServices : ITestSubjectDependencies
 {
-	private DependencyCollection fakeServices;
+	private DependencyCollection mockedDependencies;
 
 	private readonly INamedDependencySetup[] dependencySetup;
 
 	public ContentPublishedEventHandlerServices(IEnumerable<INamedDependencySetup> dependencySetup)
 	{
 		this.dependencySetup = dependencySetup.ToArray();
-		this.fakeServices = new(
-			KeyValuePair.Create<string, Func<FakeService>>(
+		this.mockedDependencies = new(
+			KeyValuePair.Create<string, Func<MockedObject>>(
 				"CustomerRepository",
 				() => new ICustomerRepository_Fake(dependencySetup.OnlyBehaviorsWithName("CustomerRepository"))),
-			KeyValuePair.Create<string, Func<FakeService>>(
+			KeyValuePair.Create<string, Func<MockedObject>>(
 				"EmailSender",
 				() => new IEmailSender_Fake(dependencySetup.OnlyBehaviorsWithName("EmailSender"))));
 	}
@@ -33,14 +33,14 @@ internal class ContentPublishedEventHandlerServices : ITestSubjectServices
 	/// Returns an instance of <see cref="ExampleProject.ICustomerRepository" />.
 	/// </summary>
 	public ExampleProject.ICustomerRepository CustomerRepository
-		=> (ExampleProject.ICustomerRepository)fakeServices["CustomerRepository"];
+		=> (ExampleProject.ICustomerRepository)mockedDependencies["CustomerRepository"];
 
 	/// <summary>
 	/// Mock for the "EmailSender" parameter of the test subject constructor.
 	/// Returns an instance of <see cref="ExampleProject.IEmailSender" />.
 	/// </summary>
 	public ExampleProject.IEmailSender EmailSender
-		=> (ExampleProject.IEmailSender)fakeServices["EmailSender"];
+		=> (ExampleProject.IEmailSender)mockedDependencies["EmailSender"];
 
-	public object this[string name] => fakeServices[name];
+	public object this[string name] => mockedDependencies[name];
 }

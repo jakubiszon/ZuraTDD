@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using ZuraTDD.Generator.DataModel;
@@ -22,7 +22,7 @@ internal partial class TemplateProcessor
 			internal partial class {{mockSpecification.TypeName}}
 			{
 				public {{mockedType.BuilderTypeName}} Setup { get; }
-				private readonly Lazy<{{mockedType.ServiceFakeTypeName}}> instance;
+				private readonly Lazy<{{mockedType.MockedFakeTypeName}}> instance;
 
 				public {{mockSpecification.TypeName}}()
 				{
@@ -32,7 +32,7 @@ internal partial class TemplateProcessor
 
 				public void Deconstruct(
 					out {{mockedType.BuilderTypeName}} setup,
-					out Func<{{mockedType.ServiceFakeTypeName}}> buildInstance,
+					out Func<{{mockedType.MockedFakeTypeName}}> buildInstance,
 					out Func<{{mockedType.ExpectTypeName}}> buildExpect)
 				{
 					setup = Setup;

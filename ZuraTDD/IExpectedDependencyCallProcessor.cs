@@ -1,10 +1,10 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace ZuraTDD;
 
-public interface IExpectedServiceCallProcessor
+public interface IExpectedDependencyCallProcessor
 {
-	ExpectedServiceCall Process(
+	ExpectedDependencyCall Process(
 		MethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount);

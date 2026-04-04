@@ -1,17 +1,17 @@
-﻿namespace ZuraTDD;
+namespace ZuraTDD;
 
-public abstract class FakeServiceSetup
-	<TSetup, TService, TTester>
+public abstract class MockedObjectSetup
+	<TSetup, TObjectType, TTester>
 {
 	public TSetup Setup { get; }
 
-	public TService Instance { get; }
+	public TObjectType Instance { get; }
 
 	public TTester Expect { get; }
 
-	protected FakeServiceSetup(
+	protected MockedObjectSetup(
 		TSetup setup,
-		TService instance,
+		TObjectType instance,
 		TTester expect)
 	{
 		Setup = setup;
@@ -21,7 +21,7 @@ public abstract class FakeServiceSetup
 
 	void Destructure(
 		out TSetup setup,
-		out TService instance,
+		out TObjectType instance,
 		out TTester expect)
 	{
 		setup = Setup;

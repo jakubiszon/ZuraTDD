@@ -1,7 +1,7 @@
-﻿namespace ZuraTDD;
+namespace ZuraTDD;
 
 /// <summary>
-/// Marks a class as a mock for the service <typeparamref name="TService" />.
+/// Marks a class as a mock for the service <typeparamref name="TType" />.
 /// The mocking code will be automatically generated.
 /// <code>
 /// // use it with partial class and pass the interface to mock
@@ -10,19 +10,21 @@
 /// }
 /// 
 /// // inside your tests:
-/// var (builder, instance, expect) = new MyClassMock();
-/// 
-/// // setting up behaviors
-/// builder.ExampleMethod()
-///   .Returns(someValue);
-/// 
-/// // after you run your tests you can
-/// expect.ExampleMethod(
-///   exampleParam: 123)
-///	  .WasCalled();
+/// {
+///   var (builder, instance, expect) = new MyClassMock();
+///   
+///   // setting up behaviors
+///   builder.ExampleMethod()
+///     .Returns(someValue);
+///   
+///   // after you run your tests you can
+///   expect.ExampleMethod(
+///     exampleParam: 123)
+///	    .WasCalled();
+///	}
 /// </code>
 /// </summary>
-/// <typeparam name="TService">Type to create mocking code for.</typeparam>
-public interface IMock<TService>
+/// <typeparam name="TType">Type to create mocking code for.</typeparam>
+public interface IMock<TType>
 {
 }

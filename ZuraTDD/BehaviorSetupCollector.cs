@@ -30,7 +30,7 @@ public class BehaviorSetupCollector : IBehaviorSetupProcessor
 
 	public void BuildInitiated(BehaviorBuilder behaviorSetup)
 	{
-		// this is needed for manual service building to collect all behavior setups which need to be built
+		// this is needed for manual dependency building to collect all behavior setups which need to be built
 		this.builders.Add(behaviorSetup);
 	}
 

@@ -23,7 +23,7 @@ internal class MockObjectSpecification
 	public string TypeName { get; }
 
 	/// <summary>
-	/// Returns the specification of the service being mocked.
+	/// Returns the specification of the mocked type.
 	/// </summary>
 	public DependencySpecification MockedTypeSpecification { get; }
 

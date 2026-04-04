@@ -5,7 +5,7 @@ namespace ZuraTDD.Tests.Example;
 internal class IEmailSender_Expect : IEmailSender_ExpectBuilder
 {
 	public IEmailSender_Expect(
-		FakeService existingFake)
+		MockedObject existingFake)
 		: base(new ExpectedServiceCallImmediateProcessor(existingFake))
 	{
 	}
@@ -16,22 +16,22 @@ internal class IEmailSender_ExpectStaticBuilder
 {
 	public IEmailSender_ExpectStaticBuilder(
 		string serviceName)
-		: base(new ExpectedServiceCallOwnerName(serviceName))
+		: base(new ExpectedDependencyCall_NameProcessor(serviceName))
 	{
 	}
 }
 
 internal abstract class IEmailSender_ExpectBuilder
 {
-	private IExpectedServiceCallProcessor processor;
+	private IExpectedDependencyCallProcessor processor;
 
 	protected IEmailSender_ExpectBuilder(
-		IExpectedServiceCallProcessor processor)
+		IExpectedDependencyCallProcessor processor)
 	{
 		this.processor = processor;
 	}
 
-	public ExpectedServiceCallBuilder SendEmail(
+	public ExpectedDependencyCallBuilder SendEmail(
 		ValueConstraint<string>? to = null,
 		ValueConstraint<string>? subject = null,
 		ValueConstraint<string>? body = null)
@@ -46,7 +46,7 @@ internal abstract class IEmailSender_ExpectBuilder
 			this.processor);
 	}
 
-	public ExpectedServiceCallBuilder SendEmailSync(
+	public ExpectedDependencyCallBuilder SendEmailSync(
 		ValueConstraint<string>? to = null,
 		ValueConstraint<string>? subject = null,
 		ValueConstraint<string>? body = null)

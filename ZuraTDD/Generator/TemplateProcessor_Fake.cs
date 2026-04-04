@@ -5,7 +5,7 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string GenerateFakeServiceCode(DependencySpecification service)
+	public static string GenerateMockedObjectCode(DependencySpecification service)
 	{
 		var methods = service.Methods
 			.Select(m => Functions.GenerateFakeMethod(service, m));
@@ -23,11 +23,11 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// A mock implementation of <see cref="{{service.FullyQualifiedName}}" />.
 			/// </summary>
-			internal class {{service.ServiceFakeTypeName}}
-				: FakeService
+			internal class {{service.MockedFakeTypeName}}
+				: MockedObject
 				, {{service.FullyQualifiedName}}
 			{
-				public {{service.ServiceFakeTypeName}}(
+				public {{service.MockedFakeTypeName}}(
 					params IEnumerable<BehaviorSetup> behaviors)
 					: base(behaviors)
 				{
@@ -60,16 +60,16 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Simulates behavior for <see cref="{{service.ServiceTypeName}}.{{method.MethodName}}" />.
+				/// Simulates behavior for <see cref="{{service.MockedTypeName}}.{{method.MethodName}}" />.
 				/// </summary>
 				public {{method.ReturnType}} {{method.MethodName}}({{ParameterDeclarations(method)}})
 				{
 					this.CallTracker.ReceiveCall(
-						{{service.ServiceMethodsTypeName}}.{{method.Token}},
+						{{service.MockedTypeMethodsTypeName}}.{{method.Token}},
 						[{{paramValues}}]);
 
 					{{@return}}base.BehaviorSetupRunner.{{InvokeMethod(method)}}(
-						{{service.ServiceMethodsTypeName}}.{{method.Token}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
+						{{service.MockedTypeMethodsTypeName}}.{{method.Token}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
 				}
 			""";
 	}

@@ -12,9 +12,9 @@ public class ExpectedResultMatching<T> : ITestResultExpectation
 		this.predicate = predicate;
 	}
 
-	public void Verify(ITestResult testSubjectServices)
+	public void Verify(ITestResult testSubjectDependencies)
 	{
-		if (testSubjectServices.Result is T result)
+		if (testSubjectDependencies.Result is T result)
 		{
 			if(!this.predicate(result))
 			{
@@ -24,7 +24,7 @@ public class ExpectedResultMatching<T> : ITestResultExpectation
 		}
 		else
 		{
-			var type = testSubjectServices.Result?.GetType() ?? typeof(object);
+			var type = testSubjectDependencies.Result?.GetType() ?? typeof(object);
 			throw new ExpectationFailed($"Returned value type is '{type.FullName}' but was expected to be '{typeof(T).FullName}'.");
 		}
 	}

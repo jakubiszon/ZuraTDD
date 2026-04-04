@@ -17,12 +17,12 @@ internal partial class TemplateProcessor
 			.Where(dependency => dependency.IsInterface)
 			.Select(dependency =>
 			$$"""
-						KeyValuePair.Create<string, Func<FakeService>>(
-							"{{dependency.ServicePropertyName}}",
-							() => new {{dependency.ServiceFakeTypeName}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.ServicePropertyName}}")))
+						KeyValuePair.Create<string, Func<MockedObject>>(
+							"{{dependency.DependencyPropertyName}}",
+							() => new {{dependency.MockedFakeTypeName}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
 			""");
 
-		// comma separated dependency factories to pass to FakeServices constructor
+		// comma separated dependency factories to pass to DependencyCollection constructor
 		var strAbstractDependencyFactories = string.Join(",\n", abstractDependencyFactories);
 
 		// TODO: when an abstract dependency is passed as a named instance - do not create a fake
@@ -39,22 +39,22 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// Services used by the test cases for <see cref="{{spec.TestSubjectFullyQualifiedName}}" />.
 			/// </summary>
-			internal class {{spec.ServicesClassName}} : ITestSubjectServices
+			internal class {{spec.ServicesClassName}} : ITestSubjectDependencies
 			{
-				private DependencyCollection fakeServices;
+				private DependencyCollection mockedDependencies;
 
 				private readonly INamedDependencySetup[] dependencySetup;
 
 				public {{spec.ServicesClassName}}(IEnumerable<INamedDependencySetup> dependencySetup)
 				{
 					this.dependencySetup = dependencySetup.ToArray();
-					this.fakeServices = new(
+					this.mockedDependencies = new(
 			{{strAbstractDependencyFactories}});
 				}
 
 			{{string.Join("\n\n", dependencyProperies)}}
 
-				public object this[string name] => fakeServices[name];
+				public object this[string name] => mockedDependencies[name];
 			}
 			""";
 	}
@@ -74,19 +74,19 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Mock for the "{{dependency.ServicePropertyName}}" parameter of the test subject constructor.
+				/// Mock for the "{{dependency.DependencyPropertyName}}" parameter of the test subject constructor.
 				/// Returns an instance of <see cref="{{dependency.FullyQualifiedName}}" />.
 				/// </summary>
-				public {{dependency.FullyQualifiedName}} {{dependency.ServicePropertyName}}
+				public {{dependency.FullyQualifiedName}} {{dependency.DependencyPropertyName}}
 				{
 					get {
 						var valueSetup = this.dependencySetup
 							.OfType<NamedDependency<{{dependency.FullyQualifiedName}}>>()
-							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.ServicePropertyName}}");
+							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.DependencyPropertyName}}");
 			
 						return valueSetup != null
 							? valueSetup.Instance
-							: ({{dependency.FullyQualifiedName}})fakeServices["{{dependency.ServicePropertyName}}"];
+							: ({{dependency.FullyQualifiedName}})mockedDependencies["{{dependency.DependencyPropertyName}}"];
 					}
 				}
 			""";
@@ -100,12 +100,12 @@ static file class Functions
 				/// Returns an instance of <see cref="{{dependency.FullyQualifiedName}}" /> which was either provided as a TestPart
 				/// or is a default value of the type.
 				/// </summary>
-				public {{dependency.FullyQualifiedName}} {{dependency.ServicePropertyName}}
+				public {{dependency.FullyQualifiedName}} {{dependency.DependencyPropertyName}}
 				{
 					get {
 						var valueSetup = this.dependencySetup
 							.OfType<NamedDependency<{{dependency.FullyQualifiedName}}>>()
-							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.ServicePropertyName}}");
+							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.DependencyPropertyName}}");
 
 						#pragma warning disable CS8603 // Possible null reference return.
 						return valueSetup != null

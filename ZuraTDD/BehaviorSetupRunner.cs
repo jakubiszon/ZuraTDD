@@ -9,7 +9,7 @@ namespace ZuraTDD;
 // TODO: expand generic params up to 16 - as the limit defined in Func and Action delegates
 
 /// <summary>
-/// An object used to map service methods to their behaviors
+/// An object used to map mocked-object methods to their behaviors
 /// and invoke those behaviors when the methods are called.
 /// </summary>
 public class BehaviorSetupRunner

@@ -7,7 +7,7 @@ namespace ZuraTDD.Tests.Example;
 /// A mock implementation of <see cref="ExampleProject.IEmailSender" />.
 /// </summary>
 internal class IEmailSender_Fake
-	: FakeService
+	: MockedObject
 	, ExampleProject.IEmailSender
 {
 	public IEmailSender_Fake(

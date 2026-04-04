@@ -1,33 +1,33 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace ZuraTDD;
 
 /// <summary>
 /// A processor which immediately verifies expected service calls
-/// in the specified <see cref="FakeService" />.
+/// in the specified <see cref="MockedObject" />.
 /// </summary>
 public class ExpectedServiceCallImmediateProcessor
-	: IExpectedServiceCallProcessor
+	: IExpectedDependencyCallProcessor
 {
-	private readonly FakeService fakeService;
+	private readonly MockedObject mockedObject;
 
 	public ExpectedServiceCallImmediateProcessor(
-		FakeService fakeService)
+		MockedObject mockedObject)
 	{
-		this.fakeService = fakeService;
+		this.mockedObject = mockedObject;
 	}
 
-	public ExpectedServiceCall Process(
+	public ExpectedDependencyCall Process(
 		MethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount)
 	{
-		var expectedCall = new ExpectedServiceCall(
+		var expectedCall = new ExpectedDependencyCall(
 			method,
 			valueSetConstraint,
 			expectedCallCount);
 
-		expectedCall.Verify(fakeService);
+		expectedCall.Verify(mockedObject);
 
 		return expectedCall;
 	}

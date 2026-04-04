@@ -21,34 +21,34 @@ internal partial class TemplateProcessor
 			namespace {{service.OutputNamespace}};
 
 			/// <summary>
-			/// An expectation setup object for <see cref="{{service.ServiceTypeName}}" />.
+			/// An expectation setup object for <see cref="{{service.MockedTypeName}}" />.
 			/// </summary>
 			internal class {{service.ExpectTypeName}}
-				: {{service.ServiceTypeName}}_ExpectBuilder
+				: {{service.MockedTypeName}}_ExpectBuilder
 			{
 				public {{service.ExpectTypeName}}(
-					FakeService existingFake)
+					MockedObject existingFake)
 					: base(new ExpectedServiceCallImmediateProcessor(existingFake))
 				{
 				}
 			}
 
-			internal class {{service.ServiceTypeName}}_ExpectStaticBuilder
-				: {{service.ServiceTypeName}}_ExpectBuilder
+			internal class {{service.MockedTypeName}}_ExpectStaticBuilder
+				: {{service.MockedTypeName}}_ExpectBuilder
 			{
-				public {{service.ServiceTypeName}}_ExpectStaticBuilder(
+				public {{service.MockedTypeName}}_ExpectStaticBuilder(
 					string serviceName)
 					: base(new ExpectedServiceCallOwnerName(serviceName))
 				{
 				}
 			}
 			
-			internal class {{service.ServiceTypeName}}_ExpectBuilder
+			internal class {{service.MockedTypeName}}_ExpectBuilder
 			{
-				private IExpectedServiceCallProcessor processor;
+				private IExpectedDependencyCallProcessor processor;
 
-				protected {{service.ServiceTypeName}}_ExpectBuilder(
-					IExpectedServiceCallProcessor processor)
+				protected {{service.MockedTypeName}}_ExpectBuilder(
+					IExpectedDependencyCallProcessor processor)
 				{
 					this.processor = processor;
 				}
@@ -68,12 +68,12 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Builds call expectations for <see cref="{{service.ServiceTypeName}}.{{method.MethodName}}" />.
+				/// Builds call expectations for <see cref="{{service.MockedTypeName}}.{{method.MethodName}}" />.
 				/// </summary>
-				public ExpectedServiceCallBuilder {{method.MethodName}}({{PrepareParameterList(method)}})
+				public ExpectedDependencyCallBuilder {{method.MethodName}}({{PrepareParameterList(method)}})
 				{
 					return new(
-						{{service.ServiceMethodsTypeName}}.{{method.Token}},
+						{{service.MockedTypeMethodsTypeName}}.{{method.Token}},
 						new ValueSetConstraint([
 							{{string.Join(",\n\t\t\t\t", method.Parameters.Select(p => $"{p.Name} ?? new ValueConstraint<{p.Type}>()"))}}
 						]),

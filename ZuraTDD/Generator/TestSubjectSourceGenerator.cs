@@ -97,12 +97,14 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 		if (isTestCase && isMock)
 		{
+			// TODO restore diagnostics
 			//OutputMultipleGeneratorsNotAllowedDiagnostic(context, candidate, typeSymbol);
 			return ImmutableArray<SourceFileToGenerate>.Empty;
 		}
 
 		if(!isPartial)
 		{
+			// TODO restore diagnostics
 			//string interfaceName = isTestCase ? "ITestCase<T>" : "IMock<T>";
 			//OutputSymbolNotPartialDiagnostic(context, candidate, typeSymbol, interfaceName);
 			return ImmutableArray<SourceFileToGenerate>.Empty;
@@ -160,22 +162,22 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceMethodsTypeName}.generated.cs",
+			$"{dependencySpecification.MockedTypeMethodsTypeName}.generated.cs",
 			TemplateProcessor.ServiceMethodsClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_Builders.generated.cs",
+			$"{dependencySpecification.MockedTypeName}_Builders.generated.cs",
 			TemplateProcessor.ServiceBuilderClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_Fake.generated.cs",
-			TemplateProcessor.GenerateFakeServiceCode,
+			$"{dependencySpecification.MockedTypeName}_Fake.generated.cs",
+			TemplateProcessor.GenerateMockedObjectCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_Expect.generated.cs",
+			$"{dependencySpecification.MockedTypeName}_Expect.generated.cs",
 			TemplateProcessor.GenerateExpectServiceCode,
 			dependencySpecification);
 
@@ -200,7 +202,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_IsOnly_Builder.generated.cs",
+			$"{dependencySpecification.MockedTypeName}_IsOnly_Builder.generated.cs",
 			TemplateProcessor.ServiceStaticBuilderCode,
 			dependencySpecification);
 
@@ -213,27 +215,27 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceMethodsTypeName}.generated.cs",
+			$"{dependencySpecification.MockedTypeMethodsTypeName}.generated.cs",
 			TemplateProcessor.ServiceMethodsClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_Builders.generated.cs",
+			$"{dependencySpecification.MockedTypeName}_Builders.generated.cs",
 			TemplateProcessor.ServiceBuilderClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_NamedInstanceBuilder.generated.cs",
+			$"{dependencySpecification.MockedTypeName}_NamedInstanceBuilder.generated.cs",
 			TemplateProcessor.ServiceStaticBuilderCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_Fake.generated.cs",
-			TemplateProcessor.GenerateFakeServiceCode,
+			$"{dependencySpecification.MockedTypeName}_Fake.generated.cs",
+			TemplateProcessor.GenerateMockedObjectCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ServiceTypeName}_Expect.generated.cs",
+			$"{dependencySpecification.MockedTypeName}_Expect.generated.cs",
 			TemplateProcessor.GenerateExpectServiceCode,
 			dependencySpecification);
 

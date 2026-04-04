@@ -1,9 +1,9 @@
-﻿using ExampleProject;
+using ExampleProject;
 using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 
-internal abstract class ICustomerRepository_BehaviorBuilder : FakeServiceBuilder
+internal abstract class ICustomerRepository_BehaviorBuilder : MockedObjectBuilder
 {
 	protected ICustomerRepository_BehaviorBuilder(IBehaviorSetupProcessor behaviorSetupProcessor)
 		: base(behaviorSetupProcessor)

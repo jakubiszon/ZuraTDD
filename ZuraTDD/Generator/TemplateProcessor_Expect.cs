@@ -5,10 +5,10 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string GenerateExpectServiceCode(DependencySpecification service)
+	public static string MockedTypeExpectClassesCode(DependencySpecification dependency)
 	{
-		var methods = service.Methods
-			.Select(method => Functions.ServiceBuilderMethodCode(service, method));
+		var methods = dependency.Methods
+			.Select(method => Functions.ServiceBuilderMethodCode(dependency, method));
 
 		var methodCode = string.Join("\n\n", methods);
 
@@ -18,36 +18,36 @@ internal partial class TemplateProcessor
 			#nullable enable
 			using ZuraTDD;
 			
-			namespace {{service.OutputNamespace}};
+			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// An expectation setup object for <see cref="{{service.MockedTypeName}}" />.
+			/// An expectation setup object for <see cref="{{dependency.MockedTypeName}}" />.
 			/// </summary>
-			internal class {{service.ExpectTypeName}}
-				: {{service.MockedTypeName}}_ExpectBuilder
+			internal class {{dependency.ExpectTypeName}}
+				: {{dependency.MockedTypeName}}_ExpectBuilder
 			{
-				public {{service.ExpectTypeName}}(
+				public {{dependency.ExpectTypeName}}(
 					MockedObject existingFake)
 					: base(new ExpectedDependencyCallImmediateProcessor(existingFake))
 				{
 				}
 			}
 
-			internal class {{service.MockedTypeName}}_ExpectStaticBuilder
-				: {{service.MockedTypeName}}_ExpectBuilder
+			internal class {{dependency.MockedTypeName}}_ExpectStaticBuilder
+				: {{dependency.MockedTypeName}}_ExpectBuilder
 			{
-				public {{service.MockedTypeName}}_ExpectStaticBuilder(
+				public {{dependency.MockedTypeName}}_ExpectStaticBuilder(
 					string serviceName)
 					: base(new ExpectedDependencyCallNameProcessor(serviceName))
 				{
 				}
 			}
 			
-			internal class {{service.MockedTypeName}}_ExpectBuilder
+			internal class {{dependency.MockedTypeName}}_ExpectBuilder
 			{
 				private IExpectedDependencyCallProcessor processor;
 
-				protected {{service.MockedTypeName}}_ExpectBuilder(
+				protected {{dependency.MockedTypeName}}_ExpectBuilder(
 					IExpectedDependencyCallProcessor processor)
 				{
 					this.processor = processor;

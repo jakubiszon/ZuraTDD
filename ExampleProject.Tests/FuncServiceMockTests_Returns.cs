@@ -3,6 +3,9 @@ using static ExampleProject.Tests.ExampleValues;
 
 namespace ExampleProject.Tests;
 
+/// <summary>
+/// Tests of <see cref="FuncServiceMock" /> class. 
+/// </summary>
 public partial class FuncServiceMockTests
 {
 	[TestMethod]

@@ -29,7 +29,7 @@ internal class TestCaseSpecification
 
 		Methods = Functions.ExtractPublicMethods(testSubjectType);
 
-		ServicesClass = new ServicesClassSpecification(
+		DependenciesClass = new DependenciesClassSpecification(
 			OutputNamespace,
 			testSubjectType);
 	}
@@ -44,5 +44,5 @@ internal class TestCaseSpecification
 
 	public IReadOnlyList<MethodSpecification> Methods { get; set; }
 
-	public ServicesClassSpecification ServicesClass { get; }
+	public DependenciesClassSpecification DependenciesClass { get; }
 }

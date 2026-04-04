@@ -5,7 +5,7 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string GenerateMockedObjectCode(DependencySpecification service)
+	public static string MockedTypeClassCode(DependencySpecification service)
 	{
 		var methods = service.Methods
 			.Select(m => Functions.GenerateFakeMethod(service, m));

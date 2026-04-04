@@ -6,12 +6,12 @@ namespace ZuraTDD.Generator;
 internal partial class TemplateProcessor
 {
 	/// <summary>
-	/// Generates code for the static class containing MethodInfo tokens for all public methods of the service.
+	/// Generates code for the static class containing MethodInfo tokens for all public methods of the mocked object.
 	/// </summary>
-	public static string ServiceMethodsClassCode(DependencySpecification service)
+	public static string MockedTypeMethodsClassCode(DependencySpecification dependency)
 	{
-		var methodsTokens = service.Methods
-			.Select(m => Functions.ServiceMethodToken(service, m));
+		var methodsTokens = dependency.Methods
+			.Select(m => Functions.MockedObjectMethodToken(dependency, m));
 
 		var strTokens = string.Join("\n\n", methodsTokens);
 
@@ -23,12 +23,12 @@ internal partial class TemplateProcessor
 			using System.Reflection;
 			using ZuraTDD;
 
-			namespace {{service.OutputNamespace}};
+			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// This class lists methods of <see cref="{{service.FullyQualifiedName}}" />.
+			/// This class lists methods of <see cref="{{dependency.FullyQualifiedName}}" />.
 			/// </summary>
-			internal static class {{service.MockedTypeMethodsTypeName}}
+			internal static class {{dependency.MockedTypeMethodsTypeName}}
 			{
 			{{strTokens}}
 			}
@@ -38,11 +38,13 @@ internal partial class TemplateProcessor
 
 static file class Functions
 {
-	public static string ServiceMethodToken(DependencySpecification service, MethodSpecification method)
+	public static string MockedObjectMethodToken(
+		DependencySpecification mockedType,
+		MethodSpecification method)
 	{
 		return
 			$$"""
-				public static readonly MethodInfo {{method.Token}} = typeof({{service.DeclaringNamespace}}.{{service.MockedTypeName}}).GetMethod(
+				public static readonly MethodInfo {{method.Token}} = typeof({{mockedType.DeclaringNamespace}}.{{mockedType.MockedTypeName}}).GetMethod(
 					"{{method.MethodName}}",
 					[{{ServiceMethodTokenTypeParams(method)}}])!;
 			""";

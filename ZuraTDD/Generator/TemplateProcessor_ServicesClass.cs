@@ -5,7 +5,7 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string PrepareServicesClassCode(ServicesClassSpecification spec)
+	public static string PrepareTestSubjectDependenciesClassCode(DependenciesClassSpecification spec)
 	{
 		// declarations of properties representing dependency instances
 		var dependencyProperies = spec.Dependencies
@@ -39,13 +39,13 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// Services used by the test cases for <see cref="{{spec.TestSubjectFullyQualifiedName}}" />.
 			/// </summary>
-			internal class {{spec.ServicesClassName}} : ITestSubjectDependencies
+			internal class {{spec.DependenciesClassName}} : ITestSubjectDependencies
 			{
 				private DependencyCollection mockedDependencies;
 
 				private readonly INamedDependencySetup[] dependencySetup;
 
-				public {{spec.ServicesClassName}}(IEnumerable<INamedDependencySetup> dependencySetup)
+				public {{spec.DependenciesClassName}}(IEnumerable<INamedDependencySetup> dependencySetup)
 				{
 					this.dependencySetup = dependencySetup.ToArray();
 					this.mockedDependencies = new(

@@ -140,11 +140,11 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			testCaseSpecification);
 
 		files.AddFile(
-			$"{testCaseSpecification.ServicesClass.ServicesClassName}.generated.cs",
-			TemplateProcessor.PrepareServicesClassCode,
-			testCaseSpecification.ServicesClass);
+			$"{testCaseSpecification.DependenciesClass.DependenciesClassName}.generated.cs",
+			TemplateProcessor.PrepareTestSubjectDependenciesClassCode,
+			testCaseSpecification.DependenciesClass);
 
-		foreach (var service in testCaseSpecification.ServicesClass.Dependencies)
+		foreach (var service in testCaseSpecification.DependenciesClass.Dependencies)
 		{
 			var filesToAdd = GenerateDependencyCode(service);
 			files.AddFiles(filesToAdd.GetFilesToGenerate());
@@ -163,22 +163,22 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeMethodsTypeName}.generated.cs",
-			TemplateProcessor.ServiceMethodsClassCode,
+			TemplateProcessor.MockedTypeMethodsClassCode,
 			dependencySpecification);
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_Builders.generated.cs",
-			TemplateProcessor.ServiceBuilderClassesCode,
+			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_Fake.generated.cs",
-			TemplateProcessor.GenerateMockedObjectCode,
+			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification);
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_Expect.generated.cs",
-			TemplateProcessor.GenerateExpectServiceCode,
+			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
@@ -203,7 +203,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_IsOnly_Builder.generated.cs",
-			TemplateProcessor.ServiceStaticBuilderCode,
+			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
 		return files;
@@ -216,27 +216,29 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeMethodsTypeName}.generated.cs",
-			TemplateProcessor.ServiceMethodsClassCode,
+			TemplateProcessor.MockedTypeMethodsClassCode,
 			dependencySpecification);
 
+		// TODO some code seems repeated in MockedTypeBuilderClassesCode and DependencyStaticBuilderCode
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_Builders.generated.cs",
-			TemplateProcessor.ServiceBuilderClassesCode,
+			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification);
 
+		// TODO some code seems repeated in MockedTypeBuilderClassesCode and DependencyStaticBuilderCode
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_NamedInstanceBuilder.generated.cs",
-			TemplateProcessor.ServiceStaticBuilderCode,
+			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_Fake.generated.cs",
-			TemplateProcessor.GenerateMockedObjectCode,
+			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification);
 
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeName}_Expect.generated.cs",
-			TemplateProcessor.GenerateExpectServiceCode,
+			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification);
 
 		return files;

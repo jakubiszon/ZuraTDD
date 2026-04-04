@@ -5,6 +5,7 @@ namespace ZuraTDD;
 /// </summary>
 public interface ITestSubjectDependencies
 {
+	// TODO this should either store all dependencies or only store mocked-objects in which case it should be renamed.
 	/// <summary>
 	/// An indexer returning a fake service by its name.
 	/// </summary>

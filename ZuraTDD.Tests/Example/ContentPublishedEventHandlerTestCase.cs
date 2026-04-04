@@ -30,8 +30,8 @@ internal partial class ContentPublishedEventHandlerTestCase
 		GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups)
 	{
 		return new global::ExampleProject.ContentPublishedEventHandler(
-			this.Services.CustomerRepository,
-			this.Services.EmailSender);
+			this.Dependencies.CustomerRepository,
+			this.Dependencies.EmailSender);
 	}
 
 	protected override ContentPublishedEventHandlerServices

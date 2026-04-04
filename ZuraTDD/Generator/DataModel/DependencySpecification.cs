@@ -26,6 +26,9 @@ internal class DependencySpecification
 		IsInterface = mockedType.TypeKind == TypeKind.Interface;
 
 		// TODO: use inheritance to apply this field only to services used by TestCase<T>
+		//       to be completely correct - split into MockedObjectSpecification and DependencySpecification classes
+		//       the two concepts only partly cover one another - we can mock without using test-subject dependencies
+		//       we can also have a dependency which is not implemented by a mocked type.
 		DependencyPropertyName = string.Empty;
 		
 		Methods = Functions.ExtractPublicMethods(mockedType);

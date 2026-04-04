@@ -8,11 +8,11 @@ internal partial class TemplateProcessor
 	/// <summary>
 	/// Generates code for the static class containing MethodInfo tokens for all public methods of the service.
 	/// </summary>
-	public static string ServiceBuilderClassesCode(DependencySpecification service)
+	public static string MockedTypeBuilderClassesCode(DependencySpecification dependency)
 	{
 		var methods = string.Join(
 			"\n\n",
-			service.Methods.Select(m => Functions.ServiceBuilderMethodCode(service, m)));
+			dependency.Methods.Select(m => Functions.ServiceBuilderMethodCode(dependency, m)));
 
 		return
 			$$"""
@@ -20,21 +20,21 @@ internal partial class TemplateProcessor
 			#nullable enable
 			using ZuraTDD;
 
-			namespace {{service.OutputNamespace}};
+			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// Instance builder of <see cref="{{service.FullyQualifiedName}}" />.
+			/// Instance builder of <see cref="{{dependency.FullyQualifiedName}}" />.
 			/// </summary>
-			internal class {{service.BuilderTypeName}}
-				: {{service.MockedTypeName}}_BehaviorBuilder
-				, IBuild<{{service.MockedFakeTypeName}}>
+			internal class {{dependency.BuilderTypeName}}
+				: {{dependency.MockedTypeName}}_BehaviorBuilder
+				, IBuild<{{dependency.MockedFakeTypeName}}>
 			{
-				public {{service.BuilderTypeName}}()
+				public {{dependency.BuilderTypeName}}()
 					: base(new BehaviorSetupCollector())
 				{
 				}
 
-				public {{service.MockedFakeTypeName}} BuildInstance()
+				public {{dependency.MockedFakeTypeName}} BuildInstance()
 				{
 					var collector = base.behaviorSetupProcessor as BehaviorSetupCollector;
 
@@ -46,12 +46,12 @@ internal partial class TemplateProcessor
 			}
 
 			/// <summary>
-			/// Abstract builder of <see cref="{{service.FullyQualifiedName}}" />.
+			/// Abstract builder of <see cref="{{dependency.FullyQualifiedName}}" />.
 			/// </summary>
-			internal abstract class {{service.MockedTypeName}}_BehaviorBuilder
+			internal abstract class {{dependency.MockedTypeName}}_BehaviorBuilder
 				: MockedObjectBuilder
 			{
-				public {{service.MockedTypeName}}_BehaviorBuilder(
+				public {{dependency.MockedTypeName}}_BehaviorBuilder(
 					IBehaviorSetupProcessor behaviorSetupProcessor)
 					: base(behaviorSetupProcessor)
 				{
@@ -62,16 +62,16 @@ internal partial class TemplateProcessor
 			""";
 	}
 
-	public static string ServiceStaticBuilderCode(
-		DependencySpecification service)
+	public static string DependencyStaticBuilderCode(
+		DependencySpecification dependency)
 	{
-		return service.IsInterface
-			? ServiceStaticAbstractBuilderCode(service)
-			: ServiceStaticIsOnlyBuilderCode(service);
+		return dependency.IsInterface
+			? AbstractDependencyStaticBuilderCode(dependency)
+			: NonAbstractDependencyStaticBuilderCode(dependency);
 	}
 
-	private static string ServiceStaticAbstractBuilderCode(
-		DependencySpecification service)
+	private static string AbstractDependencyStaticBuilderCode(
+		DependencySpecification dependency)
 	{
 		return
 			$$"""
@@ -79,13 +79,13 @@ internal partial class TemplateProcessor
 			#nullable enable
 			using ZuraTDD;
 
-			namespace {{service.OutputNamespace}};
+			namespace {{dependency.OutputNamespace}};
 
-			internal class {{service.MockedTypeName}}_NamedInstanceBuilder : {{service.MockedTypeName}}_BehaviorBuilder
+			internal class {{dependency.MockedTypeName}}_NamedInstanceBuilder : {{dependency.MockedTypeName}}_BehaviorBuilder
 			{
 				private readonly string serviceName;
 
-				public {{service.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
+				public {{dependency.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
 					: base(new BehaviorSetupOwnerName(serviceName))
 				{
 					this.serviceName = serviceName;
@@ -94,9 +94,9 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
 				/// </summary>
-				/// <param name="instance">Instance of {{service.MockedTypeName}} used as dependency.</param>
-				public NamedDependency<{{service.FullyQualifiedName}}> Is(
-					{{service.FullyQualifiedName}} instance)
+				/// <param name="instance">Instance of {{dependency.MockedTypeName}} used as dependency.</param>
+				public NamedDependency<{{dependency.FullyQualifiedName}}> Is(
+					{{dependency.FullyQualifiedName}} instance)
 				{
 					return new (
 						instance,
@@ -106,8 +106,8 @@ internal partial class TemplateProcessor
 			""";
 	}
 
-	private static string ServiceStaticIsOnlyBuilderCode(
-		DependencySpecification service)
+	private static string NonAbstractDependencyStaticBuilderCode(
+		DependencySpecification dependency)
 	{
 		return
 			$$"""
@@ -115,16 +115,16 @@ internal partial class TemplateProcessor
 			#nullable enable
 			using ZuraTDD;
 
-			namespace {{service.OutputNamespace}};
+			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
 			/// A builder of a class which is not possible to mock. It only exposes the "Is" method.
 			/// </summary>
-			internal class {{service.MockedTypeName}}_NamedInstanceBuilder
+			internal class {{dependency.MockedTypeName}}_NamedInstanceBuilder
 			{
 				private readonly string serviceName;
 
-				public {{service.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
+				public {{dependency.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
 				{
 					this.serviceName = serviceName;
 				}
@@ -132,9 +132,9 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
 				/// </summary>
-				/// <param name="instance">Instance of {{service.MockedTypeName}} used as dependency.</param>
-				public NamedDependency<{{service.FullyQualifiedName}}> Is(
-					{{service.FullyQualifiedName}} instance)
+				/// <param name="instance">Instance of {{dependency.MockedTypeName}} used as dependency.</param>
+				public NamedDependency<{{dependency.FullyQualifiedName}}> Is(
+					{{dependency.FullyQualifiedName}} instance)
 				{
 					return new (
 						instance,
@@ -148,7 +148,7 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string ServiceBuilderMethodCode(
-		DependencySpecification service,
+		DependencySpecification dependency,
 		MethodSpecification method)
 	{
 		var paramsString = string.Join(",\n\t\t\t\t", method.Parameters.Select(p => $"{p.Name} ?? new ValueConstraint<{p.Type}>()"));
@@ -164,13 +164,13 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Creates behavior builder for <see cref="{{service.MockedTypeName}}.{{method.MethodName}}" />.
+				/// Creates behavior builder for <see cref="{{dependency.MockedTypeName}}.{{method.MethodName}}" />.
 				/// </summary>
 				public {{PrepareCallSpecificationType(method)}}
 					{{method.MethodName}}({{PrepareParameterList(method)}})
 				{
 					return new(
-						{{service.MockedTypeMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
+						{{dependency.MockedTypeMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
 						this.behaviorSetupProcessor);
 				}
 			""";

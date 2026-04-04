@@ -5,20 +5,20 @@ using System.Linq;
 namespace ZuraTDD.Generator.DataModel;
 
 /// <summary>
-/// Contains data passed to the "service" template.
+/// Contains data defining dependencies of a test subject. This data is passed to the "service" template.
 /// </summary>
-internal class ServicesClassSpecification
+internal class DependenciesClassSpecification
 {
 	/// <param name="outputNamespace">Namespace where the services class will be generated.</param>
 	/// <param name="testSubjectType">Compilation symbol of the type defining the test target.</param>
-	public ServicesClassSpecification(
+	public DependenciesClassSpecification(
 		string outputNamespace,
 		INamedTypeSymbol testSubjectType)
 	{
 		string testSubjectTypeName = testSubjectType.ToDisplayString();
 
 		OutputNamespace = outputNamespace;
-		ServicesClassName = $"{testSubjectType.Name}Services";
+		DependenciesClassName = $"{testSubjectType.Name}Services";
 		TestSubjectClassName = testSubjectTypeName;
 		TestSubjectFullyQualifiedName = testSubjectType.ToDisplayString(
 			SymbolDisplayFormat.FullyQualifiedFormat);
@@ -34,7 +34,7 @@ internal class ServicesClassSpecification
 
 	public string OutputNamespace { get; }
 
-	public string ServicesClassName { get; }
+	public string DependenciesClassName { get; }
 
 	public string TestSubjectClassName { get; }
 

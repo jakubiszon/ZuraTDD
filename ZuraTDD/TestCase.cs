@@ -143,7 +143,7 @@ public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 	}
 
 	/// <summary>
-	/// The services available to the test case.
+	/// The dependencies available to the test case.
 	/// </summary>
 	public TTestSubjectDependencies Dependencies { get; }
 

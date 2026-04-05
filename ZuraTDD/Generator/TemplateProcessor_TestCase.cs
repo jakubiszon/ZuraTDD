@@ -10,16 +10,16 @@ internal partial class TemplateProcessor
 		var dependencies = testCase.DependenciesClass.Dependencies;
 		var constructorArgs = string.Join(",", dependencies.Select(s => $"\n\t\t\tthis.Dependencies.{s.DependencyPropertyName}"));
 
-		var receives = testCase.Methods.Select(method => Functions.PrepareReceivesCode(testCase, method));
+		var receives = testCase.Methods.Select(method => Functions.TestSubjectReceivesCode(testCase, method));
 		var receivesCode = string.Join("\n\n", receives);
 
-		var whenServices = testCase.DependenciesClass.Dependencies.Select(Functions.PrepareServiceWhenCode);
-		var whenCode = string.Join("\n\n", whenServices);
+		var whenSnippets = testCase.DependenciesClass.Dependencies.Select(Functions.DependencyWhenCode);
+		var whenCode = string.Join("\n\n", whenSnippets);
 
-		var expectServices = testCase.DependenciesClass.Dependencies
+		var expectSnippets = testCase.DependenciesClass.Dependencies
 			.Where(dependency => dependency.IsInterface)
-			.Select(Functions.PrepareExpectServiceCode);
-		var expectServicesCode = string.Join("\n\n", expectServices);
+			.Select(Functions.DependencyExpectCode);
+		var expectCode = string.Join("\n\n", expectSnippets);
 
 		// TODO: the class should match whatever access modifiers are used in their declaration
 		return
@@ -100,7 +100,7 @@ internal partial class TemplateProcessor
 						return new ExpectedResultMatching<TResult>(value => value!.Equals(expectedValue));
 					}
 
-			{{expectServicesCode}}
+			{{expectCode}}
 				}
 			}
 			""";
@@ -109,7 +109,10 @@ internal partial class TemplateProcessor
 
 static file class Functions
 {
-	public static string PrepareReceivesCode(
+	/// <summary>
+	/// Generates 'Receives' code for a single method of a test subject.
+	/// </summary>
+	public static string TestSubjectReceivesCode(
 		TestCaseSpecification testCase,
 		MethodSpecification method)
 	{
@@ -147,29 +150,44 @@ static file class Functions
 		}
 	}
 
-	public static string PrepareServiceWhenCode(DependencySpecification service)
+	public static string DependencyWhenCode(DependencySpecification service)
 	{
-		return
-			$$"""
-					/// <summary>
-					/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.MockedTypeName}}" />
-					/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
-					/// </summary>
-					internal static {{service.MockedTypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
-						=> new {{service.MockedTypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
-			""";
+		if (service.IsInterface)
+		{
+			return
+				$$"""
+						/// <summary>
+						/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.MockedTypeName}}" />
+						/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
+						/// </summary>
+						internal static {{service.MockedTypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
+							=> new {{service.MockedTypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
+				""";
+		}
+		else
+		{
+			return
+				$$"""
+						/// <summary>
+						/// A builder allowing to specifiy an instance of <see cref="{{service.DeclaringNamespace}}.{{service.MockedTypeName}}" />
+						/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
+						/// </summary>
+						internal static {{service.MockedTypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
+							=> new {{service.MockedTypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
+				""";
+		}
 	}
 
-	public  static string PrepareExpectServiceCode(DependencySpecification service)
+	public  static string DependencyExpectCode(DependencySpecification mockedDependency)
 	{
 		return
 			$$"""
 					/// <summary>
-					/// A builder producing expectations for <see cref="{{service.DeclaringNamespace}}.{{service.MockedTypeName}}" />
-					/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
+					/// A builder producing expectations for <see cref="{{mockedDependency.DeclaringNamespace}}.{{mockedDependency.MockedTypeName}}" />
+					/// which will be passed as "{{mockedDependency.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{service.MockedTypeName}}_ExpectStaticBuilder {{service.DependencyPropertyName}}
-						=> new {{service.MockedTypeName}}_ExpectStaticBuilder("{{service.DependencyPropertyName}}");
+					internal static {{mockedDependency.MockedTypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
+						=> new {{mockedDependency.MockedTypeName}}_ExpectStaticBuilder("{{mockedDependency.DependencyPropertyName}}");
 			""";
 	}
 }

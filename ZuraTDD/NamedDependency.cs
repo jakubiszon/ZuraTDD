@@ -29,10 +29,10 @@ public class NamedDependency<T> : INamedDependencyInstance
 
 	object? INamedDependencyInstance.Instance => Instance;
 
-	public NamedDependency(T instance, string serviceName)
+	public NamedDependency(T instance, string dependencyName)
 	{
 		this.Instance = instance;
-		this.DependencyName = serviceName;
+		this.DependencyName = dependencyName;
 	}
 
 	public IDependencySetup Build()

@@ -5,10 +5,10 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string MockedTypeClassCode(DependencySpecification service)
+	public static string MockedTypeClassCode(DependencySpecification mockedType)
 	{
-		var methods = service.Methods
-			.Select(m => Functions.GenerateFakeMethod(service, m));
+		var methods = mockedType.Methods
+			.Select(m => Functions.GenerateMethodMockingCode(mockedType, m));
 
 		var methodsCode = string.Join("\n\n", methods);
 
@@ -18,22 +18,22 @@ internal partial class TemplateProcessor
 			#nullable enable
 			using ZuraTDD;
 			
-			namespace {{service.OutputNamespace}};
+			namespace {{mockedType.OutputNamespace}};
 
 			/// <summary>
-			/// A mock implementation of <see cref="{{service.FullyQualifiedName}}" />.
+			/// A mock implementation of <see cref="{{mockedType.FullyQualifiedName}}" />.
 			/// </summary>
-			internal class {{service.MockedFakeTypeName}}
+			internal class {{mockedType.MockedFakeTypeName}}
 				: MockedObject
-				, {{service.FullyQualifiedName}}
+				, {{mockedType.FullyQualifiedName}}
 			{
-				public {{service.MockedFakeTypeName}}(
+				public {{mockedType.MockedFakeTypeName}}(
 					params IEnumerable<BehaviorSetup> behaviors)
 					: base(behaviors)
 				{
 				}
 
-				public {{service.ExpectTypeName}} GetExpectObject()
+				public {{mockedType.ExpectTypeName}} GetExpectObject()
 				{
 					return new(this);
 				}
@@ -46,13 +46,13 @@ internal partial class TemplateProcessor
 
 static file class Functions
 {
-	public static string GenerateFakeMethod(
-		DependencySpecification service,
-		MethodSpecification method)
+	public static string GenerateMethodMockingCode(
+		DependencySpecification mockedType,
+		MethodSpecification mockedMethod)
 	{
-		var paramValues = method.GetParamValuesString();
-		var @return = method.ReturnType == "void" ? "" : "return ";
-		var defaultResult = method.GetDefaultResult();
+		var paramValues = mockedMethod.GetParamValuesString();
+		var @return = mockedMethod.ReturnType == "void" ? "" : "return ";
+		var defaultResult = mockedMethod.GetDefaultResult();
 		defaultResult = defaultResult == ""
 			? ""
 			: $",\n\t\t\t{defaultResult}";
@@ -60,16 +60,16 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Simulates behavior for <see cref="{{service.MockedTypeName}}.{{method.MethodName}}" />.
+				/// Simulates behavior for <see cref="{{mockedType.MockedTypeName}}.{{mockedMethod.MethodName}}" />.
 				/// </summary>
-				public {{method.ReturnType}} {{method.MethodName}}({{ParameterDeclarations(method)}})
+				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}({{ParameterDeclarations(mockedMethod)}})
 				{
 					this.CallTracker.ReceiveCall(
-						{{service.MockedTypeMethodsTypeName}}.{{method.Token}},
+						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.Token}},
 						[{{paramValues}}]);
 
-					{{@return}}base.BehaviorSetupRunner.{{InvokeMethod(method)}}(
-						{{service.MockedTypeMethodsTypeName}}.{{method.Token}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
+					{{@return}}base.BehaviorSetupRunner.{{InvokeMethod(mockedMethod)}}(
+						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.Token}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
 				}
 			""";
 	}

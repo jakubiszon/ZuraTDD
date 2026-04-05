@@ -12,7 +12,7 @@ internal partial class TemplateProcessor
 	{
 		var methods = string.Join(
 			"\n\n",
-			dependency.Methods.Select(m => Functions.ServiceBuilderMethodCode(dependency, m)));
+			dependency.Methods.Select(m => Functions.MockedMethodBuilderDeclaration(dependency, m)));
 
 		return
 			$$"""
@@ -83,12 +83,12 @@ internal partial class TemplateProcessor
 
 			internal class {{dependency.MockedTypeName}}_NamedInstanceBuilder : {{dependency.MockedTypeName}}_BehaviorBuilder
 			{
-				private readonly string serviceName;
+				private readonly string dependencyName;
 
-				public {{dependency.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
-					: base(new BehaviorSetupOwnerName(serviceName))
+				public {{dependency.MockedTypeName}}_NamedInstanceBuilder(string dependencyName)
+					: base(new BehaviorSetupOwnerName(dependencyName))
 				{
-					this.serviceName = serviceName;
+					this.dependencyName = dependencyName;
 				}
 
 				/// <summary>
@@ -100,7 +100,7 @@ internal partial class TemplateProcessor
 				{
 					return new (
 						instance,
-						this.serviceName);
+						this.dependencyName);
 				}
 			}
 			""";
@@ -122,11 +122,11 @@ internal partial class TemplateProcessor
 			/// </summary>
 			internal class {{dependency.MockedTypeName}}_NamedInstanceBuilder
 			{
-				private readonly string serviceName;
+				private readonly string dependencyName;
 
-				public {{dependency.MockedTypeName}}_NamedInstanceBuilder(string serviceName)
+				public {{dependency.MockedTypeName}}_NamedInstanceBuilder(string dependencyName)
 				{
-					this.serviceName = serviceName;
+					this.dependencyName = dependencyName;
 				}
 
 				/// <summary>
@@ -138,7 +138,7 @@ internal partial class TemplateProcessor
 				{
 					return new (
 						instance,
-						this.serviceName);
+						this.dependencyName);
 				}
 			}
 			""";
@@ -147,7 +147,7 @@ internal partial class TemplateProcessor
 
 static file class Functions
 {
-	public static string ServiceBuilderMethodCode(
+	public static string MockedMethodBuilderDeclaration(
 		DependencySpecification dependency,
 		MethodSpecification method)
 	{

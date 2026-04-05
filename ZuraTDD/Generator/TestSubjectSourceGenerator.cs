@@ -144,9 +144,9 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			TemplateProcessor.PrepareTestSubjectDependenciesClassCode,
 			testCaseSpecification.DependenciesClass);
 
-		foreach (var service in testCaseSpecification.DependenciesClass.Dependencies)
+		foreach (var dependency in testCaseSpecification.DependenciesClass.Dependencies)
 		{
-			var filesToAdd = GenerateDependencyCode(service);
+			var filesToAdd = GenerateDependencyCode(dependency);
 			files.AddFiles(filesToAdd.GetFilesToGenerate());
 		}
 

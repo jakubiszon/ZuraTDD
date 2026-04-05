@@ -31,7 +31,7 @@ public class TestResult<TTestSubjectDependencies, TResult>
 		TResult? result)
 	{
 		this.Dependencies = dependencies as TTestSubjectDependencies
-			?? throw new ArgumentException($"Invalid service type: {dependencies.GetType().FullName}");
+			?? throw new ArgumentException($"Invalid ITestSubjectDependencies type passed '{dependencies.GetType().FullName}' but was expected to be '{typeof(TTestSubjectDependencies).FullName}'");
 
 		this.Exception = exception;
 		this.Result = result;

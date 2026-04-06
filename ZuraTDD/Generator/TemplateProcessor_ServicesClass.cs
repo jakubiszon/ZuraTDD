@@ -37,7 +37,7 @@ internal partial class TemplateProcessor
 			namespace {{spec.OutputNamespace}};
 
 			/// <summary>
-			/// Services used by the test cases for <see cref="{{spec.TestSubjectFullyQualifiedName}}" />.
+			/// Defines dependencies used by the test cases for <see cref="{{spec.TestSubjectFullyQualifiedName}}" />.
 			/// </summary>
 			internal class {{spec.DependenciesClassName}} : ITestSubjectDependencies
 			{

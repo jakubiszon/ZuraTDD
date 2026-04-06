@@ -37,8 +37,8 @@ internal partial class TemplateProcessor
 				: {{dependency.MockedTypeName}}_ExpectBuilder
 			{
 				public {{dependency.MockedTypeName}}_ExpectStaticBuilder(
-					string serviceName)
-					: base(new ExpectedDependencyCallNameProcessor(serviceName))
+					string dependencyName)
+					: base(new ExpectedDependencyCallNameProcessor(dependencyName))
 				{
 				}
 			}

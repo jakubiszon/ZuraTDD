@@ -35,7 +35,7 @@ internal partial class ContentPublishedEventHandlerTestCase
 	}
 
 	protected override ContentPublishedEventHandlerServices
-		BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups)
+		BuildTestSubjectDependencies(IEnumerable<INamedDependencySetup> dependencySetups)
 	{
 		return new(dependencySetups);
 	}

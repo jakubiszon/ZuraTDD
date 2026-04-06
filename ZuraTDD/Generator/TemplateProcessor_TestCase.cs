@@ -58,7 +58,7 @@ internal partial class TemplateProcessor
 				}
 
 				protected override {{testCase.DependenciesClass.DependenciesClassName}}
-					BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups)
+					BuildTestSubjectDependencies(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
 					return new(dependencySetups);
 				}

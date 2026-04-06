@@ -139,7 +139,7 @@ public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 		params ITestPart[] testParts)
 		: base(name, testParts)
 	{
-		this.Dependencies = BuildTestSubjectServices(base.WhenConditions);
+		this.Dependencies = BuildTestSubjectDependencies(base.WhenConditions);
 	}
 
 	/// <summary>
@@ -152,7 +152,7 @@ public abstract class TestCase<TestSubject, TTestSubjectDependencies>
 	/// </summary>
 	public abstract TestSubject GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups);
 
-	protected abstract TTestSubjectDependencies BuildTestSubjectServices(IEnumerable<INamedDependencySetup> dependencySetups);
+	protected abstract TTestSubjectDependencies BuildTestSubjectDependencies(IEnumerable<INamedDependencySetup> dependencySetups);
 
 	public override async Task RunTestAsync()
 	{

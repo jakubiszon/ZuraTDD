@@ -2,11 +2,14 @@
 *Behaviors* in short are the things that mocked objects do when their methods are called.
 
 ## Definitions
-There are 3 types of behaviors:
+There are 3 types of behaviors plus the `Is` function:
 
 - `Returns` - used to setup return values from mocked object methods.
 - `Throws` - used to throw exceptions from mocked object methods.
 - `Invokes` - especially useful when your mocked object receives a delegate which it needs to call.
+- `Is` - used to setup a dependency as a specific instance.
+  This is not setting up any behaviors to mock - it sets up a specific object to be used.
+  It is useful when your test subject needs dependencies which are not possible to mock (not passed as an interface).
 
 Behaviors are chained into ***BehaviorSetup*** objects which also use [filter values](./CallMatching.md) to determine whether the specific setup should be used.
 
@@ -140,6 +143,35 @@ setup.TaskMethod()
 setup.ValueTaskMethod()
     .Returns(new ValueTask(Task.FromException(new Exception())));
 ```
+
+## The `.Is` function
+The `.Is` function is only available when using the builders prepared for objects marked with `ITestCase`.
+It is useful in a couple scenarios:
+
+- Tested object accepts non-mockable dependencies (e.g. a sql client class which accepts `string connectionString` as its constructor param)
+- You want to test behavior of multiple classes without using mocks.
+- Your tests rely on using a specific instance of a dependency (e.g. a global logger stub which you don't want to redefine everywhere)
+- You have a dependency which you want to mock manually and pass it to the test case
+
+```csharp
+[ZuraTest<SqlClientTestCase>("Example test")]
+private ITestPart[] ExampleTest() => [
+  // ...
+
+  // pass a specific connection string
+  When.ConnectionString
+    .Is("example connection string"),
+
+  // use the global test logger
+  When.Logger
+    .Is(GlobalTestLogger.Instance),
+
+  Expect.SqlConnectionFactory
+    .CreateClient("example connection string")
+    .WasCalled(),
+];
+```
+
 
 
 ## Best practices and recommendations

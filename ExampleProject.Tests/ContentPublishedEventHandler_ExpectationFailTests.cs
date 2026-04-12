@@ -32,7 +32,7 @@ public class ContentPublishedEventHandler_ExpectationFailTests
 		var testCase = new ContentPublishedEventHandlerTestCase(
 			name: "Sends email to customers when content is published.",
 
-			Receives.Handle(exampleContent),
+			Receives.HandleContentPublish(exampleContent),
 
 			When.CustomerRepository
 				.ListByInterests(topics: null)
@@ -61,7 +61,7 @@ public class ContentPublishedEventHandler_ExpectationFailTests
 		var testCase = new ContentPublishedEventHandlerTestCase(
 			name: "Sends email to customers when content is published.",
 
-			Receives.Handle(exampleContent),
+			Receives.HandleContentPublish(exampleContent),
 
 			When.CustomerRepository
 				.ListByInterests(topics: null)

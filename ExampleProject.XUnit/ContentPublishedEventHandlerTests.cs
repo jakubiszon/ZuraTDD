@@ -19,12 +19,12 @@ public partial class ContentPublishedEventHandlerTests
 
 	/// <summary>
 	/// Defines and tests the standard "happy path" for the
-	/// <see cref="ContentPublishedEventHandler.Handle" />
+	/// <see cref="ContentPublishedEventHandler.HandleContentPublish" />
 	/// </summary>
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
 		"Handle - sends email to customers when content is published.")]
 	public ITestPart[] HandleStandardBehaviors => [
-		Receives.Handle(exampleContent),
+		Receives.HandleContentPublish(exampleContent),
 
 		When.CustomerRepository
 			.ListByInterests(topics: null)
@@ -46,7 +46,7 @@ public partial class ContentPublishedEventHandlerTests
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
 		"Throws when CustomerRepository.ListByInterests throws.")]
 	public ITestPart[] ThrowsTest_WhenListByInterestsThrows() => [
-		Receives.Handle(exampleContent),
+		Receives.HandleContentPublish(exampleContent),
 
 		When.CustomerRepository
 			.ListByInterests(topics: null)
@@ -64,7 +64,7 @@ public partial class ContentPublishedEventHandlerTests
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
 		"Throws when EmailSender.SendEmail throws.")]
 	public ITestPart[] ThrowsTest1() => [
-		Receives.Handle(exampleContent),
+		Receives.HandleContentPublish(exampleContent),
 
 		When.EmailSender
 			.SendEmail()

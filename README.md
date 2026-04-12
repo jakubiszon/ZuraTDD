@@ -69,7 +69,7 @@ public partial class SendEmailControllerTests
 {
     [ZuraTest<SendEmailControllerTestCase>(
         "SendEmailToCustomer throws when EmailSender throws.")]
-    public static IEnumerable<ITestPart> SendEmailToCustomer_TestsData()
+    public static IEnumerable<ITestPart> SendEmailToCustomer_ThrowsWhenEmailSenderThrows()
     => [
         // first - specify what call the test subject receives
         // you can skip parameters - default value will be used
@@ -100,7 +100,7 @@ public partial class SendEmailControllerTests
 
     [ZuraTest<SendEmailControllerTestCase>(
         "SendEmailToCustomer sends an email using customer data.")]
-    public static IEnumerable<ITestPart> SendEmailToCustomer_TestsData()
+    public static IEnumerable<ITestPart> SendEmailToCustomer_SendsEmailUsingCustomerData()
     => [
         // first - specify what call the test subject receives
         // you can skip parameters - default value will be used
@@ -119,9 +119,10 @@ public partial class SendEmailControllerTests
             .SendEmail()
             .Returns(Task.CompletedTask),
 
-        // let's verify that GetCustomer was called
+        // let's verify that GetCustomer was called exactly once
         Expect.CustomerRepository
             .GetCustomer(123)
+            // we specify the exact number of calls here
             .WasCalled(times: 1)
 
         // let's confirm that a call with the right data was made to SendEmail
@@ -129,7 +130,7 @@ public partial class SendEmailControllerTests
             .SendEmail(
                 to: "emma.nuelmacron@example.com",
                 emailTemplateId: 456)
-            // WasCalled with no param checks for at lease 1 call
+            // no param below - checks for at least 1 call
             .WasCalled()
 
         // Let's check that the method returned success.

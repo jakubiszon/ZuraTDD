@@ -49,7 +49,7 @@ internal partial class ContentPublishedEventHandlerTestCase
 		/// Defines a call to the <see cref="global::ExampleProject.ContentPublishedEventHandler.HandleContentPublish"/> method.
 		/// </summary>
 		public static TestedTaskCall
-			Handle(ExampleProject.Content? content = default)
+			HandleContentPublish(ExampleProject.Content? content = default)
 		{
 			#pragma warning disable CS8604
 			return new (

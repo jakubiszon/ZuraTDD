@@ -18,7 +18,7 @@ public partial class ContentPublishedEventHandlerTests
 		yield return new ContentPublishedEventHandlerTestCase(
 			name: "Throws when CustomerRepository.ListByInterests throws.",
 
-			Receives.Handle(exampleContent),
+			Receives.HandleContentPublish(exampleContent),
 
 			When.CustomerRepository.ListByInterests(topics: null)
 				.Throws(new TestException()),
@@ -29,7 +29,7 @@ public partial class ContentPublishedEventHandlerTests
 		yield return new ContentPublishedEventHandlerTestCase(
 			name: "Sends email to customers when content is published.",
 
-			Receives.Handle(exampleContent),
+			Receives.HandleContentPublish(exampleContent),
 
 			When.CustomerRepository.ListByInterests(topics: null)
 				.Returns(

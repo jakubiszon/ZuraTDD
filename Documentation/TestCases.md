@@ -1,7 +1,7 @@
 # Zura TDD `TestCase` objects
 
 When you declare a class as implementing `ITestCase<TSubject>` - you are defining a test case object.
-This object will receive an auto-generated constructor and builders for its constructor depdencies / parameters.
+This object will receive an auto-generated constructor and builders for its constructor dependencies / parameters.
 
 ```csharp
 // example class we want to test

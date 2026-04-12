@@ -16,7 +16,7 @@ internal class ContentPublishedEventHandler : IContentPublishedEventHandler
 		//this.templateEngine = templateEngine;
 	}
 
-	public async Task Handle(Content content)
+	public async Task HandleContentPublish(Content content)
 	{
 		var interestedCustomers = await customerRepository.ListByInterests(content.Topics);
 		foreach (var customer in interestedCustomers)

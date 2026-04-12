@@ -22,7 +22,7 @@ public class ContentPublishController : ControllerBase
 
 		try
 		{
-			await _handler.Handle(content);
+			await _handler.HandleContentPublish(content);
 			return Ok(new { message = "Content published successfully" });
 		}
 		catch (Exception ex)

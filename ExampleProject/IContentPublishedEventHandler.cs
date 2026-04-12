@@ -2,5 +2,5 @@ namespace ExampleProject;
 
 public interface IContentPublishedEventHandler
 {
-	Task Handle(Content content);
+	Task HandleContentPublish(Content content);
 }

@@ -46,14 +46,14 @@ internal partial class ContentPublishedEventHandlerTestCase
 	internal static class Receives
 	{
 		/// <summary>
-		/// Defines a call to the <see cref="global::ExampleProject.ContentPublishedEventHandler.Handle"/> method.
+		/// Defines a call to the <see cref="global::ExampleProject.ContentPublishedEventHandler.HandleContentPublish"/> method.
 		/// </summary>
 		public static TestedTaskCall
 			Handle(ExampleProject.Content? content = default)
 		{
 			#pragma warning disable CS8604
 			return new (
-				obj => (obj as ExampleProject.ContentPublishedEventHandler)!.Handle(content));
+				obj => (obj as ExampleProject.ContentPublishedEventHandler)!.HandleContentPublish(content));
 			#pragma warning restore CS8604
 		}
 	}

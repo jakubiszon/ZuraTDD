@@ -4,10 +4,6 @@ using System.Linq;
 
 namespace ZuraTDD;
 
-// TODO: add type param documentation
-// TODO: add method param documentation
-// TODO: expand generic params up to 16 - as the limit defined in Func and Action delegates
-
 /// <summary>
 /// A stateful object invoking method behaviors - side-effects, return values and exceptions.
 /// </summary>

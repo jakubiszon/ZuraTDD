@@ -3,7 +3,7 @@
 A testing / mocking library designed to write concise, declarative **unit-tests** in dotnet.
 
 
-![Simple, declarative test](./Documentation/example-test.png)
+![Simple, declarative test](https://github.com/jakubiszon/ZuraTDD/raw/main/Documentation/example-test.png)
 
 
 What ZuraTDD does for you:
@@ -65,90 +65,78 @@ using static SendEmailControllerTestCase;
 using ZuraTDD;
 
 [TestClass]
-public class SendEmailControllerTests
+public partial class SendEmailControllerTests
 {
-    [TestMethod]
-    [DynamicData(nameof(Handle_TestsData))]
-    public async Task SendEmailToCustomer_Tests(TestCase testCase)
-    {
-        await testCase.RunTestAsync();
-    }
+    [ZuraTest<SendEmailControllerTestCase>(
+        "SendEmailToCustomer throws when EmailSender throws.")]
+    public static IEnumerable<ITestPart> SendEmailToCustomer_TestsData()
+    => [
+        // first - specify what call the test subject receives
+        // you can skip parameters - default value will be used
+        // the idea is to specify only parameters relevant for the test
+        Receives.SendEmailToCustomer(),
 
-    public static IEnumerable<object[]> SendEmailToCustomer_TestsData()
-    {
-        // you can yield return instances of SendEmailControllerTestCase directly
-        // they are automatically converted to object[]
-        yield return new SendEmailControllerTestCase
-        {
-            name: "SendEmailToCustomer throws when EmailSender throws.",
+        // GetCustomer - returning a customer
+        When.CustomerRepository
+            // you can skip params unless you want to match them
+            .GetCustomer()
+            .Returns(Task.FromResult(new Customer(123, "Emma", "Nuelmacron"))),
 
-            // first - specify what call the test subject receives
-            // you can skip parameters - default value will be used
-            // the idea is to specify only parameters relevant for the test
-            Receives.SendEmailToCustomer(),
+        // let's simulate SendEmail to throw
+        When.EmailSender
+            .SendEmail()
+            .Throws(new ExampleTestException()),
 
-            // GetCustomer - returning a customer
-            When.CustomerRepository
-                // you can skip params unless you want to match them
-                .GetCustomer()
-                .Returns(Task.FromResult(new Customer(123, "Emma", "Nuelmacron"))),
+        // in this case - we expect the tested class to propagate the exception
+        Expect.ExceptionToBeThrown<ExampleTestException>(),
 
-            // let's simulate SendEmail to throw
-            When.EmailSender
-                .SendEmail()
-                .Throws(new ExampleTestException()),
+        // let's verify that GetCustomer was called exactly once
+        Expect.CustomerRepository
+            .GetCustomer()
+            .WasCalled(times: 1)
 
-            // in this case - we expect the tested class to propagate the exception
-            Expect.ExceptionToBeThrown<ExampleTestException>(),
+        // we set no return-value expectations, because the method was expected to throw
+    ];
 
-            // let's verify that GetCustomer was called exactly once
-            Expect.CustomerRepository
-                .GetCustomer()
-                .WasCalled(times: 1)
+    [ZuraTest<SendEmailControllerTestCase>(
+        "SendEmailToCustomer sends an email using customer data.")]
+    public static IEnumerable<ITestPart> SendEmailToCustomer_TestsData()
+    => [
+        // first - specify what call the test subject receives
+        // you can skip parameters - default value will be used
+        // the idea is to specify only parameters relevant for the test
+        Receives.SendEmailToCustomer(
+            customerId: 123,
+            emailTemplateId: 456),
 
-            // we set no return-value expectations, because the method was expected to throw
-        };
+        // GetCustomer - returning a customer
+        When.CustomerRepository
+            .GetCustomer(123)
+            .Returns(Task.FromResult(new Customer(123, "emma.nuelmacron@example.com"))),
 
-        yield return new SendEmailControllerTestCase
-        {
-            name: "SendEmailToCustomer sends an email using customer data.",
+        // SendEmail - succeeds
+        When.EmailSender
+            .SendEmail()
+            .Returns(Task.CompletedTask),
 
-            // first - specify what call the test subject receives
-            // you can skip parameters - default value will be used
-            // the idea is to specify only parameters relevant for the test
-            Receives.SendEmailToCustomer(
-                customerId: 123,
-                emailTemplateId: 456),
+        // let's verify that GetCustomer was called
+        Expect.CustomerRepository
+            .GetCustomer(123)
+            .WasCalled(times: 1)
 
-            // GetCustomer - returning a customer
-            When.CustomerRepository
-                .GetCustomer(123)
-                .Returns(Task.FromResult(new Customer(123, "emma.nuelmacron@example.com"))),
+        // let's confirm that a call with the right data was made to SendEmail
+        Expect.EmailSender
+            .SendEmail(
+                to: "emma.nuelmacron@example.com",
+                emailTemplateId: 456)
+            // WasCalled with no param checks for at lease 1 call
+            .WasCalled()
 
-            // SendEmail - succeeds
-            When.EmailSender
-                .SendEmail()
-                .Returns(Task.CompletedTask),
-
-            // let's verify that GetCustomer was called
-            Expect.CustomerRepository
-                .GetCustomer(123)
-                .WasCalled(times: 1)
-
-            // let's confirm that a call with the right data was made to SendEmail
-            Expect.EmailSender
-                .SendEmail(
-                    to: "emma.nuelmacron@example.com",
-                    emailTemplateId: 456)
-                // WasCalled with no param checks for at lease 1 call
-                .WasCalled()
-
-            // Let's check that the method returned success.
-            // note: ResultMatching type param must match the return type as declared by the tested method.
-            Expect.ResultMatching<IActionResult>(
-                result => result is OkObjectResult)
-        };
-    }
+        // Let's check that the method returned success.
+        // note: ResultMatching type param must match the return type as declared by the tested method.
+        Expect.ResultMatching<IActionResult>(
+            result => result is OkObjectResult)
+    ];
 }
 ```
 
@@ -235,14 +223,14 @@ dotnet add package ZuraTDD
 ```
 
 Documentation topics:
-- [Behaviors](./Documentation/Behaviors.md)
-- [Matching calls](./Documentation/CallMatching.md)
-- [`ZuraTest` attribute](./Documentation/ZuraTest.md) ⚠️ section under construction
-- [Expectations](./Documentation/Expect.md) ⚠️ section under construction
-- [Mocking](./Documentation/Mocking.md) ⚠️ section under construction
-- [Test Cases](./Documentation/TestCases.md) ⚠️ section under construction
-- [Code navigation](./Documentation/Navigation.md) ⚠️ section under construction
-- [IDE errors](./Documentation/IDEErrors.md) ⚠️ section under construction
+- [Behaviors](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Behaviors.md)
+- [Matching calls](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/CallMatching.md)
+- [Expectations](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Expect.md) ⚠️ section under construction
+- [`ZuraTest` attribute](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/ZuraTest.md)
+- [Test Cases](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/TestCases.md)
+- [Mocking](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Mocking.md) ⚠️ section under construction
+- [Code navigation](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Navigation.md) ⚠️ section under construction
+- [IDE errors](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/IDEErrors.md) ⚠️ section under construction
 
 
 ## Limitations

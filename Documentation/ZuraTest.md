@@ -1,17 +1,24 @@
 # `ZuraTest` attribute
-If you want to, you can write your test using the `ZuraTest` attribute.
-It will create the test and the cove invoking the `TestCase` for you.
+It is recommended to write your test using the `ZuraTest` attribute.
+It will create the test and the code invoking the `TestCase` for you.
 Your task will be to return the `ITestPart`-s that will be run as part of the test.
-You place this attribute on methods and properties which return `ITestPart[]` or `IEnumerable<ITestPart>`.
+You place this attribute on either methods or properties which return `ITestPart[]` or `IEnumerable<ITestPart>`.
 
 Using this attribute requires you to specify the `TestCase` type as its generic param
 as well as a name for the test to show in the test explorer.
-```csharp
-[ZuraTest<TestCaseClass>("Test name shown in the text explorer.")
-ITestPart[] Method_TestParts => [ ... ]
-```
+The class which declares methods or properties with this attribute must be marked as `partial`.
+If you are using *MsTest* - the class must also be marked with the `[TestClass]` attribute
 
-This will only work if you use *Xunit* or *MSTest*. The other frameworks are not supported yet.
+```csharp
+[TestClass] // required for MSTest
+public partial class MyTestCaseTests
+{
+    [ZuraTest<TestCaseClass>("Test name shown in the text explorer.")
+    ITestPart[] Method_TestParts => [
+        // declare test parts here
+    ];
+}
+```
 
 
 ## Why is that useful?
@@ -25,6 +32,11 @@ Another can reuse it and only specify the deviations in behavior and expected re
 ## Example
 ```csharp
 using ZuraTDD;
+
+// required to easily access the builders for the ContentPublishedEventHandlerTestCase
+using static MyTestNamespace.ContentPublishedEventHandlerTestCase
+
+namespace MyTestNamespace;
 
 [TestClass]
 public partial class MyTests
@@ -66,11 +78,17 @@ public partial class MyTests
 			.SendEmail()
 			.Throws(new TestException()),
 
-        // importing behaviors from another test is trivial
+        // importing dependency setip and behaviors from another test is trivial
 		..HandleStandardBehaviors
-			.BehaviorsOnly(),
+			.OnlyDependencySetup(),
 
 		Expect.ExceptionToBeThrown<TestException>()
 	];
 }
 ```
+
+## Limitations
+
+At the moment this attribute is only supported for *Xunit* and *MSTest*.
+
+When you are using other testing frameworks - you can still use the builders created for your `ITestCase` marked classes but you need to [create a test manually](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/TestCases.md).

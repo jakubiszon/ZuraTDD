@@ -4,10 +4,6 @@ using System.Reflection;
 
 namespace ZuraTDD;
 
-// TODO: add type param documentation
-// TODO: add method param documentation
-// TODO: expand generic params up to 16 - as the limit defined in Func and Action delegates
-
 /// <summary>
 /// An object used to map mocked-object methods to their behaviors
 /// and invoke those behaviors when the methods are called.

@@ -27,7 +27,7 @@ internal class TestCaseSpecification
 		TestSubjectFullyQualifiedClassName = testSubjectType.ToDisplayString(
 			SymbolDisplayFormat.FullyQualifiedFormat);
 
-		Methods = Functions.ExtractPublicMethods(testSubjectType);
+		TestableMethods = Functions.ExtractPublicMethods(testSubjectType);
 
 		DependenciesClass = new DependenciesClassSpecification(
 			OutputNamespace,
@@ -42,7 +42,10 @@ internal class TestCaseSpecification
 
 	public string TestSubjectFullyQualifiedClassName { get; }
 
-	public IReadOnlyList<MethodSpecification> Methods { get; set; }
+	/// <summary>
+	/// Lists methods of the test subject which the system could potentially test.
+	/// </summary>
+	public IReadOnlyList<MethodSpecification> TestableMethods { get; set; }
 
 	public DependenciesClassSpecification DependenciesClass { get; }
 }

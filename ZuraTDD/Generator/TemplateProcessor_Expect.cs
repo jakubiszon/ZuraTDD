@@ -21,10 +21,10 @@ internal partial class TemplateProcessor
 			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// An expectation setup object for <see cref="{{dependency.MockedTypeName}}" />.
+			/// An expectation setup object for <see cref="{{dependency.MockedType.TypeName}}" />.
 			/// </summary>
 			internal class {{dependency.ExpectTypeName}}
-				: {{dependency.MockedTypeName}}_ExpectBuilder
+				: {{dependency.MockedType.TypeName}}_ExpectBuilder
 			{
 				public {{dependency.ExpectTypeName}}(
 					MockedObject existingFake)
@@ -33,21 +33,21 @@ internal partial class TemplateProcessor
 				}
 			}
 
-			internal class {{dependency.MockedTypeName}}_ExpectStaticBuilder
-				: {{dependency.MockedTypeName}}_ExpectBuilder
+			internal class {{dependency.MockedType.TypeName}}_ExpectStaticBuilder
+				: {{dependency.MockedType.TypeName}}_ExpectBuilder
 			{
-				public {{dependency.MockedTypeName}}_ExpectStaticBuilder(
+				public {{dependency.MockedType.TypeName}}_ExpectStaticBuilder(
 					string dependencyName)
 					: base(new ExpectedDependencyCallNameProcessor(dependencyName))
 				{
 				}
 			}
 			
-			internal class {{dependency.MockedTypeName}}_ExpectBuilder
+			internal class {{dependency.MockedType.TypeName}}_ExpectBuilder
 			{
 				private IExpectedDependencyCallProcessor processor;
 
-				protected {{dependency.MockedTypeName}}_ExpectBuilder(
+				protected {{dependency.MockedType.TypeName}}_ExpectBuilder(
 					IExpectedDependencyCallProcessor processor)
 				{
 					this.processor = processor;
@@ -68,7 +68,7 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Builds call expectations for <see cref="{{service.MockedTypeName}}.{{method.MethodName}}" />.
+				/// Builds call expectations for <see cref="{{service.MockedType.TypeName}}.{{method.MethodName}}" />.
 				/// </summary>
 				public ExpectedDependencyCallBuilder {{method.MethodName}}({{PrepareParameterList(method)}})
 				{

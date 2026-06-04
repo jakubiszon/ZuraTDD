@@ -143,6 +143,11 @@ internal static class Functions
 		};
 	}
 
+	/// <summary>
+	/// Extracts all public methods defined directly on the specified type.
+	/// </summary>
+	/// <param name="typeSymbol">Type to extract methods from.</param>
+	/// <returns>List of method specifications.</returns>
 	public static List<MethodSpecification> ExtractPublicMethods(INamedTypeSymbol? typeSymbol)
 	{
 		if (typeSymbol == null) return [];
@@ -150,8 +155,11 @@ internal static class Functions
 		var allPublicMethods = typeSymbol
 			.GetMembers()
 			.OfType<IMethodSymbol>()
-			.Where(m => m.DeclaredAccessibility == Accessibility.Public && !m.IsStatic)
+			.Where(m => !m.IsStatic)
+			.Where(m => m.DeclaredAccessibility == Accessibility.Public)
 			.Where(m => m.Name != ".ctor")
+			.Distinct(SymbolEqualityComparer.Default)
+			.Cast<IMethodSymbol>()
 			.ToList();
 
 		return allPublicMethods
@@ -159,9 +167,45 @@ internal static class Functions
 			{
 				var methodsWithSameName = allPublicMethods.Count(m => m.Name == method.Name);
 				var hasOverloads = methodsWithSameName > 1;
-				return new MethodSpecification(method, hasOverloads);
+				return new MethodSpecification(typeSymbol, method, hasOverloads);
 			})
 			.ToList();
+	}
+
+	public static List<MethodSpecification> ExtractInterfaceMethods(INamedTypeSymbol? interfaceSymbol)
+	{
+		if (interfaceSymbol == null) return [];
+		//if (!interfaceSymbol.TypeKind.HasFlag(TypeKind.Interface))
+		//	throw new Exception($"The method {nameof(ExtractInterfaceMethods)} received the type '{interfaceSymbol?.Name}' which is not an interface.");
+
+		INamedTypeSymbol[] allInterfaces = [interfaceSymbol, .. interfaceSymbol.AllInterfaces];
+
+		var allPublicMethods = allInterfaces
+			.SelectMany(ExtractMethodsWithOwner)
+			.ToList();
+
+		return allPublicMethods
+			.Select(methodAndType =>
+			{
+				var methodsWithSameName = allPublicMethods.Count(mt => mt.method.Name == methodAndType.method.Name);
+				var hasOverloads = methodsWithSameName > 1;
+				return new MethodSpecification(methodAndType.ownerType, methodAndType.method, hasOverloads);
+			})
+			.ToList();
+	}
+
+	private static IEnumerable<(INamedTypeSymbol ownerType, IMethodSymbol method)> ExtractMethodsWithOwner(
+		INamedTypeSymbol typeSymbol)
+	{
+		return typeSymbol
+			.GetMembers()
+			.OfType<IMethodSymbol>()
+			.Where(m => !m.IsStatic)
+			.Where(m => m.DeclaredAccessibility == Accessibility.Public)
+			.Where(m => m.Name != ".ctor")
+			.Distinct(SymbolEqualityComparer.Default)
+			.Cast<IMethodSymbol>()
+			.Select(method => (ownerType: typeSymbol, method));
 	}
 
 	//public static List<PropertySpecification> ExtractProperties(INamedTypeSymbol? typeSymbol)
@@ -178,7 +222,7 @@ internal static class Functions
 	//	return [];
 	//}
 
-	public static string PrependNotEmpty(this string? input, string prepend)
+	public static string PrependNotEmpty(this string input, string prepend)
 	{
 		return string.IsNullOrEmpty(input)
 			? ""

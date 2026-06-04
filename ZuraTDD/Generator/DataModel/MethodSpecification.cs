@@ -11,6 +11,9 @@ namespace ZuraTDD.Generator.DataModel;
 /// </summary>
 internal class MethodSpecification
 {
+	/// <summary>
+	/// Format used to get the type name to use in <see langword="typeof" /> expressions in generated code.
+	/// </summary>
 	private static readonly SymbolDisplayFormat TypeOfFormat =
 		new(
 			typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
@@ -20,8 +23,14 @@ internal class MethodSpecification
 
 	public string MethodName { get; }
 
+	/// <summary>
+	/// Determines if and how does the method return its return value.
+	/// </summary>
 	public MethodType MethodType { get; }
 
+	/// <summary>
+	/// Name the type returned as the method result.
+	/// </summary>
 	public string ReturnType { get; }
 
 	/// <summary>
@@ -29,20 +38,35 @@ internal class MethodSpecification
 	/// </summary>
 	public string Token { get; }
 
+	/// <summary>
+	/// Defines the parameters of the method.
+	/// </summary>
 	public List<ParameterSpecification> Parameters { get; }
 
 	/// <summary>
 	/// Type which this method returns inside the Task{T} or ValueTask{T}.
-	/// This only applies when MethodType is TaskOfT or ValueTaskOfT.
+	/// This only applies when <see cref="MethodSpecification.MethodType">MethodType</see> is
+	/// either <see cref="DataModel.MethodType.TaskOfT">TaskOfT</see>
+	/// or <see cref="DataModel.MethodType.ValueTaskOfT">ValueTaskOfT</see>.
 	/// </summary>
 	public string AwaitedType { get; }
 
+	/// <summary>
+	/// The type which defines the method. It can be an interface other than the class where the method is seen.
+	/// </summary>
+	public TypeInfo DefiningType { get; }
+
+	/// <param name="definingType">The type which defines the method. It can be an interface other than the class where the method is seen.</param>
+	/// <param name="methodSymbol">The symbol representing the method.</param>
+	/// <param name="hasOverloads">Indicates whether the method has overloads.</param>
 	public MethodSpecification(
+		INamedTypeSymbol definingType,
 		IMethodSymbol methodSymbol,
 		bool hasOverloads)
 	{
 		MethodName = methodSymbol.Name;
 		ReturnType = methodSymbol.ReturnType.ToDisplayString();
+		DefiningType = new TypeInfo(definingType);
 		Parameters = methodSymbol
 			.Parameters
 			.Select(p => new ParameterSpecification

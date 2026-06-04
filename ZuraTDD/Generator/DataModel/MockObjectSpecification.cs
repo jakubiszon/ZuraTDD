@@ -1,8 +1,6 @@
-using Microsoft.CodeAnalysis;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
 
@@ -27,6 +25,11 @@ internal class MockObjectSpecification
 	/// </summary>
 	public DependencySpecification MockedTypeSpecification { get; }
 
+	/// <summary>
+	/// Prepares an instance of the <see cref="MockObjectSpecification"/> class based on the provided symbol.
+	/// </summary>
+	/// <param name="typeSymbol">The type which implements the <see cref="IMock{T}"/> interface.</param>
+	/// <exception cref="InvalidOperationException"></exception>
 	public MockObjectSpecification(
 		INamedTypeSymbol typeSymbol)
 	{

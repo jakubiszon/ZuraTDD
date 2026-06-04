@@ -21,11 +21,11 @@ internal partial class TemplateProcessor
 			namespace {{mockedType.OutputNamespace}};
 
 			/// <summary>
-			/// A mock implementation of <see cref="{{mockedType.FullyQualifiedName}}" />.
+			/// A mock implementation of <see cref="{{mockedType.MockedType.FullyQualifiedTypeName}}" />.
 			/// </summary>
 			internal class {{mockedType.MockedFakeTypeName}}
 				: MockedObject
-				, {{mockedType.FullyQualifiedName}}
+				, {{mockedType.MockedType.FullyQualifiedTypeName}}
 			{
 				public {{mockedType.MockedFakeTypeName}}(
 					params IEnumerable<BehaviorSetup> behaviors)
@@ -52,15 +52,12 @@ static file class Functions
 	{
 		var paramValues = mockedMethod.GetParamValuesString();
 		var @return = mockedMethod.ReturnType == "void" ? "" : "return ";
-		var defaultResult = mockedMethod.GetDefaultResult();
-		defaultResult = defaultResult == ""
-			? ""
-			: $",\n\t\t\t{defaultResult}";
+		var defaultResult = mockedMethod.GetDefaultResult().PrependNotEmpty(",\n\t\t\t");
 
 		return
 			$$"""
 				/// <summary>
-				/// Simulates behavior for <see cref="{{mockedType.MockedTypeName}}.{{mockedMethod.MethodName}}" />.
+				/// Simulates behavior for <see cref="{{mockedType.MockedType.TypeName}}.{{mockedMethod.MethodName}}" />.
 				/// </summary>
 				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}({{ParameterDeclarations(mockedMethod)}})
 				{

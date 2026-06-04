@@ -75,18 +75,18 @@ static file class Functions
 			$$"""
 				/// <summary>
 				/// Mock for the "{{dependency.DependencyPropertyName}}" parameter of the test subject constructor.
-				/// Returns an instance of <see cref="{{dependency.FullyQualifiedName}}" />.
+				/// Returns an instance of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" />.
 				/// </summary>
-				public {{dependency.FullyQualifiedName}} {{dependency.DependencyPropertyName}}
+				public {{dependency.MockedType.FullyQualifiedTypeName}} {{dependency.DependencyPropertyName}}
 				{
 					get {
 						var valueSetup = this.dependencySetup
-							.OfType<NamedDependency<{{dependency.FullyQualifiedName}}>>()
+							.OfType<NamedDependency<{{dependency.MockedType.FullyQualifiedTypeName}}>>()
 							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.DependencyPropertyName}}");
 			
 						return valueSetup != null
 							? valueSetup.Instance
-							: ({{dependency.FullyQualifiedName}})mockedDependencies["{{dependency.DependencyPropertyName}}"];
+							: ({{dependency.MockedType.FullyQualifiedTypeName}})mockedDependencies["{{dependency.DependencyPropertyName}}"];
 					}
 				}
 			""";
@@ -97,14 +97,14 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Returns an instance of <see cref="{{dependency.FullyQualifiedName}}" /> which was either provided as a TestPart
+				/// Returns an instance of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" /> which was either provided as a TestPart
 				/// or is a default value of the type.
 				/// </summary>
-				public {{dependency.FullyQualifiedName}} {{dependency.DependencyPropertyName}}
+				public {{dependency.MockedType.FullyQualifiedTypeName}} {{dependency.DependencyPropertyName}}
 				{
 					get {
 						var valueSetup = this.dependencySetup
-							.OfType<NamedDependency<{{dependency.FullyQualifiedName}}>>()
+							.OfType<NamedDependency<{{dependency.MockedType.FullyQualifiedTypeName}}>>()
 							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.DependencyPropertyName}}");
 
 						#pragma warning disable CS8603 // Possible null reference return.

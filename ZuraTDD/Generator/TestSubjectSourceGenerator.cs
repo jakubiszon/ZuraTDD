@@ -1,10 +1,9 @@
-using ZuraTDD.Generator.DataModel;
-using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Immutable;
+using ZuraTDD.Generator.DataModel;
 
 namespace ZuraTDD.Generator;
 
@@ -76,6 +75,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			.Equals(interface1.OriginalDefinition, interface2);
 	}
 
+	//TODO: change result type to allow outputting diagnostics from this method
 	private ImmutableArray<SourceFileToGenerate> ProcessCandidateClass(
 		(ClassDeclarationSyntax, Compilation) pair)
 	{
@@ -167,17 +167,17 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_Builders.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_Builders.generated.cs",
 			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_Fake.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_Fake.generated.cs",
 			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_Expect.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_Expect.generated.cs",
 			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification);
 
@@ -202,7 +202,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_IsOnly_Builder.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_IsOnly_Builder.generated.cs",
 			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
@@ -221,23 +221,23 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 		// TODO some code seems repeated in MockedTypeBuilderClassesCode and DependencyStaticBuilderCode
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_Builders.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_Builders.generated.cs",
 			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification);
 
 		// TODO some code seems repeated in MockedTypeBuilderClassesCode and DependencyStaticBuilderCode
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_NamedInstanceBuilder.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_NamedInstanceBuilder.generated.cs",
 			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_Fake.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_Fake.generated.cs",
 			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeName}_Expect.generated.cs",
+			$"{dependencySpecification.MockedType.TypeName}_Expect.generated.cs",
 			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification);
 

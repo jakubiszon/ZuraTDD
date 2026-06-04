@@ -25,11 +25,9 @@ public class FuncBehaviorBuilder<Tout>
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
 	{
-		// TODO if this constructor was not called Constraints could be private to ValueSetConstraint
-
-		if (valueSetConstraint.Constraints.Length > 0)
+		if (!valueSetConstraint.IsEmpty())
 			throw new Exceptions.IncorrectConfiguration(
-				$"Cannot pass value filters to FuncBehaviorBuilder for a method which takes no parameters");
+				$"Cannot pass value filters to FuncBehaviorBuilder for a method which takes no parameters.");
 	}
 }
 

@@ -1,4 +1,4 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 
 namespace ZuraTDD.Tests;
 
@@ -16,5 +16,21 @@ public class ValueSetConstraintTests
 			new ValueConstraint<string>());
 
 		Assert.IsTrue(constraint.Matches([ intValue, strValue ]));
+	}
+
+	[TestMethod]
+	public void IsEmpty_WhenEmpty_ReturnsTrue()
+	{
+		var constraint = new ValueSetConstraint();
+		Assert.IsTrue(constraint.IsEmpty());
+	}
+
+	[TestMethod]
+	public void IsEmpty_WhenConstraintsPassedToConstructor_ReturnsFalse()
+	{
+		var constraint = new ValueSetConstraint(
+			new ValueConstraint<int>());
+
+		Assert.IsFalse(constraint.IsEmpty());
 	}
 }

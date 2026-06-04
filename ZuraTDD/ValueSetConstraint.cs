@@ -5,7 +5,9 @@ namespace ZuraTDD;
 /// </summary>
 public class ValueSetConstraint
 {
-	public IValueConstraint[] Constraints { get; }
+	private IValueConstraint[] Constraints { get; }
+
+	public bool IsEmpty() => this.Constraints.Length == 0;
 
 	public ValueSetConstraint(params IValueConstraint[] valueConstraints)
 	{

@@ -1,3 +1,5 @@
+using ExampleProject.Model;
+
 namespace ExampleProject;
 
 internal class ContentPublishedEventHandler : IContentPublishedEventHandler
@@ -34,5 +36,10 @@ internal class ContentPublishedEventHandler : IContentPublishedEventHandler
 
 			await emailSender.SendEmail(customer.Email, subject, body);
 		}
+	}
+
+	public void RollbackTransaction()
+	{
+		throw new NotImplementedException();
 	}
 }

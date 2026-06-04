@@ -1,3 +1,5 @@
+using ExampleProject.Model;
+
 namespace ExampleProject;
 
 public interface ICustomerRepository

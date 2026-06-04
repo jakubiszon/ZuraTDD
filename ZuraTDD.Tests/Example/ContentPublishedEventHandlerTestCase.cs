@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using ExampleProject.Model;
 using ZuraTDD;
 using ZuraTDD.Tests.Example;
 
@@ -49,7 +50,7 @@ internal partial class ContentPublishedEventHandlerTestCase
 		/// Defines a call to the <see cref="global::ExampleProject.ContentPublishedEventHandler.HandleContentPublish"/> method.
 		/// </summary>
 		public static TestedTaskCall
-			HandleContentPublish(ExampleProject.Content? content = default)
+			HandleContentPublish(Content? content = default)
 		{
 			#pragma warning disable CS8604
 			return new (

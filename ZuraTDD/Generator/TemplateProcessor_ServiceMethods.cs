@@ -26,7 +26,7 @@ internal partial class TemplateProcessor
 			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// This class lists methods of <see cref="{{dependency.FullyQualifiedName}}" />.
+			/// This class lists methods of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" />.
 			/// </summary>
 			internal static class {{dependency.MockedTypeMethodsTypeName}}
 			{
@@ -44,7 +44,7 @@ static file class Functions
 	{
 		return
 			$$"""
-				public static readonly MethodInfo {{method.Token}} = typeof({{mockedType.DeclaringNamespace}}.{{mockedType.MockedTypeName}}).GetMethod(
+				public static readonly MethodInfo {{method.Token}} = typeof({{method.DefiningType.FullyQualifiedTypeName}}).GetMethod(
 					"{{method.MethodName}}",
 					[{{ServiceMethodTokenTypeParams(method)}}])!;
 			""";

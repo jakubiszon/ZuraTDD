@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Net.Sockets;
 using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
@@ -12,17 +11,15 @@ internal class DependencySpecification
 	/// <summary>
 	/// Constructor used when a type is mocked using IMock&lt;T&gt; interface.
 	/// </summary>
-	/// <param name="typeSymbol">Symbol which was declares as implementing the <see cref="IMock{TType}"/> interface.</param>
+	/// <param name="outputNamespace">Namespace into which the code will be generated.</param>
+	/// <param name="mockedType">Symbol representing the generic type declared in <see cref="IMock{TType}"/> interface.</param>
 	public DependencySpecification(
 		string outputNamespace,
 		INamedTypeSymbol mockedType)
 	{
-		string mockedTypeName = mockedType.ToDisplayString();
-
 		OutputNamespace = outputNamespace;
-		MockedTypeName = mockedType.Name;
+		MockedType = new TypeInfo(mockedType);
 		DeclaringNamespace = mockedType.ContainingNamespace.ToDisplayString();
-		FullyQualifiedName = mockedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
 		IsInterface = mockedType.TypeKind == TypeKind.Interface;
 
 		// TODO: use inheritance to apply this field only to services used by TestCase<T>
@@ -31,7 +28,7 @@ internal class DependencySpecification
 		//       we can also have a dependency which is not implemented by a mocked type.
 		DependencyPropertyName = string.Empty;
 		
-		Methods = Functions.ExtractPublicMethods(mockedType);
+		Methods = Functions.ExtractInterfaceMethods(mockedType);
 	}
 
 	/// <summary>
@@ -42,34 +39,26 @@ internal class DependencySpecification
 		IParameterSymbol param)
 	{
 		OutputNamespace = outputNamespace;
-		MockedTypeName = param.Type.Name;
+		MockedType = new TypeInfo(param.Type);
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
 		DependencyPropertyName = param.Name.ToString().Capitalize();
-		FullyQualifiedName = param.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
 		IsInterface = param.Type.TypeKind == TypeKind.Interface;
 		
-		Methods = Functions.ExtractPublicMethods(param.Type as INamedTypeSymbol);
+		Methods = Functions.ExtractInterfaceMethods(param.Type as INamedTypeSymbol);
 	}
 
 	/// <summary>
 	/// Name of the mocked type without the namespace.
 	/// </summary>
-	public string MockedTypeName { get; }
+	public TypeInfo MockedType { get; }
 
-	/// <summary>
-	/// Gets the fully qualified name of the object, including its namespace or containing context.
-	/// </summary>
-	public string FullyQualifiedName { get; }
+	public string MockedFakeTypeName => $"{MockedType.TypeName}_Fake";
 
-	public string MockedFakeTypeName => $"{MockedTypeName}_Fake";
+	public string MockedTypeMethodsTypeName => $"{MockedType.TypeName}_Methods";
 
-	public string MockedTypeMethodsTypeName => $"{MockedTypeName}_Methods";
+	public string BuilderTypeName => $"{MockedType.TypeName}_Builder";
 
-	public string BuilderTypeName => $"{MockedTypeName}_Builder";
-
-	public string ExpectTypeName => $"{MockedTypeName}_Expect";
-
-	public string MockTypeName => $"{MockedTypeName}_Mock";
+	public string ExpectTypeName => $"{MockedType.TypeName}_Expect";
 
 	/// <summary>
 	/// Namespace containing the mocked type.

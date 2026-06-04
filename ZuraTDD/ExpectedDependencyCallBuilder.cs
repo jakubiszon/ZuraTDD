@@ -31,6 +31,9 @@ public class ExpectedDependencyCallBuilder
 		this.valueSetConstraint = new ValueSetConstraint(valueConstraints);
 	}
 
+	/// <summary>
+	/// Builds an expectation that the method call is not matched at all.
+	/// </summary>
 	public ExpectedMockedObjectMethodCall WasNotCalled()
 	{
 		return processor.Process(
@@ -39,6 +42,9 @@ public class ExpectedDependencyCallBuilder
 			0);
 	}
 
+	/// <summary>
+	/// Builds an expectation that the method call is matched at least once, without specifying how many times exactly.
+	/// </summary>
 	public ExpectedMockedObjectMethodCall WasCalled()
 	{
 		return processor.Process(
@@ -47,6 +53,10 @@ public class ExpectedDependencyCallBuilder
 			null);
 	}
 
+	/// <summary>
+	/// Builds an expectation that the method call is matched a specific number of times.
+	/// </summary>
+	/// <param name="times">Number of times to expect the method call to be matched.</param>
 	public ExpectedMockedObjectMethodCall WasCalled(int times)
 	{
 		return processor.Process(

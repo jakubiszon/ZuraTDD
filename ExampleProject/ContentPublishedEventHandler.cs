@@ -37,9 +37,4 @@ internal class ContentPublishedEventHandler : IContentPublishedEventHandler
 			await emailSender.SendEmail(customer.Email, subject, body);
 		}
 	}
-
-	public void RollbackTransaction()
-	{
-		throw new NotImplementedException();
-	}
 }

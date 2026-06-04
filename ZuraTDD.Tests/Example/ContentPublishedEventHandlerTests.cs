@@ -1,4 +1,4 @@
-using ExampleProject;
+using ExampleProject.Model;
 using static ZuraTDD.Tests.Example.ContentPublishedEventHandlerTestCase;
 
 namespace ZuraTDD.Tests.Example;

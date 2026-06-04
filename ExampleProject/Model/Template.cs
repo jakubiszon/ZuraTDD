@@ -1,4 +1,4 @@
-﻿namespace ExampleProject;
+namespace ExampleProject.Model;
 
 /// <summary>
 /// Represents a template used to compose message content.

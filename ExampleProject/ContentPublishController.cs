@@ -1,3 +1,4 @@
+using ExampleProject.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleProject;
@@ -25,9 +26,9 @@ public class ContentPublishController : ControllerBase
 			await _handler.HandleContentPublish(content);
 			return Ok(new { message = "Content published successfully" });
 		}
-		catch (Exception ex)
+		catch
 		{
-			return StatusCode(500, new { error = ex.Message });
+			return StatusCode(500, "An error occurred while processing the request.");
 		}
 	}
 

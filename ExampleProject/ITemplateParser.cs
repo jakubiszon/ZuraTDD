@@ -1,4 +1,5 @@
 using System.Text.Json;
+using ExampleProject.Model;
 
 namespace ExampleProject;
 

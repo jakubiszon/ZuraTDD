@@ -1,4 +1,4 @@
-namespace ExampleProject;
+namespace ExampleProject.Model;
 
 public class Content
 {

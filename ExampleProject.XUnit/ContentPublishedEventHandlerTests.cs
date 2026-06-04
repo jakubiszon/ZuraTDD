@@ -1,3 +1,4 @@
+using ExampleProject.Model;
 using ZuraTDD;
 using static ExampleProject.XUnit.ContentPublishedEventHandlerTestCase;
 

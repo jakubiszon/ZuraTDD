@@ -167,17 +167,17 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_Builders.generated.cs",
+			$"{dependencySpecification.TypeInfo.TypeName}_Builders.generated.cs",
 			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_Fake.generated.cs",
+			$"{dependencySpecification.TypeInfo.TypeName}_Fake.generated.cs",
 			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_Expect.generated.cs",
+			$"{dependencySpecification.TypeInfo.TypeName}_Expect.generated.cs",
 			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification);
 
@@ -191,7 +191,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 	private SourceFilesToCreate GenerateDependencyCode(DependencySpecification dependencySpecification)
 	{
-		return dependencySpecification.IsInterface
+		return dependencySpecification.IsMockable
 			? GenerateAbstractDependencyCode(dependencySpecification)
 			: GenerateConcreteDependencyCode(dependencySpecification);
 	}
@@ -202,7 +202,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_IsOnly_Builder.generated.cs",
+			$"{dependencySpecification.DependencyType.TypeName}_IsOnly_Builder.generated.cs",
 			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
@@ -217,29 +217,29 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		files.AddFile(
 			$"{dependencySpecification.MockedTypeMethodsTypeName}.generated.cs",
 			TemplateProcessor.MockedTypeMethodsClassCode,
-			dependencySpecification);
+			dependencySpecification.MockedType!);
 
 		// TODO some code seems repeated in MockedTypeBuilderClassesCode and DependencyStaticBuilderCode
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_Builders.generated.cs",
+			$"{dependencySpecification.DependencyType.TypeName}_Builders.generated.cs",
 			TemplateProcessor.MockedTypeBuilderClassesCode,
-			dependencySpecification);
+			dependencySpecification.MockedType!);
 
 		// TODO some code seems repeated in MockedTypeBuilderClassesCode and DependencyStaticBuilderCode
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_NamedInstanceBuilder.generated.cs",
+			$"{dependencySpecification.DependencyType.TypeName}_NamedInstanceBuilder.generated.cs",
 			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_Fake.generated.cs",
+			$"{dependencySpecification.DependencyType.TypeName}_Fake.generated.cs",
 			TemplateProcessor.MockedTypeClassCode,
-			dependencySpecification);
+			dependencySpecification.MockedType!);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.TypeName}_Expect.generated.cs",
+			$"{dependencySpecification.DependencyType.TypeName}_Expect.generated.cs",
 			TemplateProcessor.MockedTypeExpectClassesCode,
-			dependencySpecification);
+			dependencySpecification.MockedType!);
 
 		return files;
 	}

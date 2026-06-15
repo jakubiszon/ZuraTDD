@@ -8,10 +8,10 @@ internal partial class TemplateProcessor
 	/// <summary>
 	/// Generates code for the static class containing MethodInfo tokens for all public methods of the mocked object.
 	/// </summary>
-	public static string MockedTypeMethodsClassCode(DependencySpecification dependency)
+	public static string MockedTypeMethodsClassCode(MockedTypeSpecification dependency)
 	{
 		var methodsTokens = dependency.Methods
-			.Select(m => Functions.MockedObjectMethodToken(dependency, m));
+			.Select(Functions.MockedObjectMethodToken);
 
 		var strTokens = string.Join("\n\n", methodsTokens);
 
@@ -26,7 +26,7 @@ internal partial class TemplateProcessor
 			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// This class lists methods of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" />.
+			/// This class lists methods of <see cref="{{dependency.TypeInfo.FullyQualifiedTypeName}}" />.
 			/// </summary>
 			internal static class {{dependency.MockedTypeMethodsTypeName}}
 			{
@@ -39,7 +39,6 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string MockedObjectMethodToken(
-		DependencySpecification mockedType,
 		MethodSpecification method)
 	{
 		return

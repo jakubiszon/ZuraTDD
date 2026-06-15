@@ -14,7 +14,7 @@ internal partial class TemplateProcessor
 		// creation key-value pairs mapping dependency names to factory functions
 		// that will be used to create abstract dependencies
 		var abstractDependencyFactories = spec.Dependencies
-			.Where(dependency => dependency.IsInterface)
+			.Where(dependency => dependency.IsMockable)
 			.Select(dependency =>
 			$$"""
 						KeyValuePair.Create<string, Func<MockedObject>>(
@@ -64,7 +64,7 @@ static file class Functions
 {
 	public static string DependencyCode(DependencySpecification dependency)
 	{
-		return dependency.IsInterface
+		return dependency.IsMockable
 			? AbstractDependencyCode(dependency)
 			: SolidDependencyCode(dependency);
 	}
@@ -75,18 +75,18 @@ static file class Functions
 			$$"""
 				/// <summary>
 				/// Mock for the "{{dependency.DependencyPropertyName}}" parameter of the test subject constructor.
-				/// Returns an instance of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" />.
+				/// Returns an instance of <see cref="{{dependency.DependencyType.FullyQualifiedTypeName}}" />.
 				/// </summary>
-				public {{dependency.MockedType.FullyQualifiedTypeName}} {{dependency.DependencyPropertyName}}
+				public {{dependency.DependencyType.FullyQualifiedTypeName}} {{dependency.DependencyPropertyName}}
 				{
 					get {
 						var valueSetup = this.dependencySetup
-							.OfType<NamedDependency<{{dependency.MockedType.FullyQualifiedTypeName}}>>()
+							.OfType<NamedDependency<{{dependency.DependencyType.FullyQualifiedTypeName}}>>()
 							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.DependencyPropertyName}}");
 			
 						return valueSetup != null
 							? valueSetup.Instance
-							: ({{dependency.MockedType.FullyQualifiedTypeName}})mockedDependencies["{{dependency.DependencyPropertyName}}"];
+							: ({{dependency.DependencyType.FullyQualifiedTypeName}})mockedDependencies["{{dependency.DependencyPropertyName}}"];
 					}
 				}
 			""";
@@ -97,14 +97,14 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Returns an instance of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" /> which was either provided as a TestPart
+				/// Returns an instance of <see cref="{{dependency.DependencyType.FullyQualifiedTypeName}}" /> which was either provided as a TestPart
 				/// or is a default value of the type.
 				/// </summary>
-				public {{dependency.MockedType.FullyQualifiedTypeName}} {{dependency.DependencyPropertyName}}
+				public {{dependency.DependencyType.FullyQualifiedTypeName}} {{dependency.DependencyPropertyName}}
 				{
 					get {
 						var valueSetup = this.dependencySetup
-							.OfType<NamedDependency<{{dependency.MockedType.FullyQualifiedTypeName}}>>()
+							.OfType<NamedDependency<{{dependency.DependencyType.FullyQualifiedTypeName}}>>()
 							.FirstOrDefault(setup => setup.DependencyName == "{{dependency.DependencyPropertyName}}");
 
 						#pragma warning disable CS8603 // Possible null reference return.

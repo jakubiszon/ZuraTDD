@@ -8,11 +8,11 @@ internal partial class TemplateProcessor
 	/// <summary>
 	/// Generates code for the static class containing MethodInfo tokens for all public methods of the service.
 	/// </summary>
-	public static string MockedTypeBuilderClassesCode(DependencySpecification dependency)
+	public static string MockedTypeBuilderClassesCode(MockedTypeSpecification mockedType)
 	{
 		var methods = string.Join(
 			"\n\n",
-			dependency.Methods.Select(m => Functions.MockedMethodBuilderDeclaration(dependency, m)));
+			mockedType.Methods.Select(m => Functions.MockedMethodBuilderDeclaration(mockedType, m)));
 
 		return
 			$$"""
@@ -20,21 +20,21 @@ internal partial class TemplateProcessor
 			#nullable enable
 			using ZuraTDD;
 
-			namespace {{dependency.OutputNamespace}};
+			namespace {{mockedType.OutputNamespace}};
 
 			/// <summary>
-			/// Instance builder of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" />.
+			/// Instance builder of <see cref="{{mockedType.TypeInfo.FullyQualifiedTypeName}}" />.
 			/// </summary>
-			internal class {{dependency.BuilderTypeName}}
-				: {{dependency.MockedType.TypeName}}_BehaviorBuilder
-				, IBuild<{{dependency.MockedFakeTypeName}}>
+			internal class {{mockedType.BuilderTypeName}}
+				: {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder
+				, IBuild<{{mockedType.MockedFakeTypeName}}>
 			{
-				public {{dependency.BuilderTypeName}}()
+				public {{mockedType.BuilderTypeName}}()
 					: base(new BehaviorSetupCollector())
 				{
 				}
 
-				public {{dependency.MockedFakeTypeName}} BuildInstance()
+				public {{mockedType.MockedFakeTypeName}} BuildInstance()
 				{
 					var collector = base.behaviorSetupProcessor as BehaviorSetupCollector;
 
@@ -46,12 +46,12 @@ internal partial class TemplateProcessor
 			}
 
 			/// <summary>
-			/// Abstract builder of <see cref="{{dependency.MockedType.FullyQualifiedTypeName}}" />.
+			/// Abstract builder of <see cref="{{mockedType.TypeInfo.FullyQualifiedTypeName}}" />.
 			/// </summary>
-			internal abstract class {{dependency.MockedType.TypeName}}_BehaviorBuilder
+			internal abstract class {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder
 				: MockedObjectBuilder
 			{
-				public {{dependency.MockedType.TypeName}}_BehaviorBuilder(
+				public {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder(
 					IBehaviorSetupProcessor behaviorSetupProcessor)
 					: base(behaviorSetupProcessor)
 				{
@@ -65,7 +65,7 @@ internal partial class TemplateProcessor
 	public static string DependencyStaticBuilderCode(
 		DependencySpecification dependency)
 	{
-		return dependency.IsInterface
+		return dependency.IsMockable
 			? AbstractDependencyStaticBuilderCode(dependency)
 			: NonAbstractDependencyStaticBuilderCode(dependency);
 	}
@@ -81,11 +81,11 @@ internal partial class TemplateProcessor
 
 			namespace {{dependency.OutputNamespace}};
 
-			internal class {{dependency.MockedType.TypeName}}_NamedInstanceBuilder : {{dependency.MockedType.TypeName}}_BehaviorBuilder
+			internal class {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder : {{dependency.DependencyType.TypeName}}_BehaviorBuilder
 			{
 				private readonly string dependencyName;
 
-				public {{dependency.MockedType.TypeName}}_NamedInstanceBuilder(string dependencyName)
+				public {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder(string dependencyName)
 					: base(new BehaviorSetupOwnerName(dependencyName))
 				{
 					this.dependencyName = dependencyName;
@@ -94,9 +94,9 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
 				/// </summary>
-				/// <param name="instance">Instance of {{dependency.MockedType.TypeName}} used as dependency.</param>
-				public NamedDependency<{{dependency.MockedType.FullyQualifiedTypeName}}> Is(
-					{{dependency.MockedType.FullyQualifiedTypeName}} instance)
+				/// <param name="instance">Instance of {{dependency.DependencyType.TypeName}} used as dependency.</param>
+				public NamedDependency<{{dependency.DependencyType.FullyQualifiedTypeName}}> Is(
+					{{dependency.DependencyType.FullyQualifiedTypeName}} instance)
 				{
 					return new (
 						instance,
@@ -120,11 +120,11 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// A builder of a class which is not possible to mock. It only exposes the "Is" method.
 			/// </summary>
-			internal class {{dependency.MockedType.TypeName}}_NamedInstanceBuilder
+			internal class {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder
 			{
 				private readonly string dependencyName;
 
-				public {{dependency.MockedType.TypeName}}_NamedInstanceBuilder(string dependencyName)
+				public {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder(string dependencyName)
 				{
 					this.dependencyName = dependencyName;
 				}
@@ -132,9 +132,9 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Returns an ITestPart which will make the TestSubject receive the specified instance as its dependency.
 				/// </summary>
-				/// <param name="instance">Instance of {{dependency.MockedType.TypeName}} used as dependency.</param>
-				public NamedDependency<{{dependency.MockedType.FullyQualifiedTypeName}}> Is(
-					{{dependency.MockedType.FullyQualifiedTypeName}} instance)
+				/// <param name="instance">Instance of {{dependency.DependencyType.TypeName}} used as dependency.</param>
+				public NamedDependency<{{dependency.DependencyType.FullyQualifiedTypeName}}> Is(
+					{{dependency.DependencyType.FullyQualifiedTypeName}} instance)
 				{
 					return new (
 						instance,
@@ -148,7 +148,7 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string MockedMethodBuilderDeclaration(
-		DependencySpecification dependency,
+		MockedTypeSpecification mockedType,
 		MethodSpecification method)
 	{
 		var paramsString = string.Join(",\n\t\t\t\t", method.Parameters.Select(p => $"{p.Name} ?? new ValueConstraint<{p.Type}>()"));
@@ -164,13 +164,13 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Creates behavior builder for <see cref="{{dependency.MockedType.TypeName}}.{{method.MethodName}}" />.
+				/// Creates behavior builder for <see cref="{{mockedType.TypeInfo.TypeName}}.{{method.MethodName}}" />.
 				/// </summary>
 				public {{PrepareCallSpecificationType(method)}}
 					{{method.MethodName}}({{PrepareParameterList(method)}})
 				{
 					return new(
-						{{dependency.MockedTypeMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
+						{{mockedType.MockedTypeMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
 						this.behaviorSetupProcessor);
 				}
 			""";

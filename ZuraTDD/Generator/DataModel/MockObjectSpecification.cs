@@ -6,6 +6,7 @@ namespace ZuraTDD.Generator.DataModel;
 
 /// <summary>
 /// Represents information about a class declared as implementing the <see cref="IMock{T}"/> interface.
+/// This class will be used to mock the type specified as the generic parameter.
 /// </summary>
 internal class MockObjectSpecification
 {
@@ -21,9 +22,9 @@ internal class MockObjectSpecification
 	public string TypeName { get; }
 
 	/// <summary>
-	/// Returns the specification of the mocked type.
+	/// Returns the specification of the mocked type - one declared as the generic parameter of the <see cref="IMock{T}"/> interface.
 	/// </summary>
-	public DependencySpecification MockedTypeSpecification { get; }
+	public MockedTypeSpecification MockedTypeSpecification { get; }
 
 	/// <summary>
 	/// Prepares an instance of the <see cref="MockObjectSpecification"/> class based on the provided symbol.
@@ -40,7 +41,7 @@ internal class MockObjectSpecification
 			?.TypeArguments[0] as INamedTypeSymbol
 			?? throw new InvalidOperationException("Test case type does not implement IMock<T>");
 
-		MockedTypeSpecification = new DependencySpecification(
+		MockedTypeSpecification = new MockedTypeSpecification(
 			OutputNamespace,
 			mockedType);
 	}

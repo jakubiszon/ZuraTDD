@@ -5,7 +5,7 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string MockedTypeClassCode(DependencySpecification mockedType)
+	public static string MockedTypeClassCode(MockedTypeSpecification mockedType)
 	{
 		var methods = mockedType.Methods
 			.Select(m => Functions.GenerateMethodMockingCode(mockedType, m));
@@ -21,11 +21,11 @@ internal partial class TemplateProcessor
 			namespace {{mockedType.OutputNamespace}};
 
 			/// <summary>
-			/// A mock implementation of <see cref="{{mockedType.MockedType.FullyQualifiedTypeName}}" />.
+			/// A mock implementation of <see cref="{{mockedType.TypeInfo.FullyQualifiedTypeName}}" />.
 			/// </summary>
 			internal class {{mockedType.MockedFakeTypeName}}
 				: MockedObject
-				, {{mockedType.MockedType.FullyQualifiedTypeName}}
+				, {{mockedType.TypeInfo.FullyQualifiedTypeName}}
 			{
 				public {{mockedType.MockedFakeTypeName}}(
 					params IEnumerable<BehaviorSetup> behaviors)
@@ -47,7 +47,7 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string GenerateMethodMockingCode(
-		DependencySpecification mockedType,
+		MockedTypeSpecification mockedType,
 		MethodSpecification mockedMethod)
 	{
 		var paramValues = mockedMethod.GetParamValuesString();
@@ -57,7 +57,7 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Simulates behavior for <see cref="{{mockedType.MockedType.TypeName}}.{{mockedMethod.MethodName}}" />.
+				/// Simulates behavior for <see cref="{{mockedType.TypeInfo.TypeName}}.{{mockedMethod.MethodName}}" />.
 				/// </summary>
 				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}({{ParameterDeclarations(mockedMethod)}})
 				{

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Sockets;
 using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
@@ -9,29 +10,6 @@ namespace ZuraTDD.Generator.DataModel;
 internal class DependencySpecification
 {
 	/// <summary>
-	/// Constructor used when a type is mocked using IMock&lt;T&gt; interface.
-	/// </summary>
-	/// <param name="outputNamespace">Namespace into which the code will be generated.</param>
-	/// <param name="mockedType">Symbol representing the generic type declared in <see cref="IMock{TType}"/> interface.</param>
-	public DependencySpecification(
-		string outputNamespace,
-		INamedTypeSymbol mockedType)
-	{
-		OutputNamespace = outputNamespace;
-		MockedType = new TypeInfo(mockedType);
-		DeclaringNamespace = mockedType.ContainingNamespace.ToDisplayString();
-		IsInterface = mockedType.TypeKind == TypeKind.Interface;
-
-		// TODO: use inheritance to apply this field only to services used by TestCase<T>
-		//       to be completely correct - split into MockedObjectSpecification and DependencySpecification classes
-		//       the two concepts only partly cover one another - we can mock without using test-subject dependencies
-		//       we can also have a dependency which is not implemented by a mocked type.
-		DependencyPropertyName = string.Empty;
-		
-		Methods = Functions.ExtractInterfaceMethods(mockedType);
-	}
-
-	/// <summary>
 	/// Constructor used when a type is passed as a constructor parameter of a test subject.
 	/// </summary>
 	public DependencySpecification(
@@ -39,26 +17,35 @@ internal class DependencySpecification
 		IParameterSymbol param)
 	{
 		OutputNamespace = outputNamespace;
-		MockedType = new TypeInfo(param.Type);
+		DependencyType = new TypeInfo(param.Type);
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
 		DependencyPropertyName = param.Name.ToString().Capitalize();
-		IsInterface = param.Type.TypeKind == TypeKind.Interface;
-		
-		Methods = Functions.ExtractInterfaceMethods(param.Type as INamedTypeSymbol);
+		IsMockable = param.Type.TypeKind == TypeKind.Interface;
+
+		MockedType = IsMockable
+			? new MockedTypeSpecification(
+				outputNamespace,
+				param)
+			: null as MockedTypeSpecification;
 	}
 
 	/// <summary>
 	/// Name of the mocked type without the namespace.
 	/// </summary>
-	public TypeInfo MockedType { get; }
+	public TypeInfo DependencyType { get; }
 
-	public string MockedFakeTypeName => $"{MockedType.TypeName}_Fake";
+	/// <summary>
+	/// Specification of the mocked type. It will be null if the dependency is not mockable (i.e. it is not an interface).
+	/// </summary>
+	public MockedTypeSpecification? MockedType { get; }
 
-	public string MockedTypeMethodsTypeName => $"{MockedType.TypeName}_Methods";
+	public string MockedFakeTypeName => $"{DependencyType.TypeName}_Fake";
 
-	public string BuilderTypeName => $"{MockedType.TypeName}_Builder";
+	public string MockedTypeMethodsTypeName => $"{DependencyType.TypeName}_Methods";
 
-	public string ExpectTypeName => $"{MockedType.TypeName}_Expect";
+	public string BuilderTypeName => $"{DependencyType.TypeName}_Builder";
+
+	public string ExpectTypeName => $"{DependencyType.TypeName}_Expect";
 
 	/// <summary>
 	/// Namespace containing the mocked type.
@@ -76,12 +63,7 @@ internal class DependencySpecification
 	public string DependencyPropertyName { get; }
 
 	/// <summary>
-	/// List of all public methods of the mocked type.
-	/// </summary>
-	public IReadOnlyList<MethodSpecification> Methods { get; }
-
-	/// <summary>
 	/// Returns true if the dependency is an interface and can be mocked.
 	/// </summary>
-	public bool IsInterface { get; }
+	public bool IsMockable { get; }
 }

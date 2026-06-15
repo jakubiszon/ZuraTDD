@@ -18,8 +18,8 @@ public partial class DateTimeFormatterTests
 
 	internal class FakeDateService : IDateTimeService
 	{
-		public DateTime Now() => new DateTime(2024, 6, 1, 23, 59, 59);
+		public DateTime Now() => new(2024, 6, 1, 23, 59, 59);
 
-		public DateOnly Today() => new DateOnly(2024, 6, 1);
+		public DateOnly Today() => new(2024, 6, 1);
 	}
 }

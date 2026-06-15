@@ -17,7 +17,7 @@ internal partial class TemplateProcessor
 		var whenCode = string.Join("\n\n", whenSnippets);
 
 		var expectSnippets = testCase.DependenciesClass.Dependencies
-			.Where(dependency => dependency.IsInterface)
+			.Where(dependency => dependency.IsMockable)
 			.Select(Functions.DependencyExpectCode);
 		var expectCode = string.Join("\n\n", expectSnippets);
 
@@ -152,16 +152,16 @@ static file class Functions
 
 	public static string DependencyWhenCode(DependencySpecification service)
 	{
-		if (service.IsInterface)
+		if (service.IsMockable)
 		{
 			return
 				$$"""
 						/// <summary>
-						/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.MockedType.TypeName}}" />
+						/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.DependencyType.TypeName}}" />
 						/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{service.MockedType.TypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
-							=> new {{service.MockedType.TypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
+						internal static {{service.DependencyType.TypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
+							=> new {{service.DependencyType.TypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
 				""";
 		}
 		else
@@ -169,11 +169,11 @@ static file class Functions
 			return
 				$$"""
 						/// <summary>
-						/// A builder allowing to specifiy an instance of <see cref="{{service.DeclaringNamespace}}.{{service.MockedType.TypeName}}" />
+						/// A builder allowing to specifiy an instance of <see cref="{{service.DeclaringNamespace}}.{{service.DependencyType.TypeName}}" />
 						/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{service.MockedType.TypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
-							=> new {{service.MockedType.TypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
+						internal static {{service.DependencyType.TypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
+							=> new {{service.DependencyType.TypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
 				""";
 		}
 	}
@@ -183,11 +183,11 @@ static file class Functions
 		return
 			$$"""
 					/// <summary>
-					/// A builder producing expectations for <see cref="{{mockedDependency.DeclaringNamespace}}.{{mockedDependency.MockedType.TypeName}}" />
+					/// A builder producing expectations for <see cref="{{mockedDependency.DeclaringNamespace}}.{{mockedDependency.DependencyType.TypeName}}" />
 					/// which will be passed as "{{mockedDependency.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{mockedDependency.MockedType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
-						=> new {{mockedDependency.MockedType.TypeName}}_ExpectStaticBuilder("{{mockedDependency.DependencyPropertyName}}");
+					internal static {{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
+						=> new {{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder("{{mockedDependency.DependencyPropertyName}}");
 			""";
 	}
 }

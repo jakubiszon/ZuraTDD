@@ -5,7 +5,7 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string MockedTypeExpectClassesCode(DependencySpecification dependency)
+	public static string MockedTypeExpectClassesCode(MockedTypeSpecification dependency)
 	{
 		var methods = dependency.Methods
 			.Select(method => Functions.ServiceBuilderMethodCode(dependency, method));
@@ -21,10 +21,10 @@ internal partial class TemplateProcessor
 			namespace {{dependency.OutputNamespace}};
 
 			/// <summary>
-			/// An expectation setup object for <see cref="{{dependency.MockedType.TypeName}}" />.
+			/// An expectation setup object for <see cref="{{dependency.TypeInfo.TypeName}}" />.
 			/// </summary>
 			internal class {{dependency.ExpectTypeName}}
-				: {{dependency.MockedType.TypeName}}_ExpectBuilder
+				: {{dependency.TypeInfo.TypeName}}_ExpectBuilder
 			{
 				public {{dependency.ExpectTypeName}}(
 					MockedObject existingFake)
@@ -33,21 +33,21 @@ internal partial class TemplateProcessor
 				}
 			}
 
-			internal class {{dependency.MockedType.TypeName}}_ExpectStaticBuilder
-				: {{dependency.MockedType.TypeName}}_ExpectBuilder
+			internal class {{dependency.TypeInfo.TypeName}}_ExpectStaticBuilder
+				: {{dependency.TypeInfo.TypeName}}_ExpectBuilder
 			{
-				public {{dependency.MockedType.TypeName}}_ExpectStaticBuilder(
+				public {{dependency.TypeInfo.TypeName}}_ExpectStaticBuilder(
 					string dependencyName)
 					: base(new ExpectedDependencyCallNameProcessor(dependencyName))
 				{
 				}
 			}
 			
-			internal class {{dependency.MockedType.TypeName}}_ExpectBuilder
+			internal class {{dependency.TypeInfo.TypeName}}_ExpectBuilder
 			{
 				private IExpectedDependencyCallProcessor processor;
 
-				protected {{dependency.MockedType.TypeName}}_ExpectBuilder(
+				protected {{dependency.TypeInfo.TypeName}}_ExpectBuilder(
 					IExpectedDependencyCallProcessor processor)
 				{
 					this.processor = processor;
@@ -62,13 +62,13 @@ internal partial class TemplateProcessor
 static file class Functions
 {
 	public static string ServiceBuilderMethodCode(
-		DependencySpecification service,
+		MockedTypeSpecification service,
 		MethodSpecification method)
 	{
 		return
 			$$"""
 				/// <summary>
-				/// Builds call expectations for <see cref="{{service.MockedType.TypeName}}.{{method.MethodName}}" />.
+				/// Builds call expectations for <see cref="{{service.TypeInfo.TypeName}}.{{method.MethodName}}" />.
 				/// </summary>
 				public ExpectedDependencyCallBuilder {{method.MethodName}}({{PrepareParameterList(method)}})
 				{

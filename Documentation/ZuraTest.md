@@ -2,7 +2,7 @@
 It is recommended to write your test using the `ZuraTest` attribute.
 It will create the test and the code invoking the `TestCase` for you.
 Your task will be to return the `ITestPart`-s that will be run as part of the test.
-You place this attribute on either methods or properties which return `ITestPart[]` or `IEnumerable<ITestPart>`.
+You place this attribute on methods and properties which return `ITestPart[]` or `IEnumerable<ITestPart>`.
 
 Using this attribute requires you to specify the `TestCase` type as its generic param
 as well as a name for the test to show in the test explorer.
@@ -26,6 +26,8 @@ public partial class MyTestCaseTests
 }
 ```
 
+This will only work if you use *Xunit* or *MSTest*. The other frameworks are not supported yet.
+The test framework you use is detected automatically.
 
 ## Why is that useful?
 It allows your tests to be expressed as sets of *conditions* and *expectations*

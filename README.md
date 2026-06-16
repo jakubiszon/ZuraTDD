@@ -248,7 +248,7 @@ This library is still in development and has some limitations:
 Some of the above are planned in the near future, but feel free to contribute if you want to see them sooner.
 
 ## Contributing
-Contributions are welcome! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines.
+Contributions are welcome! Please see the [CONTRIBUTING.md](https://github.com/jakubiszon/ZuraTDD/blob/main/CONTRIBUTING.md) file for guidelines.
 
 ## License
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details

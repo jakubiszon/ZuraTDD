@@ -35,6 +35,9 @@ indent_size = 2
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
 
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
+
 [*.md]
 indent_style = space
 indent_size = 4

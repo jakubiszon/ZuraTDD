@@ -10,12 +10,18 @@ The class which declares methods or properties with this attribute must be marke
 If you are using *MsTest* - the class must also be marked with the `[TestClass]` attribute
 
 ```csharp
+using ZuraTDD;
+using static TestCaseClass;
+
 [TestClass] // required for MSTest
 public partial class MyTestCaseTests
 {
     [ZuraTest<TestCaseClass>("Test name shown in the text explorer.")
     ITestPart[] Method_TestParts => [
         // declare test parts here
+        Receives...
+        When...
+        Expect...
     ];
 }
 ```
@@ -32,6 +38,7 @@ Another can reuse it and only specify the deviations in behavior and expected re
 ## Example
 ```csharp
 using ZuraTDD;
+using static ContentPublishedEventHandlerTestCase;
 
 // required to easily access the builders for the ContentPublishedEventHandlerTestCase
 using static MyTestNamespace.ContentPublishedEventHandlerTestCase
@@ -42,7 +49,7 @@ namespace MyTestNamespace;
 public partial class MyTests
 {
 	// Defines and tests the standard "happy path" for the
-	// ContentPublishedEventHandler.Handle" method.
+	// ContentPublishedEventHandler.Handle method.
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
 		"Handle - sends email to customers when content is published.")]
 	public ITestPart[] HandleStandardBehaviors => [
@@ -50,7 +57,7 @@ public partial class MyTests
 
 		When.CustomerRepository
 			.ListByInterests(topics: null)
-			.ReturnsInTask(new List<Customer> {exampleCustomer }),
+			.ReturnsInTask(new List<Customer> { exampleCustomer }),
 
 		When.EmailSender
 			.SendEmail()
@@ -59,13 +66,9 @@ public partial class MyTests
 		Expect.EmailSender
 			.SendEmail(to: new(s => s.Length > 0))
 			.WasCalled(),
-
-		Expect.EmailSender
-			.SendEmailSync()
-			.WasNotCalled()
 	];
 
-	// this test copes behaviors from the one above
+	// this test copies behaviors from the one above
 	// then it only needs to specify the deviation in behavior
 	// and the expectations of the test
 	[ZuraTest<ContentPublishedEventHandlerTestCase>(
@@ -78,7 +81,7 @@ public partial class MyTests
 			.SendEmail()
 			.Throws(new TestException()),
 
-        // importing dependency setip and behaviors from another test is trivial
+        // importing dependency setup and behaviors from another test is trivial
 		..HandleStandardBehaviors
 			.OnlyDependencySetup(),
 

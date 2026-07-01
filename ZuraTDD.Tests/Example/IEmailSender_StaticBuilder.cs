@@ -1,5 +1,3 @@
-using ZuraTDD;
-
 namespace ZuraTDD.Tests.Example;
 
 internal class IEmailSender_NamedInstanceBuilder : IEmailSender_BehaviorBuilder

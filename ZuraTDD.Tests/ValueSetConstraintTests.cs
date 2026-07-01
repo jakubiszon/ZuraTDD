@@ -1,5 +1,3 @@
-using ZuraTDD;
-
 namespace ZuraTDD.Tests;
 
 [TestClass]

@@ -1,5 +1,4 @@
 using ExampleProject;
-using System.Reflection;
 
 namespace ZuraTDD.Tests.Example;
 

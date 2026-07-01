@@ -1,5 +1,3 @@
-using ZuraTDD;
-
 namespace ZuraTDD.Tests.Example;
 
 public class IEmailSender_StaticExpectedCallBuilder : IEmailSender_ExpectedCallBuilder

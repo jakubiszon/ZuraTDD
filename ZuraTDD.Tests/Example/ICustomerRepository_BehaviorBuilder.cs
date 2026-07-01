@@ -1,5 +1,4 @@
 using ExampleProject.Model;
-using ZuraTDD;
 
 namespace ZuraTDD.Tests.Example;
 

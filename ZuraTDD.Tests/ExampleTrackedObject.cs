@@ -1,4 +1,3 @@
-﻿using ZuraTDD;
 using System.Reflection;
 
 namespace ZuraTDD.Tests;

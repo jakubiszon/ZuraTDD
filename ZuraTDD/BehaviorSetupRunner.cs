@@ -13,7 +13,7 @@ public class BehaviorSetupRunner
 	/// <summary>
 	/// Maps method delegates to their behavior setups.
 	/// </summary>
-	private readonly Dictionary<MethodInfo, List<BehaviorSetup>> configuredSetups;
+	private readonly Dictionary<ZuraMethodInfo, List<BehaviorSetup>> configuredSetups;
 
 	public BehaviorSetupRunner()
 	{
@@ -47,7 +47,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior(
-		MethodInfo method)
+		ZuraMethodInfo method)
 	{
 		InvokeActionBehaviorInternal(
 			method,
@@ -60,7 +60,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<Tin>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		Tin input)
 	{
 		InvokeActionBehaviorInternal(
@@ -74,7 +74,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2)
 	{
 		InvokeActionBehaviorInternal(
@@ -88,7 +88,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3)
 	{
 		InvokeActionBehaviorInternal(
@@ -102,7 +102,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4)
 	{
 		InvokeActionBehaviorInternal(
@@ -116,7 +116,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5)
 	{
 		InvokeActionBehaviorInternal(
@@ -130,7 +130,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6)
 	{
 		InvokeActionBehaviorInternal(
@@ -144,7 +144,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7)
 	{
 		InvokeActionBehaviorInternal(
@@ -158,7 +158,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8)
 	{
 		InvokeActionBehaviorInternal(
@@ -172,7 +172,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
 	{
 		InvokeActionBehaviorInternal(
@@ -186,7 +186,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10)
 	{
 		InvokeActionBehaviorInternal(
@@ -200,7 +200,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11)
 	{
 		InvokeActionBehaviorInternal(
@@ -214,7 +214,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12)
 	{
 		InvokeActionBehaviorInternal(
@@ -228,7 +228,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13)
 	{
 		InvokeActionBehaviorInternal(
@@ -242,7 +242,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14)
 	{
 		InvokeActionBehaviorInternal(
@@ -256,7 +256,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15)
 	{
 		InvokeActionBehaviorInternal(
@@ -270,7 +270,7 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16)
 	{
 		InvokeActionBehaviorInternal(
@@ -280,7 +280,7 @@ public class BehaviorSetupRunner
 	}
 
 	private void InvokeActionBehaviorInternal(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		object?[] matcherParameters,
 		Action<BehaviorInvoker> invokerAction)
 	{
@@ -300,7 +300,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with zero params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<Tout>(MethodInfo method, Tout defaultResult)
+	public Tout InvokeFuncBehavior<Tout>(ZuraMethodInfo method, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -320,7 +320,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 1 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, Tout>(MethodInfo method, T1 p1, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, Tout>(ZuraMethodInfo method, T1 p1, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -345,7 +345,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 3 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, Tout>(MethodInfo method, T1 p1, T2 p2, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -370,7 +370,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 3 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -395,7 +395,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 4 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -420,7 +420,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 5 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -445,7 +445,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 6 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -470,7 +470,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 7 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -495,7 +495,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 8 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -520,7 +520,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 9 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -545,7 +545,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 10 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -570,7 +570,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 11 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -595,7 +595,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 12 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -620,7 +620,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 13 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -645,7 +645,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 14 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -670,7 +670,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 15 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
@@ -695,7 +695,7 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 16 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, Tout>(MethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16, Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;

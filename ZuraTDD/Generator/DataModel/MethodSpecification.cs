@@ -1,6 +1,6 @@
-using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
 
@@ -11,16 +11,6 @@ namespace ZuraTDD.Generator.DataModel;
 /// </summary>
 internal class MethodSpecification
 {
-	/// <summary>
-	/// Format used to get the type name to use in <see langword="typeof" /> expressions in generated code.
-	/// </summary>
-	private static readonly SymbolDisplayFormat TypeOfFormat =
-		new(
-			typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-			genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
-			miscellaneousOptions: SymbolDisplayMiscellaneousOptions.None
-		);
-
 	public string MethodName { get; }
 
 	/// <summary>
@@ -34,9 +24,27 @@ internal class MethodSpecification
 	public string ReturnType { get; }
 
 	/// <summary>
-	/// Token used to define and refer to this methods cached MethodInfo instance.
+	/// Token used to define and refer to this method's cached ZuraMethodInfo instance.
 	/// </summary>
-	public string Token { get; }
+	public string MethodCodeName { get; }
+
+	/// <summary>
+	/// A token used to distinguish methods
+	/// </summary>
+	public string MethodUniqueToken { get; }
+
+	/// <summary>
+	/// A token shown to the user to describe the method.
+	/// </summary>
+	/// <remarks>
+	/// The difference between <see cref="MethodUniqueToken"/> and <see cref="MethodDisplayToken"/>
+	/// is that the latter includes names of the generic type parameters.
+	/// These names could make the token look different while the methods might still be considered identical.
+	/// e.g. void Foo&lt;T&gt;(T) and void Foo&lt;U&gt;(U) are identical methods but their display tokens would be different.
+	/// </remarks>
+	public string MethodDisplayToken { get; }
+
+	public List<GenericTypeParamSpecification> GenericTypeParameters { get; }
 
 	/// <summary>
 	/// Defines the parameters of the method.
@@ -69,19 +77,50 @@ internal class MethodSpecification
 		DefiningType = new TypeInfo(definingType);
 		Parameters = methodSymbol
 			.Parameters
-			.Select(p => new ParameterSpecification
-			{
-				Type = p.Type.ToDisplayString(),
-				Name = p.Name,
-				TypeofType = p.Type.ToDisplayString(TypeOfFormat),
-				IsReferenceType = p.Type.IsReferenceType,
-			})
+			.Select(p => new ParameterSpecification(p))
 			.ToList();
-		Token = GenerateMethodToken(MethodName, hasOverloads, Parameters);
+
+		MethodCodeName = GenerateMethodToken(MethodName, hasOverloads, Parameters);
+		MethodUniqueToken = GenerateUniqueToken(methodSymbol);
+		MethodDisplayToken = GenerateDisplayToken(methodSymbol);
+
+		GenericTypeParameters = methodSymbol
+			.TypeParameters
+			.Select(tp => new GenericTypeParamSpecification(tp))
+			.ToList();
 
 		var (methodType, awaitedType) = DetermineMethodType(methodSymbol);
 		MethodType = methodType;
 		AwaitedType = awaitedType;
+	}
+
+	private static string GenerateUniqueToken(IMethodSymbol methodSymbol)
+	{
+        var returnType = methodSymbol.ReturnType.ToDisplayString();
+        var methodName = methodSymbol.Name;
+        var genericArity = methodSymbol.TypeParameters.Length > 0 
+            ? $"`{methodSymbol.TypeParameters.Length}" 
+            : "";
+        
+        var parameters = string.Join(", ", 
+            methodSymbol.Parameters.Select(p => p.Type.ToDisplayString()));
+        
+        return $"{returnType} {methodName}{genericArity}({parameters})";
+	}
+
+	private static string GenerateDisplayToken(IMethodSymbol methodSymbol)
+	{
+        var returnType = methodSymbol.ReturnType.ToDisplayString();
+        var methodName = methodSymbol.Name;
+
+        var typeParams = methodSymbol.TypeParameters.Length > 0
+            ? $"<{string.Join(", ", methodSymbol.TypeParameters.Select(tp => tp.ToDisplayString()))}>"
+            : "";
+        
+        var parameters = string.Join(", ", 
+            methodSymbol.Parameters.Select(p => p.Type.ToDisplayString()));
+        
+        return $"{returnType} {methodName}{typeParams}({parameters})";
 	}
 
 	private static string GenerateMethodToken(

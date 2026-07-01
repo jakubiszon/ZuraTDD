@@ -8,12 +8,12 @@ namespace ZuraTDD;
 /// </summary>
 public class ExpectedMockedObjectMethodCall : ITestPart
 {
-	private readonly MethodInfo method;
+	private readonly ZuraMethodInfo method;
 	private readonly ValueSetConstraint valueSetConstraint;
 	private readonly int? expectedCallCount;
 
 	public ExpectedMockedObjectMethodCall(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount)
 	{

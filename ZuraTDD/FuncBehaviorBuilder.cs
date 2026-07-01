@@ -10,7 +10,7 @@ public class FuncBehaviorBuilder<Tout>
 	/// <param name="methodInfo">Identifies the method which is being set up.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, new([]), setupProcessor)
 	{
@@ -20,7 +20,7 @@ public class FuncBehaviorBuilder<Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -39,7 +39,7 @@ public class FuncBehaviorBuilder<Tin, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -78,7 +78,7 @@ public class FuncBehaviorBuilder<T1, T2, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -116,7 +116,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -154,7 +154,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -192,7 +192,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -230,7 +230,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -268,7 +268,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -306,7 +306,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -344,7 +344,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -382,7 +382,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Tout>
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -420,7 +420,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -458,7 +458,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -496,7 +496,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -534,7 +534,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -572,7 +572,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -610,7 +610,7 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	/// <param name="valueSetConstraint">Constraints matching values passed to the method.</param>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)

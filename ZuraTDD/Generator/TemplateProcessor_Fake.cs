@@ -50,8 +50,9 @@ static file class Functions
 		MockedTypeSpecification mockedType,
 		MethodSpecification mockedMethod)
 	{
-		var paramValues = mockedMethod.GetParamValuesString();
 		var @return = mockedMethod.ReturnType == "void" ? "" : "return ";
+		var genericParameters = mockedMethod.GetMethodGenericTypeParametersString();
+		var paramValues = mockedMethod.GetParamValuesString();
 		var defaultResult = mockedMethod.GetDefaultResult().PrependNotEmpty(",\n\t\t\t");
 
 		return
@@ -59,14 +60,14 @@ static file class Functions
 				/// <summary>
 				/// Simulates behavior for <see cref="{{mockedType.TypeInfo.TypeName}}.{{mockedMethod.MethodName}}" />.
 				/// </summary>
-				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}({{ParameterDeclarations(mockedMethod)}})
+				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}{{genericParameters}}({{ParameterDeclarations(mockedMethod)}})
 				{
 					this.CallTracker.ReceiveCall(
-						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.Token}},
+						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.MethodCodeName}},
 						[{{paramValues}}]);
 
 					{{@return}}base.BehaviorSetupRunner.{{InvokeMethod(mockedMethod)}}(
-						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.Token}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
+						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.MethodCodeName}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
 				}
 			""";
 	}

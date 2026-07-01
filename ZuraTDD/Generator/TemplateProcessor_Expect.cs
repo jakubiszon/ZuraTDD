@@ -73,7 +73,7 @@ static file class Functions
 				public ExpectedDependencyCallBuilder {{method.MethodName}}({{PrepareParameterList(method)}})
 				{
 					return new(
-						{{service.MockedTypeMethodsTypeName}}.{{method.Token}},
+						{{service.MockedTypeMethodsTypeName}}.{{method.MethodCodeName}},
 						new ValueSetConstraint([
 							{{string.Join(",\n\t\t\t\t", method.Parameters.Select(p => $"{p.Name} ?? new ValueConstraint<{p.Type}>()"))}}
 						]),

@@ -7,12 +7,12 @@ namespace ZuraTDD;
 /// </summary>
 public class ExpectedDependencyCallBuilder
 {
-	private readonly MethodInfo method;
+	private readonly ZuraMethodInfo method;
 	private readonly IExpectedDependencyCallProcessor processor;
 	private readonly ValueSetConstraint valueSetConstraint;
 
 	public ExpectedDependencyCallBuilder(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		IExpectedDependencyCallProcessor processor)
 	{
@@ -22,7 +22,7 @@ public class ExpectedDependencyCallBuilder
 	}
 
 	public ExpectedDependencyCallBuilder(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		IValueConstraint[] valueConstraints,
 		IExpectedDependencyCallProcessor processor)
 	{

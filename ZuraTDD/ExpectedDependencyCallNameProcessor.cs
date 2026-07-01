@@ -17,7 +17,7 @@ public class ExpectedDependencyCallNameProcessor : IExpectedDependencyCallProces
 	}
 
 	public ExpectedMockedObjectMethodCall Process(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount)
 	{

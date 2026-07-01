@@ -10,7 +10,7 @@ namespace ZuraTDD;
 public class BehaviorSetup : IDependencySetup
 {
 	internal BehaviorSetup(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IEnumerable<IBehavior> behaviors)
 	{
@@ -19,7 +19,7 @@ public class BehaviorSetup : IDependencySetup
 		this.BehaviorInvoker = new(behaviors);
 	}
 
-	public MethodInfo Method { get; }
+	public ZuraMethodInfo Method { get; }
 
 	/// <summary>
 	/// Value set constraint that restricts the allowed values for this element.

@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -10,15 +11,18 @@ public class ExpectedMockedObjectMethodCall : ITestPart
 {
 	private readonly ZuraMethodInfo method;
 	private readonly ValueSetConstraint valueSetConstraint;
+	private readonly GenericTypeParameterSetConstraint genericTypeParameterSetConstraint;
 	private readonly int? expectedCallCount;
 
 	public ExpectedMockedObjectMethodCall(
 		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		int? expectedCallCount)
 	{
 		this.method = method;
 		this.valueSetConstraint = valueSetConstraint;
+		this.genericTypeParameterSetConstraint = genericTypeParameterSetConstraint;
 		this.expectedCallCount = expectedCallCount;
 	}
 
@@ -37,7 +41,8 @@ public class ExpectedMockedObjectMethodCall : ITestPart
 		var expectedCall = new ExpectedMethodCall(
 			this.method,
 			this.valueSetConstraint,
-			this.expectedCallCount);
+			this.expectedCallCount,
+			this.genericTypeParameterSetConstraint);
 
 		// verify or throw
 		expectedCall.Verify(mockedObject.CallTracker);

@@ -1,6 +1,7 @@
+using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 using ZuraTDD.Exceptions;
 using ZuraTDD.Tests.Example;
-using System.Reflection;
 
 namespace ZuraTDD.Tests;
 
@@ -243,5 +244,98 @@ public class ExpectedCallTests
 		Assert.Throws<ExpectationFailed>(() => expectedFourHellos.Verify(tracker));
 		Assert.Throws<ExpectationFailed>(() => expectedEmailToJurko.Verify(tracker));
 		Assert.Throws<ExpectationFailed>(() => expectedAnyByeByeEmails.Verify(tracker));
+	}
+
+	/// <summary>
+	/// In this test we define an insance of <see cref="ExpectedMethodCall" /> with generic type parameter constraints.
+	/// We don't pass any parameters to the method calls. Verification must fail.
+	/// </summary>
+	[TestMethod]
+	public void Verify_WithGenericTypeParamConstrains_WhenNoParamsPassedToCalls_ShouldFail()
+	{
+		var someMethod = new ZuraMethodInfo("TestMethod");
+
+		var tracker = new CallTracker();
+		tracker.ReceiveCall(someMethod, [], []);
+
+		var expectedCall = new ExpectedMethodCall(
+			method: someMethod,
+			valueSetConstraint: new ValueSetConstraint([]),
+			genericTypeParameterSetConstraint: new GenericTypeParameterSetConstraint([
+				new GenericTypeParameterConstraint(typeof(int)),
+				new GenericTypeParameterConstraint(typeof(string))
+			]),
+			exactCallNumber: 1);
+
+		Assert.Throws<ExpectationFailed>(() => expectedCall.Verify(tracker));
+	}
+
+	/// <summary>
+	/// In this test we define an insance of <see cref="ExpectedMethodCall" /> without generic type parameter constraints.
+	/// We pass type parameters to the method calls. Verification must fail.
+	/// </summary>
+	[TestMethod]
+	public void Verify_WithoutGenericTypeParamConstrains_WhenTypeParamsPassedToCalls_ShouldFail()
+	{
+		var someMethod = new ZuraMethodInfo("TestMethod");
+
+		var tracker = new CallTracker();
+		tracker.ReceiveCall(someMethod, [], [typeof(int)]);
+
+		var expectedCall = new ExpectedMethodCall(
+			method: someMethod,
+			valueSetConstraint: new ValueSetConstraint([]),
+			exactCallNumber: 1);
+
+		Assert.Throws<ExpectationFailed>(() => expectedCall.Verify(tracker));
+	}
+
+	/// <summary>
+	/// In this test we define an insance of <see cref="ExpectedMethodCall" /> with generic type parameter constraints.
+	/// We pass type parameters to the method cal - but they do not match the ones which are expected.
+	/// Verification must fail.
+	/// </summary>
+	[TestMethod]
+	public void Verify_WhenGenericTypeParamsAreMismatched_ShouldFail()
+	{
+		var someMethod = new ZuraMethodInfo("TestMethod");
+
+		var tracker = new CallTracker();
+		tracker.ReceiveCall(someMethod, [], [typeof(int)]);
+
+		var expectedCall = new ExpectedMethodCall(
+			method: someMethod,
+			valueSetConstraint: new ValueSetConstraint([]),
+			genericTypeParameterSetConstraint: new GenericTypeParameterSetConstraint([
+				new GenericTypeParameterConstraint(typeof(string))
+			]),
+			exactCallNumber: 1);
+
+		Assert.Throws<ExpectationFailed>(() => expectedCall.Verify(tracker));
+	}
+
+	/// <summary>
+	/// In this test we define an insance of <see cref="ExpectedMethodCall" /> with generic type parameter constraints.
+	/// We pass type parameters to the method cal - and they match the ones which are expected.
+	/// Verification must succeed.
+	/// </summary>
+	[TestMethod]
+	public void Verify_WhenGenericTypeParamsAreMatched_ShouldSucceed()
+	{
+		var someMethod = new ZuraMethodInfo("TestMethod");
+
+		var tracker = new CallTracker();
+		tracker.ReceiveCall(someMethod, [], [typeof(int)]);
+
+		var expectedCall = new ExpectedMethodCall(
+			method: someMethod,
+			valueSetConstraint: new ValueSetConstraint([]),
+			genericTypeParameterSetConstraint: new GenericTypeParameterSetConstraint([
+				new GenericTypeParameterConstraint(typeof(int))
+			]),
+			exactCallNumber: 1);
+
+		// should not throw
+		expectedCall.Verify(tracker);
 	}
 }

@@ -1,4 +1,5 @@
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -10,26 +11,31 @@ public class ExpectedDependencyCallBuilder
 	private readonly ZuraMethodInfo method;
 	private readonly IExpectedDependencyCallProcessor processor;
 	private readonly ValueSetConstraint valueSetConstraint;
+	private readonly GenericTypeParameterSetConstraint genericTypeParameterSetConstraint;
 
 	public ExpectedDependencyCallBuilder(
 		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IExpectedDependencyCallProcessor processor)
 	{
 		this.method = method;
 		this.processor = processor;
 		this.valueSetConstraint = valueSetConstraint;
+		this.genericTypeParameterSetConstraint = genericTypeParameterSetConstraint;
 	}
 
-	public ExpectedDependencyCallBuilder(
-		ZuraMethodInfo method,
-		IValueConstraint[] valueConstraints,
-		IExpectedDependencyCallProcessor processor)
-	{
-		this.method = method;
-		this.processor = processor;
-		this.valueSetConstraint = new ValueSetConstraint(valueConstraints);
-	}
+	//public ExpectedDependencyCallBuilder(
+	//	ZuraMethodInfo method,
+	//	IValueConstraint[] valueConstraints,
+	//	GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
+	//	IExpectedDependencyCallProcessor processor)
+	//{
+	//	this.method = method;
+	//	this.processor = processor;
+	//	this.valueSetConstraint = new ValueSetConstraint(valueConstraints);
+	//	this.genericTypeParameterSetConstraint = genericTypeParameterSetConstraint;
+	//}
 
 	/// <summary>
 	/// Builds an expectation that the method call is not matched at all.
@@ -39,6 +45,7 @@ public class ExpectedDependencyCallBuilder
 		return processor.Process(
 			this.method,
 			this.valueSetConstraint,
+			this.genericTypeParameterSetConstraint,
 			0);
 	}
 
@@ -50,6 +57,7 @@ public class ExpectedDependencyCallBuilder
 		return processor.Process(
 			this.method,
 			this.valueSetConstraint,
+			this.genericTypeParameterSetConstraint,
 			null);
 	}
 
@@ -62,6 +70,7 @@ public class ExpectedDependencyCallBuilder
 		return processor.Process(
 			this.method,
 			this.valueSetConstraint,
+			this.genericTypeParameterSetConstraint,
 			times);
 	}
 }

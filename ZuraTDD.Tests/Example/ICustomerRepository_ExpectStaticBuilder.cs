@@ -1,3 +1,5 @@
+using ZuraTDD.BuildingBlocks;
+
 namespace ZuraTDD.Tests.Example;
 
 /// <summary>
@@ -43,6 +45,7 @@ internal class ICustomerRepository_ExpectBuilder
 			new ValueSetConstraint([
 				
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 
@@ -57,6 +60,7 @@ internal class ICustomerRepository_ExpectBuilder
 			new ValueSetConstraint([
 				topic ?? new ValueConstraint<string>()
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 
@@ -71,6 +75,7 @@ internal class ICustomerRepository_ExpectBuilder
 			new ValueSetConstraint([
 				topics ?? new ValueConstraint<System.Collections.Generic.List<string>>()
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 }

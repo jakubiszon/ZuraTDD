@@ -1,6 +1,6 @@
-using ZuraTDD.Exceptions;
 using System;
-using System.Reflection;
+using ZuraTDD.BuildingBlocks;
+using ZuraTDD.Exceptions;
 
 namespace ZuraTDD;
 
@@ -10,9 +10,10 @@ namespace ZuraTDD;
 /// </summary>
 public class ExpectedMethodCall
 {
-	private ZuraMethodInfo method;
-	private ValueSetConstraint valueSetConstraint;
-	private int? exactCallNumber;
+	private readonly ZuraMethodInfo method;
+	private readonly ValueSetConstraint valueSetConstraint;
+	private readonly int? exactCallNumber;
+	private readonly GenericTypeParameterSetConstraint genericTypeParameterSetConstraint;
 
 	public ExpectedMethodCall(
 		ZuraMethodInfo method,
@@ -22,6 +23,19 @@ public class ExpectedMethodCall
 		this.method = method;
 		this.valueSetConstraint = valueSetConstraint ?? new([]);
 		this.exactCallNumber = exactCallNumber;
+		this.genericTypeParameterSetConstraint = new([]);
+	}
+
+	public ExpectedMethodCall(
+		ZuraMethodInfo method,
+		ValueSetConstraint valueSetConstraint,
+		int? exactCallNumber,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint)
+	{
+		this.method = method;
+		this.valueSetConstraint = valueSetConstraint ?? new([]);
+		this.exactCallNumber = exactCallNumber;
+		this.genericTypeParameterSetConstraint = genericTypeParameterSetConstraint ?? new([]);
 	}
 
 	public void Verify(CallTracker tracker)
@@ -33,7 +47,8 @@ public class ExpectedMethodCall
 
 		var actualCallCount = tracker.GetCallCount(
 			this.method,
-			this.valueSetConstraint);
+			this.valueSetConstraint,
+			this.genericTypeParameterSetConstraint);
 
 		if(this.exactCallNumber.HasValue && actualCallCount != this.exactCallNumber.Value)
 		{

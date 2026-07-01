@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -10,11 +12,13 @@ public class CallTracker
 
 	public void ReceiveCall(
 		ZuraMethodInfo method,
-		object?[] parameters)
+		object?[] parameters,
+		Type[]? genericArguments = null)
 	{
 		var receivedCall = new CallRecord(
 			method,
-			parameters);
+			parameters,
+			genericArguments);
 
 		registeredCalls.Add(receivedCall);
 	}
@@ -37,5 +41,17 @@ public class CallTracker
 			.Count(call =>
 				call.CalledMethod == method &&
 				parameterFilter.Matches(call.Arguments));
+	}
+
+	public int GetCallCount(
+		ZuraMethodInfo method,
+		ValueSetConstraint parameterFilter,
+		GenericTypeParameterSetConstraint genericParameterFilter)
+	{
+		return registeredCalls
+			.Count(call
+				=> call.CalledMethod == method
+				&& parameterFilter.Matches(call.Arguments)
+				&& genericParameterFilter.Matches(call.GenericArguments));
 	}
 }

@@ -42,7 +42,18 @@ internal static class Functions
 		if (method.GenericTypeParameters.Count == 0)
 			return "";
 
-		return $"<{string.Join(", ", method.GenericTypeParameters)}>";
+		return $"<{string.Join(", ", method.GenericTypeParameters.Select(p => p.Name))}>";
+	}
+
+	/// <summary>
+	/// Returns a string which will represent applied generic types inside a generic method implementation.
+	/// </summary>
+	public static string GetMethodGenericTypeParametersTypeofs(this MethodSpecification method)
+	{
+		if (method.GenericTypeParameters.Count == 0)
+			return "";
+
+		return string.Join(", ", method.GenericTypeParameters.Select(p => $"typeof({p.Name})"));
 	}
 
 	/// <summary>

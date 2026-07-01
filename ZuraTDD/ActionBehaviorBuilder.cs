@@ -12,7 +12,7 @@ public class ActionBehaviorBuilder
 	/// <param name="methodInfo"></param>
 	/// <param name="setupProcessor">Setup processor called when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, new([]), setupProcessor)
 	{
@@ -33,7 +33,7 @@ public class ActionBehaviorBuilder<Tin>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -71,7 +71,7 @@ public class ActionBehaviorBuilder<T1, T2>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -108,7 +108,7 @@ public class ActionBehaviorBuilder<T1, T2, T3>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -145,7 +145,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -182,7 +182,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -219,7 +219,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -256,7 +256,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -293,7 +293,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -330,7 +330,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -367,7 +367,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -404,7 +404,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -441,7 +441,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -478,7 +478,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -515,7 +515,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -552,7 +552,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)
@@ -589,7 +589,7 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	: BehaviorBuilder
 {
 	public ActionBehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 		: base(methodInfo, valueSetConstraint, setupProcessor)

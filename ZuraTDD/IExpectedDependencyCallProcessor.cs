@@ -5,7 +5,7 @@ namespace ZuraTDD;
 public interface IExpectedDependencyCallProcessor
 {
 	ExpectedMockedObjectMethodCall Process(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount);
 }

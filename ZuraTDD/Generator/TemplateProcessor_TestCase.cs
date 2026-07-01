@@ -142,11 +142,11 @@ static file class Functions
 	{
 		if(parameter.IsReferenceType)
 		{
-			return parameter.TypeofType + "?";
+			return parameter.TypeOfOperatorTypeName + "?";
 		}
 		else
 		{
-			return parameter.TypeofType;
+			return parameter.TypeOfOperatorTypeName;
 		}
 	}
 

@@ -1,20 +1,37 @@
+using Microsoft.CodeAnalysis;
+
 namespace ZuraTDD.Generator.DataModel;
 
 internal class ParameterSpecification
 {
-	public string Type { get; set; } = string.Empty;
+	/// <summary>
+	/// Format used to get the type name to use in <see langword="typeof" /> expressions in generated code.
+	/// </summary>
+	private static readonly SymbolDisplayFormat TypeOfFormat = new(
+		typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+		genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+		miscellaneousOptions: SymbolDisplayMiscellaneousOptions.None);
+
+	public string Type { get; }
 
 	/// <summary>
 	/// Specifies whether the type of the parameter is a reference type.
 	/// </summary>
-	public bool IsReferenceType { get; set; }
+	public bool IsReferenceType { get; }
 
-	public string Name { get; set; } = string.Empty;
+	public string Name { get; }
 
 	/// <summary>
 	/// Type name to use in <see langword="typeof" /> expressions for this parameter.
 	/// It may differ from <see cref="Type"/> for cases like nullable reference types.
 	/// </summary>
-	// TODO: think of a better name
-	public string TypeofType { get; set; } = string.Empty;
+	public string TypeOfOperatorTypeName { get; }
+
+	public ParameterSpecification(IParameterSymbol parameterSymbol)
+	{
+		Type = parameterSymbol.Type.ToDisplayString();
+		Name = parameterSymbol.Name;
+		TypeOfOperatorTypeName = parameterSymbol.Type.ToDisplayString(TypeOfFormat);
+		IsReferenceType = parameterSymbol.Type.IsReferenceType;
+	}
 }

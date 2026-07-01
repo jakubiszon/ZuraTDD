@@ -34,6 +34,21 @@ internal static class Functions
 				.ToDisplayString() == "ZuraTDD.IMock<>";
 	}
 
+	/// <summary>
+	/// Returns a string defining the generic type parameters of the method, formatted as &lt;T1, T2&gt;.
+	/// </summary>
+	public static string GetMethodGenericTypeParametersString(this MethodSpecification method)
+	{
+		if (method.GenericTypeParameters.Count == 0)
+			return "";
+
+		return $"<{string.Join(", ", method.GenericTypeParameters)}>";
+	}
+
+	/// <summary>
+	/// Returns method parameter types formatted as generic type parameters to be used with generic behavior builders.
+	/// The output type parameters include method input types as well as its return type.
+	/// </summary>
 	public static string GetGenericParamsString(this MethodSpecification method)
 	{
 		return method switch
@@ -51,6 +66,10 @@ internal static class Functions
 		};
 	}
 
+	/// <summary>
+	/// Returns method parameter types formatted as generic type parameters to be used with generic asynchronous behavior builders.
+	/// The output type parameters include method input types as well as its return type.
+	/// </summary>
 	public static string GetAsyncMethodGenericParamsString(this MethodSpecification method)
 	{
 		return method switch
@@ -191,6 +210,7 @@ internal static class Functions
 				var hasOverloads = methodsWithSameName > 1;
 				return new MethodSpecification(methodAndType.ownerType, methodAndType.method, hasOverloads);
 			})
+			.DistinctBy(methodSpec => methodSpec.MethodUniqueToken)
 			.ToList();
 	}
 
@@ -202,10 +222,18 @@ internal static class Functions
 			.OfType<IMethodSymbol>()
 			.Where(m => !m.IsStatic)
 			.Where(m => m.DeclaredAccessibility == Accessibility.Public)
-			.Where(m => m.Name != ".ctor")
+			.Where(HasExpectedMethodKind)
+			//.Where(m => m.Name != ".ctor")
 			.Distinct(SymbolEqualityComparer.Default)
 			.Cast<IMethodSymbol>()
 			.Select(method => (ownerType: typeSymbol, method));
+	}
+
+	private static bool HasExpectedMethodKind(IMethodSymbol methodSymbol)
+	{
+		return methodSymbol.MethodKind == MethodKind.Ordinary
+			|| methodSymbol.MethodKind == MethodKind.PropertyGet
+			|| methodSymbol.MethodKind == MethodKind.PropertySet;
 	}
 
 	//public static List<PropertySpecification> ExtractProperties(INamedTypeSymbol? typeSymbol)

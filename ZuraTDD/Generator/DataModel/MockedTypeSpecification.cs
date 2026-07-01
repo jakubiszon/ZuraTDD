@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
@@ -37,7 +35,6 @@ internal class MockedTypeSpecification
 
 	/// <summary>
 	/// Name of the mocked type without the namespace.
-	/// TODO rename
 	/// </summary>
 	public TypeInfo TypeInfo { get; }
 

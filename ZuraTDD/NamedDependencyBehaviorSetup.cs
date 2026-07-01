@@ -14,7 +14,7 @@ internal class NamedDependencyBehaviorSetup
 	public string DependencyName { get; }
 
 	public NamedDependencyBehaviorSetup(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IEnumerable<IBehavior> behaviors,
 		string dependencyName)

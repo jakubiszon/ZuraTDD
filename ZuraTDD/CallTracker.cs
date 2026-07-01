@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -9,7 +9,7 @@ public class CallTracker
 	private List<CallRecord> registeredCalls = new();
 
 	public void ReceiveCall(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		object?[] parameters)
 	{
 		var receivedCall = new CallRecord(
@@ -24,13 +24,13 @@ public class CallTracker
 		return registeredCalls.Count;
 	}
 
-	public int GetCallCount(MethodInfo method)
+	public int GetCallCount(ZuraMethodInfo method)
 	{
 		return registeredCalls.Count(call => call.CalledMethod == method);
 	}
 
 	public int GetCallCount(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		ValueSetConstraint parameterFilter)
 	{
 		return registeredCalls

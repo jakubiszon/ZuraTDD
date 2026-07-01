@@ -156,7 +156,7 @@ static file class Functions
 			? $"""
 
 						new ValueSetConstraint([
-							{string.Join(",\n\t\t\t\t", method.Parameters.Select(p => $"{p.Name} ?? new ValueConstraint<{p.Type}>()"))}
+							{paramsString}
 						]),
 			"""
 			: "";
@@ -170,7 +170,7 @@ static file class Functions
 					{{method.MethodName}}({{PrepareParameterList(method)}})
 				{
 					return new(
-						{{mockedType.MockedTypeMethodsTypeName}}.{{method.Token}},{{valueSetConstraint}}
+						{{mockedType.MockedTypeMethodsTypeName}}.{{method.MethodCodeName}},{{valueSetConstraint}}
 						this.behaviorSetupProcessor);
 				}
 			""";

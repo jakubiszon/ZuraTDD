@@ -9,7 +9,7 @@ namespace ZuraTDD;
 public abstract class BehaviorBuilder
 	: IBehaviorBuilder
 {
-	public MethodInfo Method { get; }
+	public ZuraMethodInfo Method { get; }
 
 	public ValueSetConstraint ValueSetConstraint { get; }
 
@@ -20,7 +20,7 @@ public abstract class BehaviorBuilder
 	public IReadOnlyList<IBehavior> Behaviors => this.behaviors.AsReadOnly();
 
 	protected BehaviorBuilder(
-		MethodInfo methodInfo,
+		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 	{

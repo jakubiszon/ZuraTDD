@@ -10,20 +10,17 @@ namespace ZuraTDD;
 /// </summary>
 public class ExpectedMethodCall
 {
-	private MethodInfo method;
+	private ZuraMethodInfo method;
 	private ValueSetConstraint valueSetConstraint;
 	private int? exactCallNumber;
 
 	public ExpectedMethodCall(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
 		int? exactCallNumber)
 	{
-		this.method = method
-			?? throw new ArgumentNullException(nameof(method));
-
+		this.method = method;
 		this.valueSetConstraint = valueSetConstraint ?? new([]);
-
 		this.exactCallNumber = exactCallNumber;
 	}
 

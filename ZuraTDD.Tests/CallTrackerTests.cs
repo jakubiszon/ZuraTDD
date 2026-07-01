@@ -1,4 +1,4 @@
-﻿using ZuraTDD;
+using ZuraTDD;
 
 using System.Reflection;
 
@@ -11,7 +11,7 @@ public sealed class CallTrackerTests
 	public void ReceiveCall_CreatesData()
 	{
 		CallTracker callTracker = new CallTracker();
-		MethodInfo receivingMethod = Example.ICustomerRepository_Methods.ListByInterests__string;
+		ZuraMethodInfo receivingMethod = Example.ICustomerRepository_Methods.ListByInterests__string;
 
 		Assert.AreEqual(0, callTracker.GetCallCount());
 
@@ -29,9 +29,9 @@ public sealed class CallTrackerTests
 	public void GetCallCount_WithDelegate_ReturnsExpected()
 	{
 		CallTracker callTracker = new CallTracker();
-		MethodInfo method1 = Example.ICustomerRepository_Methods.ListByInterests__string;
-		MethodInfo method2 = Example.ICustomerRepository_Methods.ListByInterests__List_string;
-		MethodInfo method3 = Example.ICustomerRepository_Methods.ListAll;
+		ZuraMethodInfo method1 = Example.ICustomerRepository_Methods.ListByInterests__string;
+		ZuraMethodInfo method2 = Example.ICustomerRepository_Methods.ListByInterests__List_string;
+		ZuraMethodInfo method3 = Example.ICustomerRepository_Methods.ListAll;
 
 		Assert.AreEqual(0, callTracker.GetCallCount());
 

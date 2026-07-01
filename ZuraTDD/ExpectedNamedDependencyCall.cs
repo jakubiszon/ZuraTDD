@@ -1,9 +1,13 @@
-using System.Reflection;
 using ZuraTDD.Exceptions;
 
 namespace ZuraTDD;
 
-public class ExpectedNamedDependencyCall : ExpectedMockedObjectMethodCall, ITestResultExpectation
+/// <summary>
+/// Defines a test part which is an expected call to a method of a mocked dependency of a specified name.
+/// </summary>
+public class ExpectedNamedDependencyCall
+	: ExpectedMockedObjectMethodCall
+	, ITestResultExpectation
 {
 	/// <summary>
 	/// Identifies the dependency name which should verify the expected call.
@@ -11,7 +15,7 @@ public class ExpectedNamedDependencyCall : ExpectedMockedObjectMethodCall, ITest
 	public string DependencyName { get; }
 
 	public ExpectedNamedDependencyCall(
-		MethodInfo method,
+		ZuraMethodInfo method,
 		string dependencyName,
 		ValueSetConstraint valueSetConstraint,
 		int? expectedCallCount)

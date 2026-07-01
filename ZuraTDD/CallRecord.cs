@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace ZuraTDD;
@@ -8,12 +8,12 @@ namespace ZuraTDD;
 /// </summary>
 internal class CallRecord
 {
-	public MethodInfo CalledMethod { get; }
+	public ZuraMethodInfo CalledMethod { get; }
 
 	public object?[] Arguments { get; }
 
 	public CallRecord(
-		MethodInfo? calledMethod,
+		ZuraMethodInfo? calledMethod,
 		object?[]? arguments)
 	{
 		CalledMethod = calledMethod

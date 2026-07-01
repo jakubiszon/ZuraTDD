@@ -41,11 +41,15 @@ static file class Functions
 	public static string MockedObjectMethodToken(
 		MethodSpecification method)
 	{
-		return
-			$$"""
-				public static readonly MethodInfo {{method.Token}} = typeof({{method.DefiningType.FullyQualifiedTypeName}}).GetMethod(
+		return method.GenericTypeParameters.Count == 0
+			? $$"""
+				public static readonly ZuraMethodInfo {{method.MethodCodeName}} = typeof({{method.DefiningType.FullyQualifiedTypeName}}).GetMethod(
 					"{{method.MethodName}}",
 					[{{ServiceMethodTokenTypeParams(method)}}])!;
+			"""
+			// as using GetMethod is much harder for generic method - let's use a token for now
+			: $$"""
+				public static readonly ZuraMethodInfo {{method.MethodCodeName}} = "{{method.MethodDisplayToken}}";
 			""";
 	}
 
@@ -55,7 +59,7 @@ static file class Functions
 			return "";
 
 		var parameters = method.Parameters
-			.Select(p => $"typeof({p.TypeofType})");
+			.Select(p => $"typeof({p.TypeOfOperatorTypeName})");
 
 		return string.Join(", ", parameters);
 	}

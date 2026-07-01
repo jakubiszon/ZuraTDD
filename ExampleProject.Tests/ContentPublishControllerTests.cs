@@ -4,9 +4,17 @@ using static ExampleProject.Tests.ContentPublishControllerTestCase;
 
 namespace ExampleProject.Tests;
 
+/// <summary>
+/// This class demostrates using a generated TestCase class to test the <see cref="ContentPublishController">test subject class (ContentPublishController)</see>.
+/// </summary>
 [TestClass]
 public class ContentPublishControllerTests
 {
+	/// <summary>
+	/// The test method accepting TestCase instances from a generator method.
+	/// Running the tests is done with calling the <see cref="TestCase.RunTestAsync"/> method.
+	/// </summary>
+	/// <param name="testCase">The test case instance to run.</param>
 	[TestMethod]
 	[DynamicData(nameof(PublishContent_TestCases))]
 	public async Task PublishContent_Tests(TestCase testCase)

@@ -1,4 +1,5 @@
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -19,12 +20,14 @@ public class ExpectedDependencyCallNameProcessor : IExpectedDependencyCallProces
 	public ExpectedMockedObjectMethodCall Process(
 		ZuraMethodInfo method,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		int? expectedCallCount)
 	{
 		return new ExpectedNamedDependencyCall(
 			method,
 			this.Name,
 			valueSetConstraint,
+			genericTypeParameterSetConstraint,
 			expectedCallCount);
 	}
 }

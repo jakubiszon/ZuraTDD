@@ -12,13 +12,17 @@ internal class CallRecord
 
 	public object?[] Arguments { get; }
 
+	public Type[]? GenericArguments { get; } = [];
+
 	public CallRecord(
 		ZuraMethodInfo? calledMethod,
-		object?[]? arguments)
+		object?[]? arguments,
+		Type[]? genericArguments = null)
 	{
 		CalledMethod = calledMethod
 			?? throw new ArgumentNullException(nameof(calledMethod));
 
 		Arguments = arguments ?? [];
+		GenericArguments = genericArguments;
 	}
 }

@@ -1,3 +1,5 @@
+using ZuraTDD.BuildingBlocks;
+
 namespace ZuraTDD.Tests.Example;
 
 internal class IEmailSender_Expect : IEmailSender_ExpectBuilder
@@ -41,6 +43,7 @@ internal abstract class IEmailSender_ExpectBuilder
 				subject ?? new ValueConstraint<string>(),
 				body ?? new ValueConstraint<string>(),
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 
@@ -56,6 +59,7 @@ internal abstract class IEmailSender_ExpectBuilder
 				subject ?? new ValueConstraint<string>(),
 				body ?? new ValueConstraint<string>(),
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 }

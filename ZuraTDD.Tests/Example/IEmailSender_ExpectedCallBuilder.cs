@@ -1,3 +1,5 @@
+using ZuraTDD.BuildingBlocks;
+
 namespace ZuraTDD.Tests.Example;
 
 public class IEmailSender_StaticExpectedCallBuilder : IEmailSender_ExpectedCallBuilder
@@ -30,6 +32,7 @@ public abstract class IEmailSender_ExpectedCallBuilder
 				subject ?? new ValueConstraint<string>(),
 				body ?? new ValueConstraint<string>(),
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 
@@ -45,6 +48,7 @@ public abstract class IEmailSender_ExpectedCallBuilder
 				subject ?? new ValueConstraint<string>(),
 				body ?? new ValueConstraint<string>(),
 			]),
+			new GenericTypeParameterSetConstraint([]),
 			this.processor);
 	}
 }

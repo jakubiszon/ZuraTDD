@@ -1,3 +1,4 @@
+using ZuraTDD.BuildingBlocks;
 using ZuraTDD.Exceptions;
 
 namespace ZuraTDD;
@@ -18,8 +19,9 @@ public class ExpectedNamedDependencyCall
 		ZuraMethodInfo method,
 		string dependencyName,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		int? expectedCallCount)
-		: base(method, valueSetConstraint, expectedCallCount)
+		: base(method, valueSetConstraint, genericTypeParameterSetConstraint, expectedCallCount)
 	{
 		DependencyName = dependencyName;
 	}

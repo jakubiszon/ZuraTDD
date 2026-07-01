@@ -26,3 +26,7 @@ internal partial class FuncServiceMock : IMock<IFuncService>
 internal partial class AsyncMethodsMock : IMock<IAsyncMethods>
 {
 }
+
+internal partial class SimpleGenericMethodMock : IMock<IDefineGenericMethods>
+{
+}

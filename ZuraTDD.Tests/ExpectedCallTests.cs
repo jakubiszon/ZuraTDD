@@ -1,4 +1,3 @@
-using ZuraTDD;
 using ZuraTDD.Exceptions;
 using ZuraTDD.Tests.Example;
 using System.Reflection;

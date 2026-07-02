@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -16,11 +17,13 @@ internal class NamedDependencyBehaviorSetup
 	public NamedDependencyBehaviorSetup(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IEnumerable<IBehavior> behaviors,
 		string dependencyName)
 		: base(
 			methodInfo,
 			valueSetConstraint,
+			genericTypeParameterSetConstraint,
 			behaviors)
 	{
 		this.DependencyName = dependencyName;

@@ -70,11 +70,13 @@ public class BehaviorSetupRunnerTests
 			new BehaviorSetup(
 				methodInfo,
 				new ValueSetConstraint([new ValueConstraint<int>(x => x > 100)]),
+				new ([]),
 				[new SideEffectBehavior<Action<int>>(x => sideEffectCount_1++)]),
 
 			new BehaviorSetup(
 				methodInfo,
 				new ValueSetConstraint([new ValueConstraint<int>(x => x <= 100)]),
+				new ([]),
 				[new SideEffectBehavior<Action<int>>(x => sideEffectCount_2++)])
 		};
 

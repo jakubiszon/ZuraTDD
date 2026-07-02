@@ -13,6 +13,7 @@ internal abstract class ICustomerRepository_BehaviorBuilder : MockedObjectBuilde
 	{
 		return new(
 			ICustomerRepository_Methods.ListAll,
+			new([]),
 			this.behaviorSetupProcessor);
 	}
 
@@ -23,6 +24,7 @@ internal abstract class ICustomerRepository_BehaviorBuilder : MockedObjectBuilde
 			new ValueSetConstraint([
 				topic ?? new ValueConstraint<string>(),
 			]),
+			new([]),
 			this.behaviorSetupProcessor);
 	}
 
@@ -33,6 +35,7 @@ internal abstract class ICustomerRepository_BehaviorBuilder : MockedObjectBuilde
 			new ValueSetConstraint([
 				topics ?? new ValueConstraint<List<string>>(),
 			]),
+			new([]),
 			this.behaviorSetupProcessor);
 	}
 }

@@ -25,6 +25,7 @@ internal abstract class IEmailSender_BehaviorBuilder : MockedObjectBuilder
 				subject ?? new ValueConstraint<string>(),
 				body ?? new ValueConstraint<string>(),
 			]),
+			new([]),
 			this.behaviorSetupProcessor);
 	}
 
@@ -40,6 +41,7 @@ internal abstract class IEmailSender_BehaviorBuilder : MockedObjectBuilder
 				subject ?? new ValueConstraint<string>(),
 				body ?? new ValueConstraint<string>(),
 			]),
+			new([]),
 			this.behaviorSetupProcessor);
 	}
 }

@@ -173,6 +173,7 @@ static file class Functions
 				{
 					return new(
 						{{mockedType.MockedTypeMethodsTypeName}}.{{method.MethodCodeName}},{{valueSetConstraint}}
+						new GenericTypeParameterSetConstraint([{{GetGenericTypeParameterValuesString(method)}}]),
 						this.behaviorSetupProcessor);
 				}
 			""";
@@ -198,5 +199,16 @@ static file class Functions
 			.Select(p => $"ValueConstraint<{p.Type}>? {p.Name} = null");
 
 		return "\n\t\t" + string.Join(",\n\t\t", parameterDeclarations);
+	}
+
+	private static string GetGenericTypeParameterValuesString(MethodSpecification method)
+	{
+		if (method.GenericTypeParameters.Count == 0)
+			return "";
+
+		var genericParameterValues = method.GenericTypeParameters
+			.Select(p => $"new GenericTypeParameterConstraint(typeof({p.Name}))");
+
+		return "\n\t\t\t\t" + string.Join(",\n\t\t\t\t", genericParameterValues);
 	}
 }

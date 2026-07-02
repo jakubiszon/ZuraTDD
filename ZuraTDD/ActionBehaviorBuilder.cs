@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -13,8 +14,9 @@ public class ActionBehaviorBuilder
 	/// <param name="setupProcessor">Setup processor called when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, new([]), setupProcessor)
+		: base(methodInfo, new([]), genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -35,8 +37,9 @@ public class ActionBehaviorBuilder<Tin>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -73,8 +76,9 @@ public class ActionBehaviorBuilder<T1, T2>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -110,8 +114,9 @@ public class ActionBehaviorBuilder<T1, T2, T3>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -147,8 +152,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -184,8 +190,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -221,8 +228,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -258,8 +266,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -295,8 +304,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -332,8 +342,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -369,8 +380,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -406,8 +418,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -443,8 +456,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -480,8 +494,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -517,8 +532,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -554,8 +570,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -591,8 +608,9 @@ public class ActionBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
 	public ActionBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 

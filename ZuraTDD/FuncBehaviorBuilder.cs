@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -11,8 +12,9 @@ public class FuncBehaviorBuilder<Tout>
 	/// <param name="setupProcessor">Setup processor used when <see cref="BehaviorBuilder.Build" /> is called.</param>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, new([]), setupProcessor)
+		: base(methodInfo, new([]), genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -22,8 +24,9 @@ public class FuncBehaviorBuilder<Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 		if (!valueSetConstraint.IsEmpty())
 			throw new Exceptions.IncorrectConfiguration(
@@ -41,8 +44,9 @@ public class FuncBehaviorBuilder<Tin, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -80,8 +84,9 @@ public class FuncBehaviorBuilder<T1, T2, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -118,8 +123,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -156,8 +162,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -194,8 +201,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -232,8 +240,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -270,8 +279,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -308,8 +318,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -346,8 +357,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -384,8 +396,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Tout>
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -422,8 +435,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -460,8 +474,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -498,8 +513,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -536,8 +552,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -574,8 +591,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 
@@ -612,8 +630,9 @@ public class FuncBehaviorBuilder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T
 	public FuncBehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
-		: base(methodInfo, valueSetConstraint, setupProcessor)
+		: base(methodInfo, valueSetConstraint, genericTypeParameterSetConstraint, setupProcessor)
 	{
 	}
 

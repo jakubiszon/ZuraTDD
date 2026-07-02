@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -13,6 +14,8 @@ public abstract class BehaviorBuilder
 
 	public ValueSetConstraint ValueSetConstraint { get; }
 
+	public GenericTypeParameterSetConstraint GenericTypeParameterSetConstraint { get; }
+
 	private IBehaviorSetupProcessor SetupProcessor { get; }
 
 	private List<IBehavior> behaviors = new List<IBehavior>();
@@ -22,10 +25,12 @@ public abstract class BehaviorBuilder
 	protected BehaviorBuilder(
 		ZuraMethodInfo methodInfo,
 		ValueSetConstraint valueSetConstraint,
+		GenericTypeParameterSetConstraint genericTypeParameterSetConstraint,
 		IBehaviorSetupProcessor setupProcessor)
 	{
 		this.Method = methodInfo;
 		this.ValueSetConstraint = valueSetConstraint;
+		this.GenericTypeParameterSetConstraint = genericTypeParameterSetConstraint;
 		this.SetupProcessor = setupProcessor;
 
 		// notify the processor that a new build has started

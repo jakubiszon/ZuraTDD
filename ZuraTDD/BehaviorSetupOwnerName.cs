@@ -20,6 +20,7 @@ public class BehaviorSetupOwnerName : IBehaviorSetupProcessor
 		return new NamedDependencyBehaviorSetup(
 			builder.Method,
 			builder.ValueSetConstraint,
+			builder.GenericTypeParameterSetConstraint,
 			builder.Behaviors,
 			this.OwnerName);
 	}

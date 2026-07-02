@@ -25,6 +25,7 @@ public class BehaviorSetupCollector : IBehaviorSetupProcessor
 		return new(
 			behaviorBuilder.Method,
 			behaviorBuilder.ValueSetConstraint,
+			behaviorBuilder.GenericTypeParameterSetConstraint,
 			behaviorBuilder.Behaviors);
 	}
 

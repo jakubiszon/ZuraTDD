@@ -35,6 +35,7 @@ internal class IEmailSender_Fake
 		return base.BehaviorSetupRunner.InvokeFuncBehavior<string, string, string, System.Threading.Tasks.Task>(
 			IEmailSender_Methods.SendEmail,
 			to, subject, body,
+			[],
 			Task.CompletedTask);
 	}
 
@@ -52,6 +53,7 @@ internal class IEmailSender_Fake
 
 		base.BehaviorSetupRunner.InvokeActionBehavior<string, string, string>(
 			IEmailSender_Methods.SendEmailSync,
-			to, subject, body);
+			to, subject, body,
+			[]);
 	}
 }

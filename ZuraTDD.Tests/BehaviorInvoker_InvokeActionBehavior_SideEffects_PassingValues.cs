@@ -15,12 +15,18 @@ public partial class BehaviorInvokerTests
 		// arrange
 		var sideEffectWasCalled = false;
 		var behavior = new SideEffectBehavior<Action<int>>(
-			input => Assert.AreEqual(V1, input));
+			input =>
+			{
+				Assert.AreEqual(V1, input);
+				sideEffectWasCalled = true;
+			});
 
 		var invoker = new BehaviorInvoker([behavior]);
 
 		// act and assert
 		invoker.InvokeActionBehavior(V1);
+
+		Assert.IsTrue(sideEffectWasCalled);
 	}
 
 	[TestMethod]

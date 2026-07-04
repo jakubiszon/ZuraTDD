@@ -47,11 +47,13 @@ public class BehaviorSetupRunner
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior(
-		ZuraMethodInfo method)
+		ZuraMethodInfo method,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior());
 	}
 
@@ -61,11 +63,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<Tin>(
 		ZuraMethodInfo method,
-		Tin input)
+		Tin input,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[input],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(input));
 	}
 
@@ -75,11 +79,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2)
+		T1 p1, T2 p2,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2));
 	}
 
@@ -89,11 +95,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3)
+		T1 p1, T2 p2, T3 p3,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3));
 	}
 
@@ -103,11 +111,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4)
+		T1 p1, T2 p2, T3 p3, T4 p4,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4));
 	}
 
@@ -117,11 +127,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5));
 	}
 
@@ -131,11 +143,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6));
 	}
 
@@ -145,11 +159,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7));
 	}
 
@@ -159,11 +175,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8));
 	}
 
@@ -173,11 +191,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9));
 	}
 
@@ -187,11 +207,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10));
 	}
 
@@ -201,11 +223,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
 	}
 
@@ -215,11 +239,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
 	}
 
@@ -229,11 +255,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13));
 	}
 
@@ -243,11 +271,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14));
 	}
 
@@ -257,11 +287,13 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15));
 	}
 
@@ -271,17 +303,20 @@ public class BehaviorSetupRunner
 	/// <param name="method">Method for which behaviors will be invoked.</param>
 	public void InvokeActionBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
 		ZuraMethodInfo method,
-		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16)
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16,
+		Type[]? genericParameterTypes)
 	{
 		InvokeActionBehaviorInternal(
 			method,
 			[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16],
+			genericParameterTypes,
 			invoker => invoker.InvokeActionBehavior(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16));
 	}
 
 	private void InvokeActionBehaviorInternal(
 		ZuraMethodInfo method,
 		object?[] matcherParameters,
+		Type[]? genericParameterTypes,
 		Action<BehaviorInvoker> invokerAction)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
@@ -289,7 +324,7 @@ public class BehaviorSetupRunner
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches(matcherParameters))
+			if (!behaviorSetup.Matches(matcherParameters, genericParameterTypes))
 				continue;
 
 			invokerAction(behaviorSetup.BehaviorInvoker);
@@ -300,13 +335,19 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with zero params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<Tout>(ZuraMethodInfo method, Tout defaultResult)
+	public Tout InvokeFuncBehavior<Tout>(
+		ZuraMethodInfo method,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
+			if (!behaviorSetup.Matches([], genericParameterTypes))
+				continue;
+
 			// return result found in the first matching setup
 			var result = behaviorSetup.BehaviorInvoker.InvokeFuncBehavior<Tout>();
 			if(result != null)
@@ -320,14 +361,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 1 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, Tout>(ZuraMethodInfo method, T1 p1, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, Tout>(
+		ZuraMethodInfo method,
+		T1 p1,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1]))
+			if (!behaviorSetup.Matches([p1], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -345,14 +390,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 3 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2]))
+			if (!behaviorSetup.Matches([p1, p2], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -370,14 +419,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 3 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3]))
+			if (!behaviorSetup.Matches([p1, p2, p3], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -395,14 +448,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 4 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -420,14 +477,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 5 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -445,14 +506,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 6 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -470,14 +535,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 7 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -495,14 +564,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 8 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -520,14 +593,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 9 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -545,14 +622,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 10 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -570,14 +651,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 11 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -595,14 +680,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 12 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -620,14 +709,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 13 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -645,14 +738,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 14 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -670,14 +767,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 15 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup
@@ -695,14 +796,18 @@ public class BehaviorSetupRunner
 	/// Invoke behavior for the specified method with 16 params returning <see cref="{Tout}" />.
 	/// </summary>
 	/// <param name="method">Method for which behaviors will be invoked.</param>
-	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, Tout>(ZuraMethodInfo method, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16, Tout defaultResult)
+	public Tout InvokeFuncBehavior<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, Tout>(
+		ZuraMethodInfo method,
+		T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9, T10 p10, T11 p11, T12 p12, T13 p13, T14 p14, T15 p15, T16 p16,
+		Type[]? genericParameterTypes,
+		Tout defaultResult)
 	{
 		if (!this.configuredSetups.ContainsKey(method))
 			return defaultResult;
 
 		foreach(var behaviorSetup in this.configuredSetups[method])
 		{
-			if (!behaviorSetup.ValueSetConstraint.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16]))
+			if (!behaviorSetup.Matches([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16], genericParameterTypes))
 				continue;
 
 			// return result found in the first matching setup

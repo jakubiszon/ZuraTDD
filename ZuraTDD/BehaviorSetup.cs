@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ZuraTDD.BuildingBlocks;
@@ -35,4 +36,17 @@ public class BehaviorSetup : IDependencySetup
 	/// Behavior invoker to run if the value constraint is satisfied.
 	/// </summary>
 	public BehaviorInvoker BehaviorInvoker { get; }
+
+	public bool Matches(
+		object?[] methodParameters,
+		Type[]? genericTypeParameters)
+	{
+		if (!ValueSetConstraint.Matches(methodParameters))
+			return false;
+
+		if (!GenericTypeParameterSetConstraint.Matches(genericTypeParameters))
+			return false;
+
+		return true;
+	}
 }

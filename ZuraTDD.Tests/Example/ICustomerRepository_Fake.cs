@@ -21,6 +21,7 @@ internal class ICustomerRepository_Fake
 
 		return base.BehaviorSetupRunner.InvokeFuncBehavior<Task<List<Customer>>>(
 			ICustomerRepository_Methods.ListAll,
+			[],
 			Task.FromResult(new List<Customer>()));
 	}
 
@@ -33,6 +34,7 @@ internal class ICustomerRepository_Fake
 		return base.BehaviorSetupRunner.InvokeFuncBehavior<string, Task<List<Customer>>>(
 			ICustomerRepository_Methods.ListByInterests__string,
 			topic,
+            [],
             Task.FromResult(new List<Customer>()));
     }
 
@@ -45,6 +47,7 @@ internal class ICustomerRepository_Fake
 		return base.BehaviorSetupRunner.InvokeFuncBehavior<List<string>, Task<List<Customer>>>(
 			ICustomerRepository_Methods.ListByInterests__List_string,
 			topics,
+			[],
             Task.FromResult(new List<Customer>()));
     }
 }

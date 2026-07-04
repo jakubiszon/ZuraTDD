@@ -70,7 +70,8 @@ static file class Functions
 						[{{genericParameterTypes}}]);
 
 					{{@return}}base.BehaviorSetupRunner.{{InvokeMethod(mockedMethod)}}(
-						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.MethodCodeName}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}}{{defaultResult}});
+						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.MethodCodeName}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}},
+						[{{genericParameterTypes}}]{{defaultResult}});
 				}
 			""";
 	}

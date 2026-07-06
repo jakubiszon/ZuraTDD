@@ -57,6 +57,21 @@ internal static class Functions
 	}
 
 	/// <summary>
+	/// Returns the <see langword="where" /> clases for all generic type parameters of the method.
+	/// </summary>
+	public static string GetMethodGenericTypeParameterConstraints(this MethodSpecification method, string indentation = "\n\t\t")
+	{
+		if (method.GenericTypeParameters.All(gtp => gtp.Where.Length == 0))
+			return "";
+
+		var paramsWithConstraints = method.GenericTypeParameters
+			.Where(gtp => gtp.Where.Length > 0)
+			.Select(gtp => gtp.Where);
+
+		return string.Join(indentation, paramsWithConstraints);
+	}
+
+	/// <summary>
 	/// Returns method parameter types formatted as generic type parameters to be used with generic behavior builders.
 	/// The output type parameters include method input types as well as its return type.
 	/// </summary>

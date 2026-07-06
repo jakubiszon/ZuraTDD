@@ -56,13 +56,15 @@ static file class Functions
 		var genericParameterTypes = mockedMethod.GetMethodGenericTypeParametersTypeofs();
 		var paramValues = mockedMethod.GetParamValuesString();
 		var defaultResult = mockedMethod.GetDefaultResult().PrependNotEmpty(",\n\t\t\t");
+		var genericTypeParamConstraints = mockedMethod.GetMethodGenericTypeParameterConstraints()
+			.PrependNotEmpty("\n\t\t");
 
 		return
 			$$"""
 				/// <summary>
 				/// Simulates behavior for <see cref="{{mockedType.TypeInfo.TypeName}}.{{mockedMethod.MethodName}}" />.
 				/// </summary>
-				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}{{genericParameters}}({{ParameterDeclarations(mockedMethod)}})
+				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}{{genericParameters}}({{ParameterDeclarations(mockedMethod)}}){{genericTypeParamConstraints}}
 				{
 					this.CallTracker.ReceiveCall(
 						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.MethodCodeName}},

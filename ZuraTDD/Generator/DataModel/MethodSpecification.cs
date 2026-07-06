@@ -75,26 +75,32 @@ internal class MethodSpecification
 		MethodName = methodSymbol.Name;
 		ReturnType = methodSymbol.ReturnType.ToDisplayString();
 		DefiningType = new TypeInfo(definingType);
+
 		Parameters = methodSymbol
 			.Parameters
 			.Select(p => new ParameterSpecification(p))
 			.ToList();
-
-		MethodCodeName = GenerateMethodToken(MethodName, hasOverloads, Parameters);
-		MethodUniqueToken = GenerateUniqueToken(methodSymbol);
-		MethodDisplayToken = GenerateDisplayToken(methodSymbol);
 
 		GenericTypeParameters = methodSymbol
 			.TypeParameters
 			.Select(tp => new GenericTypeParamSpecification(tp))
 			.ToList();
 
+		MethodCodeName = GenerateMethodToken(
+			MethodName,
+			hasOverloads,
+			Parameters,
+			GenericTypeParameters);
+
+		MethodUniqueToken = GenerateUniqueToken(methodSymbol, GenericTypeParameters);
+		MethodDisplayToken = GenerateDisplayToken(methodSymbol, GenericTypeParameters);
+
 		var (methodType, awaitedType) = DetermineMethodType(methodSymbol);
 		MethodType = methodType;
 		AwaitedType = awaitedType;
 	}
 
-	private static string GenerateUniqueToken(IMethodSymbol methodSymbol)
+	private static string GenerateUniqueToken(IMethodSymbol methodSymbol, List<GenericTypeParamSpecification> genericTypeParameters)
 	{
         var returnType = methodSymbol.ReturnType.ToDisplayString();
         var methodName = methodSymbol.Name;
@@ -105,10 +111,20 @@ internal class MethodSpecification
         var parameters = string.Join(", ", 
             methodSymbol.Parameters.Select(p => p.Type.ToDisplayString()));
         
-        return $"{returnType} {methodName}{genericArity}({parameters})";
+		var whereClauses = genericTypeParameters
+			.Where(gtp => gtp.Where.Length > 0)
+			.Select(gtp => gtp.Where);
+
+		var whereClausesSuffix = whereClauses.Any()
+			? $" {string.Join(" ", whereClauses)}"
+			: "";
+
+        return $"{returnType} {methodName}{genericArity}({parameters}){whereClausesSuffix}";
 	}
 
-	private static string GenerateDisplayToken(IMethodSymbol methodSymbol)
+	private static string GenerateDisplayToken(
+		IMethodSymbol methodSymbol,
+		List<GenericTypeParamSpecification> genericTypeParameters)
 	{
         var returnType = methodSymbol.ReturnType.ToDisplayString();
         var methodName = methodSymbol.Name;
@@ -116,24 +132,61 @@ internal class MethodSpecification
         var typeParams = methodSymbol.TypeParameters.Length > 0
             ? $"<{string.Join(", ", methodSymbol.TypeParameters.Select(tp => tp.ToDisplayString()))}>"
             : "";
-        
-        var parameters = string.Join(", ", 
+
+		var whereClauses = genericTypeParameters
+			.Where(gtp => gtp.Where.Length > 0)
+			.Select(gtp => gtp.Where);
+
+		var whereClausesSuffix = whereClauses.Any()
+			? $" {string.Join(" ", whereClauses)}"
+			: "";
+
+		var parameters = string.Join(", ", 
             methodSymbol.Parameters.Select(p => p.Type.ToDisplayString()));
         
-        return $"{returnType} {methodName}{typeParams}({parameters})";
+        return $"{returnType} {methodName}{typeParams}({parameters}){whereClausesSuffix}";
 	}
 
 	private static string GenerateMethodToken(
 		string methodName,
 		bool hasOverloads,
-		List<ParameterSpecification> parameters)
+		List<ParameterSpecification> parameters,
+		List<GenericTypeParamSpecification> genericTypeParameters)
 	{
 		if (!hasOverloads)
 			return methodName;
 
-		return parameters.Any()
-			? $"{methodName}__by__{GetParametersSuffix(parameters)}"
-			: methodName;
+		var genericParamNamesSuffix = genericTypeParameters.Count > 0
+			? $"__{string.Join("_", genericTypeParameters.Select(gp => gp.Name))}"
+			: "";
+
+		var byParmsSuffix = parameters.Count > 0
+			? $"__by_{GetParametersSuffix(parameters)}"
+			: "";
+
+		var whereClauses = genericTypeParameters
+			.Select(gtp => gtp.Where)
+			.Where(whereClause => whereClause.Length > 0)
+			.Select(WhereSuffixPart);
+
+		var whereClausesSuffix = whereClauses.Any()
+			? string.Join("", whereClauses)
+			: "";
+
+		return $"{methodName}{genericParamNamesSuffix}{byParmsSuffix}{whereClausesSuffix}";
+	}
+
+	private static string WhereSuffixPart(string whereClause)
+	{
+		var simplifiedWhereClause = whereClause
+			.Replace("where ", "__where_")
+			.Replace(" ", "")
+			.Replace("global::", "global_")
+			.Replace(":", "_")
+			.Replace(".", "_")
+			.Replace("new()", "new");
+
+		return Tokenize(simplifiedWhereClause);
 	}
 
 	private static string GetParametersSuffix(List<ParameterSpecification> parameters)
@@ -143,13 +196,18 @@ internal class MethodSpecification
 			var shortTypeName = p.Type.Split('.').Last();
 
 			// Remove generic brackets and replace with underscores
-			return shortTypeName
-				.Replace("<", "_")
-				.Replace(">", "_")
-				.Replace(",", "_")
-				.Replace(" ", "")
-				.TrimEnd('_');
+			return Tokenize(shortTypeName);
 		}));
+	}
+
+	private static string Tokenize(string typeOrSomething)
+	{
+		return typeOrSomething
+			.Replace("<", "_")
+			.Replace(">", "_")
+			.Replace(",", "_")
+			.Replace(" ", "")
+			.TrimEnd('_');
 	}
 
 	private static (MethodType, string) DetermineMethodType(IMethodSymbol methodSymbol)

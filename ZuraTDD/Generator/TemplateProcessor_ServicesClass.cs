@@ -15,12 +15,7 @@ internal partial class TemplateProcessor
 		// that will be used to create abstract dependencies
 		var abstractDependencyFactories = spec.Dependencies
 			.Where(dependency => dependency.IsMockable)
-			.Select(dependency =>
-			$$"""
-						KeyValuePair.Create<string, Func<MockedObject>>(
-							"{{dependency.DependencyPropertyName}}",
-							() => new {{dependency.MockedType!.MockedFakeTypeName}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
-			""");
+			.Select(Functions.MockedObjectKeyValueCreation);
 
 		// comma separated dependency factories to pass to DependencyCollection constructor
 		var strAbstractDependencyFactories = string.Join(",\n", abstractDependencyFactories);
@@ -115,5 +110,19 @@ static file class Functions
 					}
 				}
 			""";
+	}
+
+	public static string MockedObjectKeyValueCreation(DependencySpecification dependency)
+	{
+		var genericTypeParams = (0 < dependency.AppliedTypeParamNames.Count)
+			? $"<{string.Join(", ", dependency.AppliedTypeParamNames)}>"
+			: string.Empty;
+
+		return
+		$$"""
+					KeyValuePair.Create<string, Func<MockedObject>>(
+						"{{dependency.DependencyPropertyName}}",
+						() => new {{dependency.MockedType!.MockedFakeTypeName}}{{genericTypeParams}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
+		""";
 	}
 }

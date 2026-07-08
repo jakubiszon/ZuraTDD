@@ -9,7 +9,7 @@ namespace ZuraTDD.Generator.DataModel;
 /// The method belongs either to an object marked as a TestCase
 /// or to one of the generated mock-object-classes.
 /// </summary>
-internal class MethodSpecification
+internal class MethodSpecification : IUseGenericTypeParameters
 {
 	public string MethodName { get; }
 
@@ -44,7 +44,7 @@ internal class MethodSpecification
 	/// </remarks>
 	public string MethodDisplayToken { get; }
 
-	public List<GenericTypeParamSpecification> GenericTypeParameters { get; }
+	public IReadOnlyCollection<GenericTypeParamSpecification> GenericTypeParameters { get; }
 
 	/// <summary>
 	/// Defines the parameters of the method.
@@ -100,7 +100,9 @@ internal class MethodSpecification
 		AwaitedType = awaitedType;
 	}
 
-	private static string GenerateUniqueToken(IMethodSymbol methodSymbol, List<GenericTypeParamSpecification> genericTypeParameters)
+	private static string GenerateUniqueToken(
+		IMethodSymbol methodSymbol,
+		IReadOnlyCollection<GenericTypeParamSpecification> genericTypeParameters)
 	{
         var returnType = methodSymbol.ReturnType.ToDisplayString();
         var methodName = methodSymbol.Name;
@@ -124,7 +126,7 @@ internal class MethodSpecification
 
 	private static string GenerateDisplayToken(
 		IMethodSymbol methodSymbol,
-		List<GenericTypeParamSpecification> genericTypeParameters)
+		IReadOnlyCollection<GenericTypeParamSpecification> genericTypeParameters)
 	{
         var returnType = methodSymbol.ReturnType.ToDisplayString();
         var methodName = methodSymbol.Name;
@@ -151,7 +153,7 @@ internal class MethodSpecification
 		string methodName,
 		bool hasOverloads,
 		List<ParameterSpecification> parameters,
-		List<GenericTypeParamSpecification> genericTypeParameters)
+		IReadOnlyCollection<GenericTypeParamSpecification> genericTypeParameters)
 	{
 		if (!hasOverloads)
 			return methodName;

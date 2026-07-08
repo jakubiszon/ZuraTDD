@@ -150,18 +150,22 @@ static file class Functions
 		}
 	}
 
-	public static string DependencyWhenCode(DependencySpecification service)
+	public static string DependencyWhenCode(DependencySpecification dependency)
 	{
-		if (service.IsMockable)
+		if (dependency.IsMockable)
 		{
+			var genericTypeParams = (0 < dependency.AppliedTypeParamNames.Count)
+				? $"<{string.Join(", ", dependency.AppliedTypeParamNames)}>"
+				: string.Empty;
+
 			return
 				$$"""
 						/// <summary>
-						/// A builder producing behaviors for <see cref="{{service.DeclaringNamespace}}.{{service.DependencyType.TypeName}}" />
-						/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
+						/// A builder producing behaviors for <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
+						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{service.DependencyType.TypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
-							=> new {{service.DependencyType.TypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
+						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} {{dependency.DependencyPropertyName}}
+							=> new {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}}("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 		else
@@ -169,11 +173,11 @@ static file class Functions
 			return
 				$$"""
 						/// <summary>
-						/// A builder allowing to specifiy an instance of <see cref="{{service.DeclaringNamespace}}.{{service.DependencyType.TypeName}}" />
-						/// which will be passed as "{{service.DependencyPropertyName}}" to the test subject.
+						/// A builder allowing to specifiy an instance of <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
+						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{service.DependencyType.TypeName}}_NamedInstanceBuilder {{service.DependencyPropertyName}}
-							=> new {{service.DependencyType.TypeName}}_NamedInstanceBuilder("{{service.DependencyPropertyName}}");
+						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder {{dependency.DependencyPropertyName}}
+							=> new {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 	}

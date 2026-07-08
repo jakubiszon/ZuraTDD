@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
@@ -27,10 +28,16 @@ internal class MockedTypeSpecification
 		string outputNamespace,
 		IParameterSymbol param)
 	{
+		var namedType = param.Type as INamedTypeSymbol
+			?? param.Type.OriginalDefinition as INamedTypeSymbol;
+
+		TypeInfo = namedType != null
+			? new TypeInfo(namedType)
+			: new TypeInfo(param);
+
 		OutputNamespace = outputNamespace;
-		TypeInfo = new TypeInfo(param.Type);
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
-		Methods = Functions.ExtractInterfaceMethods(param.Type as INamedTypeSymbol);
+		Methods = Functions.ExtractInterfaceMethods(namedType);
 	}
 
 	/// <summary>

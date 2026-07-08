@@ -35,36 +35,36 @@ internal static class Functions
 	}
 
 	/// <summary>
-	/// Returns a string defining the generic type parameters of the method, formatted as &lt;T1, T2&gt;.
+	/// Returns a string defining the generic type parameters of a method or type, formatted as &lt;T1, T2&gt;.
 	/// </summary>
-	public static string GetMethodGenericTypeParametersString(this MethodSpecification method)
+	public static string GetMethodGenericTypeParametersString(this IUseGenericTypeParameters genericCodeBlock)
 	{
-		if (method.GenericTypeParameters.Count == 0)
+		if (genericCodeBlock.GenericTypeParameters.Count == 0)
 			return "";
 
-		return $"<{string.Join(", ", method.GenericTypeParameters.Select(p => p.Name))}>";
+		return $"<{string.Join(", ", genericCodeBlock.GenericTypeParameters.Select(p => p.Name))}>";
 	}
 
 	/// <summary>
-	/// Returns a string which will represent applied generic types inside a generic method implementation.
+	/// Returns a string which will represent applied generic types inside a generic method or class implementation.
 	/// </summary>
-	public static string GetMethodGenericTypeParametersTypeofs(this MethodSpecification method)
+	public static string GetMethodGenericTypeParametersTypeofs(this IUseGenericTypeParameters genericCodeBlock)
 	{
-		if (method.GenericTypeParameters.Count == 0)
+		if (genericCodeBlock.GenericTypeParameters.Count == 0)
 			return "";
 
-		return string.Join(", ", method.GenericTypeParameters.Select(p => $"typeof({p.Name})"));
+		return string.Join(", ", genericCodeBlock.GenericTypeParameters.Select(p => $"typeof({p.Name})"));
 	}
 
 	/// <summary>
 	/// Returns the <see langword="where" /> clases for all generic type parameters of the method.
 	/// </summary>
-	public static string GetMethodGenericTypeParameterConstraints(this MethodSpecification method, string indentation = "\n\t\t")
+	public static string GetMethodGenericTypeParameterConstraints(this IUseGenericTypeParameters genericCodeBlock, string indentation = "\n\t\t")
 	{
-		if (method.GenericTypeParameters.All(gtp => gtp.Where.Length == 0))
+		if (genericCodeBlock.GenericTypeParameters.All(gtp => gtp.Where.Length == 0))
 			return "";
 
-		var paramsWithConstraints = method.GenericTypeParameters
+		var paramsWithConstraints = genericCodeBlock.GenericTypeParameters
 			.Where(gtp => gtp.Where.Length > 0)
 			.Select(gtp => gtp.Where);
 

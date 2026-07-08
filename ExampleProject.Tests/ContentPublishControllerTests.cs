@@ -1,3 +1,4 @@
+using ExampleProject.Model;
 using Microsoft.AspNetCore.Mvc;
 using ZuraTDD;
 using static ExampleProject.Tests.ContentPublishControllerTestCase;
@@ -22,6 +23,17 @@ public class ContentPublishControllerTests
 		await testCase.RunTestAsync();
 	}
 
+	private static Content BuildExampleContent()
+	{
+		return new Content(
+			id: Guid.NewGuid(),
+			title: "Example Title",
+			body: "Example body content.",
+			topics: new List<string> { "Topic1", "Topic2" },
+			url: "http://example.com/content"
+		);
+	}
+
 	public static IEnumerable<object[]> PublishContent_TestCases()
 	{
 		yield return new ContentPublishControllerTestCase(
@@ -32,6 +44,58 @@ public class ContentPublishControllerTests
 
 			Expect.ResultMatching<IActionResult>(
 				result => result is BadRequestObjectResult)
+		);
+
+		yield return new ContentPublishControllerTestCase(
+			name: "Returns Ok when content is valid.",
+
+			Receives.PublishContent(
+				content: BuildExampleContent()),
+
+			Expect.ResultMatching<IActionResult>(
+				result => result is OkObjectResult)
+		);
+
+		yield return new ContentPublishControllerTestCase(
+			name: "Throws ArgumentNullException when logger is null and there are errors in processing.",
+
+			Receives.PublishContent(
+				content: BuildExampleContent()),
+
+			// the extension methods declared on ILogger<T> throw ArgumentNullException
+			When.Logger.Is(null!),
+
+			When.Handler
+				.HandleContentPublish()
+				.Throws(new Exception()),
+
+			Expect.ExceptionToBeThrown<ArgumentNullException>()
+		);
+
+		yield return new ContentPublishControllerTestCase(
+			name: "Calls logger.Log method when errors occur.",
+
+			Receives.PublishContent(
+				content: BuildExampleContent()),
+
+			When.Handler
+				.HandleContentPublish()
+				.Throws(new Exception()),
+
+			Expect.Logger
+				.Log<GenericArgument.AnyType>()
+				.WasCalled()
+		);
+
+		yield return new ContentPublishControllerTestCase(
+			name: "Does not call logger.Log when no errors occur.",
+
+			Receives.PublishContent(
+				content: BuildExampleContent()),
+
+			Expect.Logger
+				.Log<GenericArgument.AnyType>()
+				.WasNotCalled()
 		);
 	}
 }

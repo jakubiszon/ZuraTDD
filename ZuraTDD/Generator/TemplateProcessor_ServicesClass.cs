@@ -19,7 +19,7 @@ internal partial class TemplateProcessor
 			$$"""
 						KeyValuePair.Create<string, Func<MockedObject>>(
 							"{{dependency.DependencyPropertyName}}",
-							() => new {{dependency.MockedFakeTypeName}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
+							() => new {{dependency.MockedType!.MockedFakeTypeName}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
 			""");
 
 		// comma separated dependency factories to pass to DependencyCollection constructor

@@ -39,14 +39,6 @@ internal class DependencySpecification
 	/// </summary>
 	public MockedTypeSpecification? MockedType { get; }
 
-	public string MockedFakeTypeName => $"{DependencyType.TypeName}_Fake";
-
-	public string MockedTypeMethodsTypeName => $"{DependencyType.TypeName}_Methods";
-
-	public string BuilderTypeName => $"{DependencyType.TypeName}_Builder";
-
-	public string ExpectTypeName => $"{DependencyType.TypeName}_Expect";
-
 	/// <summary>
 	/// Namespace containing the mocked type.
 	/// </summary>

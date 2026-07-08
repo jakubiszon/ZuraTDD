@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using ZuraTDD.BuildingBlocks;
 
 namespace ZuraTDD;
 
@@ -9,7 +10,11 @@ namespace ZuraTDD;
 /// <typeparam name="T">Type of value.</typeparam>
 public class ValueConstraint<T> : IValueConstraint<T>
 {
-	private Expression<Func<T, bool>>? valueConstraint;
+	// this is a bit of a hack, there will be a separate static field for each T
+	private static readonly bool dependsOnTypeMatcher = TypeMatcherHelper.DependsOnTypeMatcher<T>();
+
+	private readonly Expression<Func<T, bool>>? valueConstraint;
+
 
 	/// <summary>
 	/// Builds a constraint accepting any value.
@@ -51,7 +56,15 @@ public class ValueConstraint<T> : IValueConstraint<T>
 
 	public bool IsMatching<Tin>(Tin value)
 	{
-		if (value is T typedValue)
+		if (dependsOnTypeMatcher)
+		{
+			// when we match generic method calls against our predefined ITypeMatcher types
+			// we do not want to use value constraints on the actual type instance
+			// the types used in method invocations will never match the ITypeMatcher type
+			// if the call was matched by generic types - there is nothing to check here
+			return true;
+		}
+		else if (value is T typedValue)
 		{
 			return IsMatching(typedValue);
 		}

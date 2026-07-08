@@ -85,7 +85,7 @@ public class GenericTypeParameterSetConstraintTests
 	public void AnyConstraint_MatchesAnyType()
 	{
 		var constraint = new GenericTypeParameterSetConstraint(
-			GenericTypeParameters.Any());
+			new GenericTypeParameterConstraint(typeof(GenericArgument.AnyType)));
 
 		Assert.IsTrue(constraint.Matches([typeof(string)]));
 		Assert.IsTrue(constraint.Matches([typeof(int)]));
@@ -96,7 +96,7 @@ public class GenericTypeParameterSetConstraintTests
 	public void MixedConstraints_MatchesWhenAllSatisfied()
 	{
 		var constraint = new GenericTypeParameterSetConstraint(
-			GenericTypeParameters.Any(),
+			new GenericTypeParameterConstraint(typeof(GenericArgument.AnyType)),
 			new GenericTypeParameterConstraint(typeof(string)));
 
 		Assert.IsTrue(constraint.Matches([typeof(int), typeof(string)]));
@@ -107,7 +107,7 @@ public class GenericTypeParameterSetConstraintTests
 	public void MixedConstraints_DoesNotMatchIfAnyConstraintFails()
 	{
 		var constraint = new GenericTypeParameterSetConstraint(
-			GenericTypeParameters.Any(),
+			new GenericTypeParameterConstraint(typeof(GenericArgument.AnyType)),
 			new GenericTypeParameterConstraint(typeof(string)));
 
 		Assert.IsFalse(constraint.Matches([typeof(int), typeof(int)]));

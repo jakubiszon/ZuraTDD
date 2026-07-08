@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
@@ -16,8 +17,20 @@ internal class DependencySpecification
 		string outputNamespace,
 		IParameterSymbol param)
 	{
+		var namedType = param.Type as INamedTypeSymbol
+			?? param.Type.OriginalDefinition as INamedTypeSymbol;
+
+		DependencyType = namedType != null
+			? new TypeInfo(namedType)
+			: new TypeInfo(param);
+
+		AppliedTypeParamNames = (param.Type as INamedTypeSymbol)
+			?.TypeArguments
+			.Select(t => t.ToDisplayString())
+			.ToArray()
+			?? Array.Empty<string>();
+
 		OutputNamespace = outputNamespace;
-		DependencyType = new TypeInfo(param.Type);
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
 		DependencyPropertyName = param.Name.ToString().Capitalize();
 		IsMockable = param.Type.TypeKind == TypeKind.Interface;
@@ -26,13 +39,16 @@ internal class DependencySpecification
 			? new MockedTypeSpecification(
 				outputNamespace,
 				param)
-			: null as MockedTypeSpecification;
+			: null;
 	}
 
 	/// <summary>
-	/// Name of the mocked type without the namespace.
+	/// Information about the mocked type in its most abstract form.
+	/// No applied generic type parameters are included in this type information.
 	/// </summary>
 	public TypeInfo DependencyType { get; }
+
+	public IReadOnlyCollection<string> AppliedTypeParamNames { get; }
 
 	/// <summary>
 	/// Specification of the mocked type. It will be null if the dependency is not mockable (i.e. it is not an interface).

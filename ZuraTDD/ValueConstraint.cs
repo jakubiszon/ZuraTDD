@@ -11,6 +11,9 @@ namespace ZuraTDD;
 public class ValueConstraint<T> : IValueConstraint<T>
 {
 	// this is a bit of a hack, there will be a separate static field for each T
+	// TODO: a possible optimization could be to not initialize this for every type but only for ones which we know could refer generic type matchers
+	//       one approach could be to define GenericValueConstraint<T>, move this field there, and use that class in generated code when we know the method is generic
+	//       the question is if the use of System.Reflection here is costly enough to justify such change
 	private static readonly bool dependsOnTypeMatcher = TypeMatcherHelper.DependsOnTypeMatcher<T>();
 
 	private readonly Expression<Func<T, bool>>? valueConstraint;

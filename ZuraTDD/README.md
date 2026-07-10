@@ -3,7 +3,7 @@ This project is a testing library for .NET
 
 It is packaged and distributed as ZuraTDD nuget package.
 
-Please refer to the [Readme](./README.md) in the root of the project for more details.
+Please refer to the [Readme](https://github.com/jakubiszon/ZuraTDD/blob/main/README.md) in the root of the project for more details.
 
 Project structure:
 - `ZuraTDD`: The top directory and namespace should only contain classes directly used by the users to mark code to generate.

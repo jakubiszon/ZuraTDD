@@ -238,7 +238,11 @@ Documentation topics:
 This library is still in development and has some limitations:
 
 - No indexer or property support in mocked objects yet.
-- No support for generic methods yet.
+- Partial generic types support:
+    - [x] Generic methods within inside mocked / dependency classes.
+    - [x] Generic mocked / dependency types e.g. `ILogger<TCategoryName>`.
+    - [ ] Generic methods inside test subject classes.
+    - [ ] Generic test subject classes.
 - All classes implementing `IMock<T>` and `ITestCase<T>` need to be placed in the same namespace.
 - All classes implementing `IMock<T>` and `ITestCase<T>` need to be declared as `partial` and `internal`.
 - Max input parameter count for mocked methods is 16 - if you really need more - contributions are welcome :D

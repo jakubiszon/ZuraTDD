@@ -8,6 +8,7 @@
   <Project Path="ExampleProject.Tests/ExampleProject.Tests.csproj" Id="f15c0ff8-7ccd-4915-8493-e5499febb546" />
   <Project Path="ExampleProject.XUnit/ExampleProject.XUnit.csproj" Id="ef3e7b02-4bbe-4362-96ba-56a037815077" />
   <Project Path="ExampleProject/ExampleProject.csproj" />
+  <Project Path="ZuraTDD.CompilationTests/ZuraTDD.CompilationTests.csproj" Id="1ed609c5-63ae-450a-af1b-4a23ba0a3dd0" />
   <Project Path="ZuraTDD.Tests/ZuraTDD.Tests.csproj" Id="ccdda628-5bae-46cc-bc20-545d6beba965" />
   <Project Path="ZuraTDD/ZuraTDD.csproj" Id="091085a7-ebe5-4a36-af66-1e3be8cfe00d" />
 </Solution>

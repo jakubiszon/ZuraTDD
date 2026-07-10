@@ -7,14 +7,14 @@ namespace ExampleProject;
 public class ContentPublishController : ControllerBase
 {
 	private readonly IContentPublishedEventHandler _handler;
-	private readonly ILogger<ContentPublishController> logger;
+	private readonly ILogger<ContentPublishController> _logger;
 
 	public ContentPublishController(
 		IContentPublishedEventHandler handler,
 		ILogger<ContentPublishController> logger)
 	{
 		_handler = handler;
-		this.logger = logger;
+		_logger = logger;
 	}
 
 	[HttpPost("api/content/publish")]
@@ -32,7 +32,7 @@ public class ContentPublishController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			logger.LogError(ex, $"An error occured in {nameof(PublishContent)}");
+			_logger.LogError(ex, "An error occured in {Method}", nameof(PublishContent));
 			return StatusCode(500, "An error occurred while processing the request.");
 		}
 	}

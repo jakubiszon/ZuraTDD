@@ -43,6 +43,7 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="ZuraTDD.Tests" />
+		<InternalsVisibleTo Include="ZuraTDD.CompilationTests" />
 		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 

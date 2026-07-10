@@ -8,6 +8,8 @@ The solution contains the following projects:
 
 - `ZuraTDD`: the main library and code generators.
 - `ZuraTDD.Tests`: tests of ZuraTDD building blocks, not using code generation.
+- `ZuraTDD.CompilationTests`: tests of the `DataModel` objects (ones used internally by the generators), involving a manually triggered compilation process.
+  Note: This project is especially useful to debug the `DataModel` classes.
 - `ExampleProject`: an example project with some classes and abstractions to test.
 - `ExampleProject.Tests`: tests for the example project, using ZuraTDD code generation and the MSTest.
 - `ExampleProject.XUnit`: a tiny project used to ensure the library is compatible with XUnit framework.

@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+
+namespace MyApp;
+
+public interface IGenericConverter<T>
+	: IGenericSomething<T, int>
+	, IGenericSomething<double, decimal>
+	where T : new()
+{
+}
+
+public interface IGenericSomething<T1, T2>
+{
+	T2 ExampleMethod(T1 input);
+
+	int CountSomething();
+}
+
+public interface IMyStringCollection : IList<string>
+{
+}

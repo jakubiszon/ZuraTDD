@@ -36,9 +36,4 @@ public class ContentPublishController : ControllerBase
 			return StatusCode(500, "An error occurred while processing the request.");
 		}
 	}
-
-	public int Add(int x, int y)
-	{
-		return x + y;
-	}
 }

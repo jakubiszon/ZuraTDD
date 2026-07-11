@@ -239,7 +239,7 @@ This library is still in development and has some limitations:
 
 - No indexer or property support in mocked objects yet.
 - Partial generic types support:
-    - [x] Generic methods within inside mocked / dependency classes.
+    - [x] Generic methods inside mocked / dependency classes.
     - [x] Generic mocked / dependency types e.g. `ILogger<TCategoryName>`.
     - [ ] Generic methods inside test subject classes.
     - [ ] Generic test subject classes.

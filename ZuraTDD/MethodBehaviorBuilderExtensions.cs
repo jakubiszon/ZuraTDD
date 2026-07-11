@@ -170,6 +170,10 @@ public static class MethodBehaviorBuilderExtensions
 		return testParts.OfType<IDependencyConfiguration>();
 	}
 
+	/// <summary>
+	/// Returns named dependency setup objects which match the specified dependency name.
+	/// This method is used by the generated code to filter behaviors for specific dependencies.
+	/// </summary>
 	public static IEnumerable<BehaviorSetup> OnlyBehaviorsWithName(
 		this IEnumerable<INamedDependencySetup> dependencySetup,
 		string dependencyName)

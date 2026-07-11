@@ -1,6 +1,4 @@
-﻿namespace ZuraTDD.Tests;
-
-#if DEBUG
+namespace ZuraTDD.Tests;
 
 [TestClass]
 public class ThrowBehaviorTests
@@ -15,6 +13,12 @@ public class ThrowBehaviorTests
 		var behavior = new ThrowBehavior<Func<Exception>>(exceptionFactory);
 	}
 
+#if DEBUG
+	/// <summary>
+	/// Ensures that a factory method passed to <see cref="ThrowBehavior" /> declares exactly
+	/// <see cref="Exception" /> as its return type.
+	/// This test is only run in debug mode.
+	/// </summary>
 	[TestMethod]
 	public void Constructor_InvalidExceptionFactory_Throws()
 	{
@@ -26,6 +30,10 @@ public class ThrowBehaviorTests
 			() => new ThrowBehavior<Func<TestException>>(exceptionFactory));
 	}
 
+	/// <summary>
+	/// Ensures that a void method passed to <see cref="ThrowBehavior" /> is not accepted.
+	/// This test is only run in debug mode.
+	/// </summary>
 	[TestMethod]
 	public void Constructor_NonReturningExceptionFactory_Throws()
 	{
@@ -36,6 +44,5 @@ public class ThrowBehaviorTests
 		Assert.Throws<InvalidOperationException>(
 			() => new ThrowBehavior<Action>(action));
 	}
-}
-
 #endif
+}

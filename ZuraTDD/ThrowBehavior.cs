@@ -15,7 +15,7 @@ public class ThrowBehavior<TExceptionFactory> : IThrowBehavior
 
 	public TExceptionFactory ExceptionFactory { get; }
 
-	// TODO: if the constructor is guaranteed to be called from generated code, we can skip this validation and just assume the return type is correct.
+	// TODO: if the constructor is guaranteed to be called only from generated code, we can skip this validation and just assume the return type is correct.
 	// TODO: if the constructor could be called from user-code - it would be better to use a compile time analyser to output an error.
 	private static void ValidateExceptionFactoryReturnType()
 	{

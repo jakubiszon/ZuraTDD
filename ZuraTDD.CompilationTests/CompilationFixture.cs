@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace ZuraTDD.CompilationTests;
 
-[SetUpFixture]
+[TestClass]
 public class CompilationFixture
 {
 	internal static CSharpCompilation? Compilation { get; private set; } = null;
@@ -13,8 +13,8 @@ public class CompilationFixture
 	/// </summary>
 	internal static INamespaceSymbol? TestNamespace { get; private set; } = null;
 
-	[OneTimeSetUp]
-    public void RunBeforeAnyTests()
+	[AssemblyInitialize]
+    public static void RunBeforeAnyTests(TestContext context)
     {
 		var sourceCode = File.ReadAllText("Test.cs.txt");
 
@@ -34,8 +34,8 @@ public class CompilationFixture
 		TestNamespace = FindNamespace(Compilation, "MyApp");
     }
 
-    [OneTimeTearDown]
-    public void RunAfterAnyTests()
+    [AssemblyCleanup]
+    public static void RunAfterAnyTests()
     {
 		// actually there is nothing to dispose
     }

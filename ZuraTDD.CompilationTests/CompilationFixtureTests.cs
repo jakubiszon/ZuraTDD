@@ -2,9 +2,10 @@ using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.CompilationTests;
 
+[TestClass]	
 public class CompilationFixtureTests
 {
-	[Test]
+	[TestMethod]
 	public void Compilation_ShouldNotHaveErrors()
 	{
 		if (CompilationFixture.Compilation == null)
@@ -21,7 +22,7 @@ public class CompilationFixtureTests
 		}
 	}
 
-	[Test]
+	[TestMethod]
 	public void TestNamespace_ShouldNotBeNull()
 	{
 		if (CompilationFixture.TestNamespace == null)

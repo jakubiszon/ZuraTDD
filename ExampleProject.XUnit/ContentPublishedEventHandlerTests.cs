@@ -1,9 +1,9 @@
 using ExampleProject.Model;
 using ZuraTDD;
-using static ExampleProject.XUnit.ContentPublishedEventHandlerTestCase;
 
 namespace ExampleProject.XUnit;
 
+[ZuraTestClass<ContentPublishedEventHandler>]
 public partial class ContentPublishedEventHandlerTests
 {
 	private static readonly Content exampleContent = new(
@@ -22,8 +22,7 @@ public partial class ContentPublishedEventHandlerTests
 	/// Defines and tests the standard "happy path" for the
 	/// <see cref="ContentPublishedEventHandler.HandleContentPublish" />
 	/// </summary>
-	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Handle - sends email to customers when content is published.")]
+	[ZuraTest("Handle - sends email to customers when content is published.")]
 	public ITestPart[] HandleStandardBehaviors => [
 		Receives.HandleContentPublish(exampleContent),
 
@@ -44,8 +43,7 @@ public partial class ContentPublishedEventHandlerTests
 			.WasNotCalled()
 	];
 
-	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Throws when CustomerRepository.ListByInterests throws.")]
+	[ZuraTest("Throws when CustomerRepository.ListByInterests throws.")]
 	public ITestPart[] ThrowsTest_WhenListByInterestsThrows() => [
 		Receives.HandleContentPublish(exampleContent),
 
@@ -62,8 +60,7 @@ public partial class ContentPublishedEventHandlerTests
 	// this is a demonstration of reusing test parts defined in another method
 	// the highlight of this test is that it only needs to specify the deviation from the standard behavior
 	// and the expectation of the test
-	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Throws when EmailSender.SendEmail throws.")]
+	[ZuraTest("Throws when EmailSender.SendEmail throws.")]
 	public ITestPart[] ThrowsTest1() => [
 		Receives.HandleContentPublish(exampleContent),
 

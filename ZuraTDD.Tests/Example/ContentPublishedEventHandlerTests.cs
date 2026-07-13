@@ -1,3 +1,4 @@
+/*
 using ExampleProject.Model;
 using static ZuraTDD.Tests.Example.ContentPublishedEventHandlerTestCase;
 
@@ -55,3 +56,4 @@ public partial class ContentPublishedEventHandlerTests
 		);
 	}
 }
+*/

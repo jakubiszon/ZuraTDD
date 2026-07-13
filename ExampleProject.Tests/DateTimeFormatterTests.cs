@@ -4,9 +4,10 @@ using static ExampleProject.Tests.DateTimeFormatterTestCase;
 namespace ExampleProject.Tests;
 
 [TestClass]
+[ZuraTestClass<DateTimeFormatter>]
 public partial class DateTimeFormatterTests
 {
-	[ZuraTest<DateTimeFormatterTestCase>("ZuraTest - IS - passes value and abstract dependencies.")]
+	[ZuraTest("ZuraTest - IS - passes value and abstract dependencies.")]
 	private ITestPart[] FormatNowSteps => [
 		Receives.GetFormattedDateTime(),
 

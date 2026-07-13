@@ -1,12 +1,14 @@
+using ExampleProject.Insanity;
 using ZuraTDD;
 using static ExampleProject.Tests.GenericMethodConsumerTestCase;
 
 namespace ExampleProject.Tests;
 
 [TestClass]
+[ZuraTestClass<GenericMethodConsumer>]
 public partial class GenericMethodConsumerTests
 {
-	[ZuraTest<GenericMethodConsumerTestCase>("Calling generic method without where.")]
+	[ZuraTest("Calling generic method without where.")]
 	private ITestPart[] CallingGenericMethodWithoutWhere => [
 		Receives.SomeMethod(1),
 
@@ -24,7 +26,7 @@ public partial class GenericMethodConsumerTests
 			.WasNotCalled(),
 	];
 
-	[ZuraTest<GenericMethodConsumerTestCase>("Calling generic method with where.")]
+	[ZuraTest("Calling generic method with where.")]
 	private ITestPart[] CallingGenericMethodWithWhere => [
 		Receives.SomeMethod(2),
 

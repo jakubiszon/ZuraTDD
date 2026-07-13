@@ -1,19 +1,20 @@
-# `ZuraTest` attribute
-It is recommended to write your test using the `ZuraTest` attribute.
+# `ZuraTestClass`  and `ZuraTest` attributes
+It is recommended to write your test using the `ZuraTest` and `ZuraTestClass` attributes.
 It will create the test and the code invoking the `TestCase` for you.
 Your task will be to return the `ITestPart`-s that will be run as part of the test.
 You place this attribute on either methods or properties which return `ITestPart[]` or `IEnumerable<ITestPart>`.
 
-Using this attribute requires you to specify the `TestCase` type as its generic param
+Using these attribute requires you to specify the `TestCase` type as the generic param of `ZuraTestClass`
 as well as a name for the test to show in the test explorer.
 The class which declares methods or properties with this attribute must be marked as `partial`.
 If you are using *MsTest* - the class must also be marked with the `[TestClass]` attribute
 
 ```csharp
-[TestClass] // required for MSTest
+[TestClass] // required for MSTest, if you use XUnit you will not need this line
+[ZuraTestClass<TestedClass>] // specifies the class which you want to test
 public partial class MyTestCaseTests
 {
-    [ZuraTest<TestCaseClass>("Test name shown in the text explorer.")
+    [ZuraTest("Test name shown in the text explorer.")
     ITestPart[] Method_TestParts => [
         // declare test parts here
     ];

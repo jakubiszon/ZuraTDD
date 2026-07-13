@@ -8,40 +8,56 @@ A testing / mocking library designed to write concise, declarative **unit-tests*
 
 What ZuraTDD does for you:
 - It reduces boilerplate code when setting up tests:
-    - Uses code generators to create *mocks* and *test case* objects.
-    - `TestCase` objects expose builders letting you focus purely on tests logic.
-    - `Mock` objects use builders to help focusing on data which is relevant to the test.
-    - Creating *test subject* and *fake* instances is done by the generator
-      freeing you from repeating the same code in every test.
-- It allows expressing conditions and expectations clearly.
+    - Its code generators create objects testing your code.
+    - You get `Receives` builder to specify what method is under test and how it is invoked.
+    - You get `When` builder to make expressing dependency behaviors easy.
+    - You get `Expect` builder which make it trivial to tell what your code is expected to do.
+    - Creating *fake* objects, the *test subject* class and connecting things together to test *expected outcomes* is done by the generator.
 - It helps making tests serve as documentation for the codebase.
-- It can be used with MSTest, NUnit, xUnit or any other test framework.
 - It makes it much easier to employ red-green-refactor TDD approach in your development process.
 - It does not add extra dependencies to your codebase. Only `Microsoft.CodeAnalysis` packages are used by this library.
+- It can be used with MSTest, NUnit, xUnit or any other test framework.
 
-The codebase is still in early stages of development, but the main concepts are already implemented and can be used in tests.
-Some of the limitations of this project are listed at the end of the readme.
+Note: ZuraTDD is still in development but its public API is not planned to change. Some of the limitations of this project are listed at the end of the readme.
 
 Check out the [repository](https://github.com/jakubiszon/ZuraTDD) on GitHub.
 
-## Test Cases
-You can use ZuraTDD to create `TestCase` classes.
-Your test-case classes will receive auto-generated test *builders* which help you express:
-- method called and tested on the class which is the subject of the test-case - defined using `Receives` builder
-- test-subject dependency behaviors - defined using `When` builder
-- expectations for test-subject's interactions with its dependencies as well as expectations for
-  the result returned from the tested method - defined with `Expect` builder
+## Quick Start
+1) Install the nuget package.
+    ```
+    dotnet add package ZuraTDD --version 1.0.8
+    ```
+1) Decorate a test class with `ZuraTestClass` attribute:
+    ```cs
+    // tells ZuraTDD to generate builders for the MyTodosController class
+    [ZuraTestClass<MyTodosController>]
+    public partial class MyTestClass
+    {
+    }
+    ```
+1) Inside your test class - define a test using `ZuraTest` attribute:
+    ```cs
+    // tells ZuraTDD to use this member as a source of test steps
+    [ZuraTest("CreateTodo - when no errors - succeeds.")]
+    private ITestPart[] CreateTodo_SuccessPath => [
+        // Receives builder is auto-generated, use it to tell what method to test
+        Receives.CreateTodo(payload: new TodoModel(...)),
 
-```csharp
-// Declare an internal partial class which implements ITestCase<T>
-// The type parameter is the class to test.
-internal partial class SendEmailControllerTestCase
-    : ITestCase<SendEmailController>
-{
-}
-```
+        // When builder is used to tell how do dependencies behave
+        When.TodoRepository.Exists() // skipping parameters will match any call to .Exists()
+            .ReturnsInTask(false),
 
-If the `SendEmailController` has following signature:
+        When.TodoRepository.Insert() // skipping params, matching any call to .Insert()
+            .Returns(Task.CompletedTask),
+
+        Expect.ResultMatching<StatusCodeResult>(result => result.StatusCode == 201),
+    ];
+    ```
+    That's it - you have a working test!
+
+## More complex example
+
+If we wanted to test the following class:
 ```csharp
 public class SendEmailController(
     // generated dependencies will use names used by constructor parameters
@@ -56,19 +72,16 @@ public class SendEmailController(
 }
 ```
 
-Now you get auto-generated code for setting up mocks and can now write tests like this:
+We could define the test class like this:
 
 ```csharp
-// static import - easy access to "Received", "When" and "Expect" classes
-// which were generated for the test case
-using static SendEmailControllerTestCase;
 using ZuraTDD;
 
 [TestClass]
+[ZuraTestClass<SendEmailController>]
 public partial class SendEmailControllerTests
 {
-    [ZuraTest<SendEmailControllerTestCase>(
-        "SendEmailToCustomer throws when EmailSender throws.")]
+    [ZuraTest("SendEmailToCustomer throws when EmailSender throws.")]
     public static IEnumerable<ITestPart> SendEmailToCustomer_ThrowsWhenEmailSenderThrows()
     => [
         // first - specify what call the test subject receives
@@ -98,8 +111,7 @@ public partial class SendEmailControllerTests
         // we set no return-value expectations, because the method was expected to throw
     ];
 
-    [ZuraTest<SendEmailControllerTestCase>(
-        "SendEmailToCustomer sends an email using customer data.")]
+    [ZuraTest("SendEmailToCustomer sends an email using customer data.")]
     public static IEnumerable<ITestPart> SendEmailToCustomer_SendsEmailUsingCustomerData()
     => [
         // first - specify what call the test subject receives
@@ -141,97 +153,19 @@ public partial class SendEmailControllerTests
 }
 ```
 
-## Mocking
-You can also use ZuraTDD to mock objects directly. You will get the same kind of builders as the ones used for dependencies in the `When` builder of the `TestCase` objects.
-
-```csharp
-// Declare an internal partial class implementing IMock<T>.
-internal partial class MyMock
-    : IMock<IMyInterface>
-{
-}
-```
-Assuming the `IMyInterface` has the following signature:
-```csharp
-public interface IMyInterface
-{
-    Customer GetCustomer(int id);
-}
-```
-
-
-You can use it in your tests:
-```csharp
-[TestMethod]
-public void MyTest()
-{
-    // setup - is used to define behaviors
-    // buildInstance - creates an instance of IMyInterface after the setup is completed
-    // buildExpect - creates an expect object to verify calls to the IMyInterface instance
-    var (setup, buildInstance, buildExpect) = new MyMock();
-
-    // most specific filters go first
-    setup.GetCustomer(id: 1)
-        .Returns(new Customer(1, "Ivan", "Katrump"));
-
-    // you can also use expressions to match parameters values
-    setup.GetCustomer(id: new(x => x > 1 && x < 10))
-        .Returns(new Customer(2, "Kama", "Laharris"));
-
-    // the widest filters / "match all" should go last
-    // all parameters can be skipped if you don't want to match them
-    setup.GetCustomer()
-        .Throws(() => new ExampleException());
-
-    // build the mocked object instance - this should always be called after setting up behaviors
-    // it should be passed to tested code as a dependency
-    // but here we will play with it directly to show how it works
-    var myInterfaceInstance = buildInstance();
-
-    // this call matches the first behavior-setup
-    // it will return Ivan Katrump customer instance
-    var ivan = myInterfaceInstance.GetCustomer(1);
-    Assert.AreEqual("Ivan", ivan.FirstName);
-
-    // the following call matches the last behavior-setup
-    // and results in an exception
-    Assert.ThrowsException<ExampleException>(
-        () => myInterfaceInstance.GetCustomer(11));
-
-    // build expect object - it allows checking calls and parameter values
-    // which the mocked object received
-    var expect = buildExpect();
-    expect.GetCustomer(id: new(x => x < 20)
-        .WasCalled(times: 2);
-
-    // id == 777 was not used
-    expect.GetCustomer(id: 777)
-        .WasNotCalled();
-
-    // parameters can be ignored when specifying expectations
-    // ignoring all parameters will "count all calls to the method"
-    // NOTE: this check will fail because we called the method 2 times, not 3
-    expect.GetCustomer()
-        .WasCalled(times: 3);
-}
-```
 ## Documentation
 
-Installation is simple - just add the package to your test project:
-```sh
-# Install from NuGet.org
-dotnet add package ZuraTDD
-```
-
-Documentation topics:
 - [Behaviors](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Behaviors.md)
+- [Expectations](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Expect.md)
 - [Matching calls](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/CallMatching.md)
-- [Expectations](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Expect.md) ⚠️ section under construction
-- [`ZuraTest` attribute](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/ZuraTest.md)
-- [Test Cases](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/TestCases.md)
-- [Mocking](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Mocking.md) ⚠️ section under construction
-- [Code navigation](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Navigation.md) ⚠️ section under construction
+- [`ZuraTest` and `ZuraTestClass` attributes](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/ZuraTest.md)
 - [IDE errors](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/IDEErrors.md) ⚠️ section under construction
+- [Testing framework integration](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Frameworks.md)
+- [Code navigation](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Navigation.md) ⚠️ section under construction
+
+More advanced features which might not be necessary for every user:
+- [Mocking](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/Mocking.md) - using custom mock objects not generated by default when `ZuraTestClass` are implemented.
+- [Test Cases](https://github.com/jakubiszon/ZuraTDD/blob/main/Documentation/TestCases.md) - using ZuraTDD to create TestCase classes only.
 
 
 ## Limitations
@@ -252,7 +186,7 @@ This library is still in development and has some limitations:
 Some of the above are planned in the near future, but feel free to contribute if you want to see them sooner.
 
 ## Contributing
-Contributions are welcome! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines.
+Contributions are welcome! Please see the [CONTRIBUTING.md](https://github.com/jakubiszon/ZuraTDD/blob/main/CONTRIBUTING.md) file for guidelines.
 
 ## License
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details

@@ -26,6 +26,15 @@ setup.SomeMethod(
 
 ## Getting behavior builders
 You can aquire behavior builders in multiple ways:
+- When using `ZuraTestClass` attribute - this is the simplest case.
+  ```csharp
+  [ZuraTestClass<MyClass>]
+  public partial class MyClassTests
+  {
+      // a static When class containing behavior builders for all dependencies of MyClass
+      // will be generated inside this class
+  }
+  ```
 - When using `Mock` objects - you get a `setup` object for your mocks:
   ```csharp
   // first you need to define what will be mocked
@@ -45,7 +54,9 @@ You can aquire behavior builders in multiple ways:
       // nothing more to do, test-case code will be generated
   }
 
-  // using static MyTestCase <- this is recommended to access "When" builder easily
+  // in the class defining the tests
+  using static MyTestCase; // this is recommended to access "When" builder easily
+
   // in your test methods
   var testCase = new MyTestCase(
       // setup behaviors in MyTestCase constructor
@@ -145,7 +156,7 @@ setup.ValueTaskMethod()
 ```
 
 ## The `.Is` function
-The `.Is` function is only available when using the builders prepared for objects marked with `ITestCase`.
+The `.Is` function is only available when using the builders prepared for objects marked with `ZuraTestClass` or `ITestCase`.
 It is useful in a couple scenarios:
 
 - Tested object accepts non-mockable dependencies (e.g. a sql client class which accepts `string connectionString` as its constructor param)

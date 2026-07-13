@@ -8,7 +8,7 @@ namespace ZuraTDD.TestGenerator.DataModel;
 internal class TestSpecification
 {
 	/// <summary>
-	/// Name of the namespace containing the type receiving the generatyed code.
+	/// Name of the namespace containing the type receiving the generated code.
 	/// </summary>
 	public string OutputNamespace { get; }
 
@@ -18,7 +18,7 @@ internal class TestSpecification
 	public string OutputTypeName { get; }
 
 	/// <summary>
-	/// Name of the property or method decorated with the <see cref="ZuraTest{T}"/>.
+	/// Name of the property or method decorated with the <see cref="ZuraTest"/>.
 	/// </summary>
 	public string TestPartSourceName { get; }
 
@@ -36,7 +36,7 @@ internal class TestSpecification
 	public string OutputFileName => $"{OutputTypeName}_{TestPartSourceName}.test.generated.cs";
 
 	/// <summary>
-	/// Name of the type referenced in the <see cref="ZuraTest{T}"/> attribute.
+	/// Fully qualified name of the TestCase class to use for the generated test.
 	/// </summary>
 	public string TestCaseClassName { get; }
 
@@ -45,7 +45,8 @@ internal class TestSpecification
 	public TestSpecification(
 		IMethodSymbol methodSymbol,
 		AttributeData attributeData,
-		TestFramework testFramework)
+		TestFramework testFramework,
+		string testCaseClassName)
 	{
 		TestName = attributeData.ConstructorArguments[0].Value as string ?? "Unnamed test";
 		OutputNamespace = methodSymbol.ContainingNamespace.ToDisplayString();
@@ -53,18 +54,14 @@ internal class TestSpecification
 		TestPartSourceName = methodSymbol.Name;
 		IsSourceMethod = true;
 		TestFramework = testFramework;
-
-		TestCaseClassName = attributeData
-			.AttributeClass
-			?.TypeArguments[0]
-			.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining))
-			?? "UnknownTestCase";
+		TestCaseClassName = testCaseClassName;
 	}
 
 	public TestSpecification(
 		IPropertySymbol propertySymbol,
 		AttributeData attributeData,
-		TestFramework testFramework)
+		TestFramework testFramework,
+		string testCaseClassName)
 	{
 		TestName = attributeData.ConstructorArguments[0].Value as string ?? "Unnamed test";
 		OutputNamespace = propertySymbol.ContainingNamespace.ToDisplayString();
@@ -72,11 +69,6 @@ internal class TestSpecification
 		TestPartSourceName = propertySymbol.Name;
 		IsSourceMethod = false;
 		TestFramework = testFramework;
-
-		TestCaseClassName = attributeData
-			.AttributeClass
-			?.TypeArguments[0]
-			.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining))
-			?? "UnknownTestCase";
+		TestCaseClassName = testCaseClassName;
 	}
 }

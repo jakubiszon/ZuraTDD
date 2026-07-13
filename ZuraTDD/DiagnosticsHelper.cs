@@ -83,4 +83,36 @@ internal static class DiagnosticsHelper
 			location,
 			propertySymbol.Name);
 	}
+
+	public static Diagnostic ZuraTest_MustBeInZuraTestClass(
+		IMethodSymbol methodSymbol,
+		Location? location)
+	{
+		return Diagnostic.Create(
+			new DiagnosticDescriptor(
+				id: "ZURA006",
+				title: "Non-generic ZuraTest must be inside a class decorated with [ZuraTestClass<T>]",
+				messageFormat: "Method '{0}' decorated with non-generic [ZuraTest] must be inside a class decorated with [ZuraTestClass<T>]",
+				category: "ZuraTDD.TestGenerator",
+				defaultSeverity: DiagnosticSeverity.Error,
+				isEnabledByDefault: true),
+			location,
+			methodSymbol.Name);
+	}
+
+	public static Diagnostic ZuraTest_MustBeInZuraTestClass(
+		IPropertySymbol propertySymbol,
+		Location? location)
+	{
+		return Diagnostic.Create(
+			new DiagnosticDescriptor(
+				id: "ZURA006",
+				title: "Non-generic ZuraTest must be inside a class decorated with [ZuraTestClass<T>]",
+				messageFormat: "Property '{0}' decorated with non-generic [ZuraTest] must be inside a class decorated with [ZuraTestClass<T>]",
+				category: "ZuraTDD.TestGenerator",
+				defaultSeverity: DiagnosticSeverity.Error,
+				isEnabledByDefault: true),
+			location,
+			propertySymbol.Name);
+	}
 }

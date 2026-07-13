@@ -1,6 +1,5 @@
 using ExampleProject.Insanity;
 using ZuraTDD;
-using static ExampleProject.Tests.GenericMethodConsumerTestCase;
 
 namespace ExampleProject.Tests;
 

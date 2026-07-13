@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ZuraTDD;
-using static ExampleProject.Tests.BulkContentEditControllerTestCase;
 
 namespace ExampleProject.Tests;
 
 [TestClass]
+[ZuraTestClass<BulkContentEditController>]
 public partial class BulkContentEditControllerTests
 {
-	[ZuraTest<BulkContentEditControllerTestCase>("EditBulkContent - when no errors - commits transaction")]
+	[ZuraTest("EditBulkContent - when no errors - commits transaction")]
 	public ITestPart[] EditBulkContent_HappyPathSteps => [
 		Receives.EditBulkContent(),
 
@@ -25,7 +22,7 @@ public partial class BulkContentEditControllerTests
 		Expect.ResultMatching<IActionResult>(result => result is OkResult),
 	];
 
-	[ZuraTest<BulkContentEditControllerTestCase>("EditBulkContent - when UpdateMany throws - rolls back transaction")]
+	[ZuraTest("EditBulkContent - when UpdateMany throws - rolls back transaction")]
 	public ITestPart[] EditBulkContent_UpdateManyThrows => [
 		Receives.EditBulkContent(),
 

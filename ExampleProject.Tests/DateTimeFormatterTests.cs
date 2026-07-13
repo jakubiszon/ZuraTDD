@@ -1,5 +1,4 @@
 using ZuraTDD;
-using static ExampleProject.Tests.DateTimeFormatterTestCase;
 
 namespace ExampleProject.Tests;
 

@@ -18,4 +18,7 @@ internal record SourceFileToGenerate
 		FileName = fileName;
 		GeneratorFunction = generatorFunction;
 	}
+
+	public static implicit operator SourceFileOrDiagnostic(SourceFileToGenerate sourceFile) =>
+		new SourceFileOrDiagnostic(sourceFile);
 }

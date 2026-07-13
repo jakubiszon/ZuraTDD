@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ZuraTDD.Generator;
 
@@ -8,7 +9,7 @@ namespace ZuraTDD.Generator;
 /// </summary>
 internal class SourceFilesToCreate
 {
-	private readonly Dictionary<string, SourceFileToGenerate> sourceGenerators = [];
+	private readonly List<SourceFileOrDiagnostic> sourceGenerators = [];
 
 	/// <summary>
 	/// Adds a source file with the specified name and content generator function,
@@ -23,11 +24,7 @@ internal class SourceFilesToCreate
 		Func<T, string> generatorFunc,
 		T data)
 	{
-		if(sourceGenerators.ContainsKey(fileName))
-			return;
-
 		sourceGenerators.Add(
-			fileName,
 			new SourceFileToGenerate(
 				fileName,
 				() => generatorFunc(data)));
@@ -37,10 +34,18 @@ internal class SourceFilesToCreate
 	{
 		foreach (var file in files)
 		{
-			sourceGenerators.Add(file.FileName, file);
+			sourceGenerators.Add(file);
 		}
 	}
 
-	public IEnumerable<SourceFileToGenerate> GetFilesToGenerate()
-		=> sourceGenerators.Values;
+	public void AddFiles(IEnumerable<SourceFileOrDiagnostic> files)
+	{
+		foreach (var file in files)
+		{
+			sourceGenerators.Add(file);
+		}
+	}
+
+	public IEnumerable<SourceFileOrDiagnostic> GetItems()
+		=> sourceGenerators;
 }

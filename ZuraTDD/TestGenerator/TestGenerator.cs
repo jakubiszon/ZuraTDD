@@ -8,7 +8,7 @@ using ZuraTDD.TestGenerator.DataModel;
 namespace ZuraTDD.TestGenerator;
 
 /// <summary>
-/// Generates implementations for methods decorated with <see cref="ZuraTest{T}" /> attribute.
+/// Generates implementations for methods decorated with <see cref="ZuraTest" /> attribute.
 /// </summary>
 [Generator(LanguageNames.CSharp)]
 public class TestGenerator : IIncrementalGenerator
@@ -76,16 +76,8 @@ public class TestGenerator : IIncrementalGenerator
 		var methodSymbol = ctx.SemanticModel.GetDeclaredSymbol(methodSyntax) as IMethodSymbol;
 		if (methodSymbol == null) return null;
 
-		foreach (var attr in methodSymbol.GetAttributes())
-		{
-			if (attr.AttributeClass?.ContainingNamespace.ToDisplayString() != nameof(ZuraTDD))
-				continue;
-
-			if (attr.AttributeClass.Name != nameof(ZuraTest<>))
-				continue;
-
+		if (HasZuraTestAttribute(methodSymbol))
 			return methodSymbol;
-		}
 
 		return null;
 	}
@@ -97,24 +89,30 @@ public class TestGenerator : IIncrementalGenerator
 		var propertySymbol = ctx.SemanticModel.GetDeclaredSymbol(propertySyntax) as IPropertySymbol;
 		if (propertySymbol == null) return null;
 
-		foreach (var attr in propertySymbol.GetAttributes())
-		{
-			if (attr.AttributeClass?.ContainingNamespace.ToDisplayString() != nameof(ZuraTDD))
-				continue;
-
-			if (attr.AttributeClass.Name != nameof(ZuraTest<>))
-				continue;
-
+		if (HasZuraTestAttribute(propertySymbol))
 			return propertySymbol;
-		}
 
 		return null;
 	}
 
+	private static bool HasZuraTestAttribute(ISymbol memberSymbol)
+	{
+		foreach (var attr in memberSymbol.GetAttributes())
+		{
+			if (attr.AttributeClass?.ContainingNamespace.ToDisplayString() != nameof(ZuraTDD))
+				continue;
+
+			if (attr.AttributeClass.Name == nameof(ZuraTest))
+				return true;
+		}
+
+		return false;
+	}
+
 	/// <summary>
-	/// Verifies that the methodSymbol derotated with <see cref="ZuraTest{T}" /> has the correct structure:
+	/// Verifies that the methodSymbol decorated with <see cref="ZuraTest" /> has the correct structure:
 	/// <list type="bullet">
-	/// <item>Generic type argument must implement <see cref="ITestCase{T}" /></item>
+	/// <item>Is inside a class marked as <see cref="ZuraTestClass{TSubject}" /></item>
 	/// <item>Method must take no parameters</item>
 	/// <item>Method must return <see cref="IEnumerable{ITestPart}" /> or <see cref="ITestPart" />[]</item>
 	/// </list>
@@ -143,16 +141,12 @@ public class TestGenerator : IIncrementalGenerator
 			return new ZuraTestAnalysis(diagnosticMessage);
 		}
 
-		// Check if generic type argument implements ITestCase
-		if (zuraTestAttr.AttributeClass?.TypeArguments.Length > 0)
+		var containingClass = methodSymbol.ContainingType;
+		var testCaseClassName = InferTestCaseFromZuraTestClass(containingClass, metadata);
+		if (testCaseClassName == null)
 		{
-			var typeArgument = zuraTestAttr.AttributeClass.TypeArguments[0];
-
-			if (!ImplementsInterface(typeArgument, metadata.ZuraTDD_ITestCase))
-			{
-				var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectTypeArgument(typeArgument, location);
-				return new ZuraTestAnalysis(diagnosticMessage);
-			}
+			var diagnosticMessage = DiagnosticsHelper.ZuraTest_MustBeInZuraTestClass(methodSymbol, location);
+			return new ZuraTestAnalysis(diagnosticMessage);
 		}
 
 		// Check if method returns IEnumerable<ITestPart> or ITestPart[]
@@ -167,15 +161,16 @@ public class TestGenerator : IIncrementalGenerator
 		var testSpecification = new TestSpecification(
 			methodSymbol,
 			zuraTestAttr,
-			metadata.TestFramework);
+			metadata.TestFramework,
+			testCaseClassName);
 
 		return new ZuraTestAnalysis(testSpecification);
 	}
 
 	/// <summary>
-	/// Verifies that the propertySymbol derotated with <see cref="ZuraTest{T}" /> has the correct structure:
+	/// Verifies that the propertySymbol decorated with <see cref="ZuraTest" /> has the correct structure:
 	/// <list type="bullet">
-	/// <item>Generic type argument must implement <see cref="ITestCase{T}" /></item>
+	/// <item>Is inside a class marked as <see cref="ZuraTestClass{TSubject}" /></item>
 	/// <item>Property must not be an indexer</item>
 	/// <item>Property must return <see cref="IEnumerable{ITestPart}" /> or <see cref="ITestPart" />[]</item>
 	/// </list>
@@ -204,16 +199,38 @@ public class TestGenerator : IIncrementalGenerator
 			return new ZuraTestAnalysis(diagnosticMessage);
 		}
 
-		// Check if generic type argument implements ITestCase
-		if (zuraTestAttr.AttributeClass?.TypeArguments.Length > 0)
+		// Determine the TestCase class name
+		string testCaseClassName;
+		bool isGeneric = zuraTestAttr.AttributeClass?.TypeArguments.Length > 0;
+
+		if (isGeneric)
 		{
-			var typeArgument = zuraTestAttr.AttributeClass.TypeArguments[0];
+			// Generic ZuraTest<T> - validate that T implements ITestCase<T>
+			var typeArgument = zuraTestAttr.AttributeClass!.TypeArguments[0];
 
 			if (!ImplementsInterface(typeArgument, metadata.ZuraTDD_ITestCase))
 			{
 				var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectTypeArgument(typeArgument, location);
 				return new ZuraTestAnalysis(diagnosticMessage);
 			}
+
+			testCaseClassName = typeArgument.ToDisplayString(
+				SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(
+					SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
+		}
+		else
+		{
+			// Non-generic ZuraTest - infer TestCase from containing class's [ZuraTestClass<T>]
+			var containingClass = propertySymbol.ContainingType;
+			var inferredTestCase = InferTestCaseFromZuraTestClass(containingClass, metadata);
+
+			if (inferredTestCase == null)
+			{
+				var diagnosticMessage = DiagnosticsHelper.ZuraTest_MustBeInZuraTestClass(propertySymbol, location);
+				return new ZuraTestAnalysis(diagnosticMessage);
+			}
+
+			testCaseClassName = inferredTestCase;
 		}
 
 		// Check if property returns IEnumerable<ITestPart> or ITestPart[]
@@ -228,9 +245,41 @@ public class TestGenerator : IIncrementalGenerator
 		var testSpecification = new TestSpecification(
 			propertySymbol,
 			zuraTestAttr,
-			metadata.TestFramework);
+			metadata.TestFramework,
+			testCaseClassName);
 
 		return new ZuraTestAnalysis(testSpecification);
+	}
+
+	/// <summary>
+	/// Attempts to infer the TestCase class name from the containing class's [ZuraTestClass&lt;TSubject&gt;] attribute.
+	/// Convention: {SubjectTypeName}TestCase in the same namespace as the containing class.
+	/// </summary>
+	private static string? InferTestCaseFromZuraTestClass(
+		INamedTypeSymbol containingClass,
+		CompilationMetadata metadata)
+	{
+		if (metadata.ZuraTDD_ZuraTestClass == null)
+			return null;
+
+		var attribute = containingClass.GetAttributes()
+			.FirstOrDefault(attr =>
+				attr.AttributeClass != null
+				&& SymbolEqualityComparer.Default.Equals(
+					attr.AttributeClass.OriginalDefinition,
+					metadata.ZuraTDD_ZuraTestClass));
+
+		if (attribute?.AttributeClass?.TypeArguments.Length == 0)
+			return null;
+
+		var subjectType = attribute?.AttributeClass?.TypeArguments[0];
+		if (subjectType == null)
+			return null;
+
+		string subjectTypeName = subjectType.Name;
+		string namespaceName = containingClass.ContainingNamespace.ToDisplayString();
+
+		return $"{namespaceName}.{subjectTypeName}TestCase";
 	}
 
 	private static bool ImplementsInterface(ITypeSymbol type, INamedTypeSymbol? interfaceType)
@@ -285,7 +334,7 @@ public class TestGenerator : IIncrementalGenerator
 		return memberSymbol.GetAttributes()
 			.FirstOrDefault(attr =>
 				attr.AttributeClass?.ContainingNamespace.ToDisplayString() == nameof(ZuraTDD) &&
-				attr.AttributeClass.Name == nameof(ZuraTest<>));
+				attr.AttributeClass.Name == nameof(ZuraTest));
 	}
 
 	private class CompilationMetadata
@@ -293,6 +342,8 @@ public class TestGenerator : IIncrementalGenerator
 		public INamedTypeSymbol? ZuraTDD_ITestCase { get; }
 
 		public INamedTypeSymbol? ZuraTDD_ITestPart { get; }
+
+		public INamedTypeSymbol? ZuraTDD_ZuraTestClass { get; }
 
 		public TestFramework TestFramework { get; }
 
@@ -302,6 +353,7 @@ public class TestGenerator : IIncrementalGenerator
 		{
 			ZuraTDD_ITestCase = compilation.GetTypeByMetadataName("ZuraTDD.ITestCase`1");
 			ZuraTDD_ITestPart = compilation.GetTypeByMetadataName("ZuraTDD.ITestPart");
+			ZuraTDD_ZuraTestClass = compilation.GetTypeByMetadataName("ZuraTDD.ZuraTestClass`1");
 			System_Collections_Generic_IEnumerable = compilation.GetTypeByMetadataName("System.Collections.Generic.IEnumerable`1");
 			TestFramework = DetectFramework(compilation);
 		}

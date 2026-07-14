@@ -200,37 +200,13 @@ public class TestGenerator : IIncrementalGenerator
 		}
 
 		// Determine the TestCase class name
-		string testCaseClassName;
-		bool isGeneric = zuraTestAttr.AttributeClass?.TypeArguments.Length > 0;
+		var containingClass = propertySymbol.ContainingType;
+		var testCaseClassName = InferTestCaseFromZuraTestClass(containingClass, metadata);
 
-		if (isGeneric)
+		if (testCaseClassName == null)
 		{
-			// Generic ZuraTest<T> - validate that T implements ITestCase<T>
-			var typeArgument = zuraTestAttr.AttributeClass!.TypeArguments[0];
-
-			if (!ImplementsInterface(typeArgument, metadata.ZuraTDD_ITestCase))
-			{
-				var diagnosticMessage = DiagnosticsHelper.ZuraTest_IncorrectTypeArgument(typeArgument, location);
-				return new ZuraTestAnalysis(diagnosticMessage);
-			}
-
-			testCaseClassName = typeArgument.ToDisplayString(
-				SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(
-					SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining));
-		}
-		else
-		{
-			// Non-generic ZuraTest - infer TestCase from containing class's [ZuraTestClass<T>]
-			var containingClass = propertySymbol.ContainingType;
-			var inferredTestCase = InferTestCaseFromZuraTestClass(containingClass, metadata);
-
-			if (inferredTestCase == null)
-			{
-				var diagnosticMessage = DiagnosticsHelper.ZuraTest_MustBeInZuraTestClass(propertySymbol, location);
-				return new ZuraTestAnalysis(diagnosticMessage);
-			}
-
-			testCaseClassName = inferredTestCase;
+			var diagnosticMessage = DiagnosticsHelper.ZuraTest_MustBeInZuraTestClass(propertySymbol, location);
+			return new ZuraTestAnalysis(diagnosticMessage);
 		}
 
 		// Check if property returns IEnumerable<ITestPart> or ITestPart[]

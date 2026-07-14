@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ZuraTDD.Generator;
 
 /// <summary>
-/// An object used to collect unique source files to be generated.
+/// An object used to collect source files and diagnostics to be emitted during source generation.
 /// </summary>
 internal class SourceFilesToCreate
 {
 	private readonly List<SourceFileOrDiagnostic> sourceGenerators = [];
 
 	/// <summary>
-	/// Adds a source file with the specified name and content generator function,
-	/// unless a file with the same name already exists.
+	/// Adds a source file with the specified name and content generator function.
 	/// </summary>
 	/// <typeparam name="T">The type of the data to be provided to the content generator function.</typeparam>
 	/// <param name="fileName">The name of the file to add. Cannot be null or empty.</param>
@@ -29,6 +27,9 @@ internal class SourceFilesToCreate
 				fileName,
 				() => generatorFunc(data)));
 	}
+
+	// TODO:
+	//public void AddDiagnostic(...)
 
 	public void AddFiles(IEnumerable<SourceFileToGenerate> files)
 	{

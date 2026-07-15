@@ -18,29 +18,32 @@ When using `ZuraTestClass` or `ITestCase`, the `Expect` static class is generate
 It exposes per-dependency expectation builders as well as built-in methods for exception and result expectations.
 
 ```csharp
-using static MyTests.ContentPublishedEventHandlerTestCase;
+[ZuraTestClass<ContentPublishedEventHandler>]
+public partial class ContentPublishedEventHandlerTests
+{
+    [ZuraTest("Test name")]
+    public ITestPart[] MyTest => [
+        Receives.HandleContentPublish(exampleContent),
 
-[ZuraTest<ContentPublishedEventHandlerTestCase>("Test name")]
-public ITestPart[] MyTest => [
-    Receives.HandleContentPublish(exampleContent),
+        When.EmailSender
+            .SendEmail()
+            .Returns(Task.CompletedTask),
 
-    When.EmailSender
-        .SendEmail()
-        .Returns(Task.CompletedTask),
+        // verify a dependency method was called
+        Expect.EmailSender
+            .SendEmail(to: exampleCustomer.Email)
+            .WasCalled(),
 
-    // verify a dependency method was called
-    Expect.EmailSender
-        .SendEmail(to: exampleCustomer.Email)
-        .WasCalled(),
+        // verify a dependency method was NOT called
+        Expect.EmailSender
+            .SendEmailSync()
+            .WasNotCalled(),
 
-    // verify a dependency method was NOT called
-    Expect.EmailSender
-        .SendEmailSync()
-        .WasNotCalled(),
+        // verify the tested method returned a specific result
+        Expect.ResultMatching<IActionResult>(result => result is OkObjectResult),
+    ];
+}
 
-    // verify the tested method returned a specific result
-    Expect.ResultMatching<IActionResult>(result => result is OkObjectResult),
-];
 ```
 
 ## Using Expect with `IMock<T>` directly

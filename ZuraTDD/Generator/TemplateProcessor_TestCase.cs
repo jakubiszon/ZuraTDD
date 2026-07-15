@@ -221,7 +221,7 @@ static file class Functions
 			return
 				$$"""
 						/// <summary>
-						/// A builder allowing to specifiy an instance of <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
+						/// A builder allowing to specify an instance of <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
 						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
 						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder {{dependency.DependencyPropertyName}}

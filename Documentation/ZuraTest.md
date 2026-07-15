@@ -40,12 +40,12 @@ using static MyTestNamespace.ContentPublishedEventHandlerTestCase
 namespace MyTestNamespace;
 
 [TestClass]
+[ZuraTestClass<ContentPublishedEventHandler>]
 public partial class MyTests
 {
 	// Defines and tests the standard "happy path" for the
 	// ContentPublishedEventHandler.Handle" method.
-	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Handle - sends email to customers when content is published.")]
+	[ZuraTest("Handle - sends email to customers when content is published.")]
 	public ITestPart[] HandleStandardBehaviors => [
 		Receives.Handle(exampleContent),
 
@@ -69,8 +69,7 @@ public partial class MyTests
 	// this test copes behaviors from the one above
 	// then it only needs to specify the deviation in behavior
 	// and the expectations of the test
-	[ZuraTest<ContentPublishedEventHandlerTestCase>(
-		"Throws when EmailSender.SendEmail throws.")]
+	[ZuraTest("Throws when EmailSender.SendEmail throws.")]
 	public ITestPart[] ThrowsTest1() => [
 		Receives.Handle(exampleContent),
 

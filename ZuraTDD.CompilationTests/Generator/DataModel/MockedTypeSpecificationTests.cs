@@ -12,9 +12,7 @@ public class MockedTypeSpecificationTests
 
 		Assert.IsNotNull(exampleInterface);
 
-		var mockSpecification = new MockedTypeSpecification(
-			exampleInterface.ContainingNamespace.ToDisplayString(),
-			exampleInterface);
+		var mockSpecification = new MockedTypeSpecification(exampleInterface);
 
 		Assert.IsNotNull(mockSpecification);
 	}
@@ -30,9 +28,7 @@ public class MockedTypeSpecificationTests
 
 		Assert.IsNotNull(stringCollectionInterface);
 
-		var mockedType = new MockedTypeSpecification(
-			stringCollectionInterface.ContainingNamespace.ToDisplayString(),
-			stringCollectionInterface);
+		var mockedType = new MockedTypeSpecification(stringCollectionInterface);
 
 		Assert.IsEmpty(mockedType.TypeInfo.GenericTypeParameters);
 		Assert.IsNotNull(mockedType.Methods);
@@ -49,9 +45,7 @@ public class MockedTypeSpecificationTests
 
 		Assert.IsNotNull(exampleInterface);
 
-		var mockedType = new MockedTypeSpecification(
-			exampleInterface.ContainingNamespace.ToDisplayString(),
-			exampleInterface);
+		var mockedType = new MockedTypeSpecification(exampleInterface);
 
 		Assert.IsNotEmpty(mockedType.TypeInfo.GenericTypeParameters);
 

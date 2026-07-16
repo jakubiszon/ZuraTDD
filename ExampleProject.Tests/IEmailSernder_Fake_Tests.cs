@@ -15,7 +15,7 @@ public class IEmailSernder_Fake_Tests
 		bool behaviorWasRun = false;
 		var action = () => { behaviorWasRun = true; };
 
-		var fake = new IEmailSender_Builder();
+		var fake = new ZuraTDD.Generated_ExampleProject.IEmailSender_Builder();
 		fake.SendEmail()
 			.Invokes(action);
 

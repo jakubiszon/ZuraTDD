@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis;
+using ZuraTDD.Generator.DataModel;
 
 namespace ZuraTDD.TestGenerator.DataModel;
 
@@ -8,12 +9,12 @@ namespace ZuraTDD.TestGenerator.DataModel;
 internal class TestSpecification
 {
 	/// <summary>
-	/// Name of the namespace containing the type receiving the generated code.
+	/// Name of the namespace containing the type receiving the generated test-method.
 	/// </summary>
 	public string OutputNamespace { get; }
 
 	/// <summary>
-	/// Name of the partial class which will receive the generated test method.
+	/// Name of the partial class which will receive the generated test-method.
 	/// </summary>
 	public string OutputTypeName { get; }
 
@@ -33,20 +34,17 @@ internal class TestSpecification
 	/// </summary>
 	public string TestName { get; }
 
-	public string OutputFileName => $"{OutputTypeName}_{TestPartSourceName}.test.generated.cs";
-
-	/// <summary>
-	/// Fully qualified name of the TestCase class to use for the generated test.
-	/// </summary>
-	public string TestCaseClassName { get; }
+	public string OutputFileName => $"{OutputNamespace}.{OutputTypeName}_{TestPartSourceName}.test.generated.cs";
 
 	public TestFramework TestFramework { get; }
+
+	public ImplicitTestCaseClass ImplicitTestCaseClass { get; }
 
 	public TestSpecification(
 		IMethodSymbol methodSymbol,
 		AttributeData attributeData,
 		TestFramework testFramework,
-		string testCaseClassName)
+		ImplicitTestCaseClass implicitTestCaseClass)
 	{
 		TestName = attributeData.ConstructorArguments[0].Value as string ?? "Unnamed test";
 		OutputNamespace = methodSymbol.ContainingNamespace.ToDisplayString();
@@ -54,14 +52,14 @@ internal class TestSpecification
 		TestPartSourceName = methodSymbol.Name;
 		IsSourceMethod = true;
 		TestFramework = testFramework;
-		TestCaseClassName = testCaseClassName;
+		ImplicitTestCaseClass = implicitTestCaseClass;
 	}
 
 	public TestSpecification(
 		IPropertySymbol propertySymbol,
 		AttributeData attributeData,
 		TestFramework testFramework,
-		string testCaseClassName)
+		ImplicitTestCaseClass implicitTestCaseClass)
 	{
 		TestName = attributeData.ConstructorArguments[0].Value as string ?? "Unnamed test";
 		OutputNamespace = propertySymbol.ContainingNamespace.ToDisplayString();
@@ -69,6 +67,6 @@ internal class TestSpecification
 		TestPartSourceName = propertySymbol.Name;
 		IsSourceMethod = false;
 		TestFramework = testFramework;
-		TestCaseClassName = testCaseClassName;
+		ImplicitTestCaseClass = implicitTestCaseClass;
 	}
 }

@@ -66,7 +66,7 @@ static file class Functions
 		return
 			$$"""
 				/// <summary>
-				/// Simulates behavior for <see cref="{{mockedType.TypeInfo.TypeName}}.{{mockedMethod.MethodName}}" />.
+				/// Simulates behavior for <see cref="{{mockedType.TypeInfo.FullyQualifiedGenericTypeName}}.{{mockedMethod.MethodName}}" />.
 				/// </summary>
 				public {{mockedMethod.ReturnType}} {{mockedMethod.MethodName}}{{genericParameters}}({{ParameterDeclarations(mockedMethod)}}){{genericTypeParamConstraints}}
 				{
@@ -75,9 +75,11 @@ static file class Functions
 						[{{paramValues}}],
 						[{{genericParameterTypes}}]);
 
+					#pragma warning disable CS8604
 					{{@return}}base.BehaviorSetupRunner.{{InvokeMethod(mockedMethod)}}(
 						{{mockedType.MockedTypeMethodsTypeName}}.{{mockedMethod.MethodCodeName}}{{paramValues.PrependNotEmpty(",\n\t\t\t")}},
 						[{{genericParameterTypes}}]{{defaultResult}});
+					#pragma warning restore CS8604
 				}
 			""";
 	}

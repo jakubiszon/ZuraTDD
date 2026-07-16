@@ -1,12 +1,12 @@
-using Microsoft.CodeAnalysis;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace ZuraTDD.Generator.DataModel;
 
 /// <summary>
-/// Represents data used to generate a test case using the test-case template.
+/// Represents data used to generate code for a user-defined test-case class
+/// implementing <see cref="ITestCase{TSubject}"/> for a specific subject type.
 /// </summary>
 internal class TestCaseSpecification
 {
@@ -19,33 +19,14 @@ internal class TestCaseSpecification
 			?.TypeArguments[0] as INamedTypeSymbol
 			?? throw new InvalidOperationException("Test case type does not implement ITestCase<T>");
 
-		string testSubjectTypeName = testSubjectType.ToDisplayString();
-
 		OutputNamespace = typeSymbol.ContainingNamespace.ToDisplayString();
 		TestCaseClassName = typeSymbol.Name;
-		TestSubjectClassName = testSubjectTypeName;
-		TestSubjectFullyQualifiedClassName = testSubjectType.ToDisplayString(
-			SymbolDisplayFormat.FullyQualifiedFormat);
-
-		TestableMethods = Functions.ExtractPublicMethods(testSubjectType);
-
-		DependenciesClass = new DependenciesClassSpecification(
-			OutputNamespace,
-			testSubjectType);
+		TestSubject = new TestCaseSubject(testSubjectType);
 	}
 
 	public string OutputNamespace { get; set; } = string.Empty;
 
 	public string TestCaseClassName { get; set; } = string.Empty;
 
-	public string TestSubjectClassName { get; set; } = string.Empty;
-
-	public string TestSubjectFullyQualifiedClassName { get; }
-
-	/// <summary>
-	/// Lists methods of the test subject which the system could potentially test.
-	/// </summary>
-	public IReadOnlyList<MethodSpecification> TestableMethods { get; set; }
-
-	public DependenciesClassSpecification DependenciesClass { get; }
+	public TestCaseSubject TestSubject { get; }
 }

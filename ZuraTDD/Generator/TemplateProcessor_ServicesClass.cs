@@ -122,7 +122,7 @@ static file class Functions
 		$$"""
 					KeyValuePair.Create<string, Func<MockedObject>>(
 						"{{dependency.DependencyPropertyName}}",
-						() => new {{dependency.MockedType!.MockedFakeTypeName}}{{genericTypeParams}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
+						() => new {{dependency.OutputNamespace}}.{{dependency.MockedType!.MockedFakeTypeName}}{{genericTypeParams}}(dependencySetup.OnlyBehaviorsWithName("{{dependency.DependencyPropertyName}}")))
 		""";
 	}
 }

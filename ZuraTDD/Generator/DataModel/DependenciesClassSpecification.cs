@@ -10,15 +10,13 @@ namespace ZuraTDD.Generator.DataModel;
 /// </summary>
 internal class DependenciesClassSpecification
 {
-	/// <param name="outputNamespace">Namespace where the class will be generated.</param>
 	/// <param name="testSubjectType">Compilation symbol of the type defining the test target.</param>
 	public DependenciesClassSpecification(
-		string outputNamespace,
 		INamedTypeSymbol testSubjectType)
 	{
 		string testSubjectTypeName = testSubjectType.ToDisplayString();
 
-		OutputNamespace = outputNamespace;
+		OutputNamespace = $"ZuraTDD.Generated_{testSubjectType.ContainingNamespace.ToDisplayString().WithUnderscores()}";
 		DependenciesClassName = $"{testSubjectType.Name}Dependencies";
 		TestSubjectClassName = testSubjectTypeName;
 		TestSubjectFullyQualifiedName = testSubjectType.ToDisplayString(
@@ -28,14 +26,27 @@ internal class DependenciesClassSpecification
 			?.Constructors
 			.FirstOrDefault()
 			?.Parameters
-			.Select(p => new DependencySpecification(outputNamespace, p))
+			.Select(p => new DependencySpecification(p))
 			.ToList()
 			?? [];
 	}
 
 	public string OutputNamespace { get; }
 
+	public string OutputFileName => $"{OutputNamespace}.{DependenciesClassName}.generated.cs";
+
+	/// <summary>
+	/// Name of the class implementing <see cref="ITestSubjectDependencies" /> interface
+	/// for the specified test subject type.
+	/// </summary>
+	/// <remarks>
+	/// Only one class implementing the specific test subject dependencies will be generated
+	/// even if there are multiple user-defined test-case classes or multiple ZuraTestClasses
+	/// referencing the same test subject type.
+	/// </remarks>
 	public string DependenciesClassName { get; }
+
+	public string DependenciesFullyQualifiedName => $"{OutputNamespace}.{DependenciesClassName}";
 
 	public string TestSubjectClassName { get; }
 

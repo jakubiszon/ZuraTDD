@@ -282,4 +282,23 @@ internal static class Functions
 			? ""
 			: prepend + input;
 	}
+
+	/// <summary>
+	/// Returns code containing using directives for dependencies needed by a consuming class
+	/// which is located inside the specified outputNamespace.
+	/// </summary>
+	/// <param name="outputNamespace">Namespace inside which the using directives will be used.</param>
+	public static string DependencyUsingDirectives(
+		this DependenciesClassSpecification dependenciesClass,
+		string outputNamespace)
+	{
+		var usingDirectives = dependenciesClass.Dependencies
+			.Select(d => d.OutputNamespace)
+			.Append(dependenciesClass.OutputNamespace)
+			.Distinct()
+			.Where(@namespace => @namespace != outputNamespace)
+			.Select(@namespace => $"using {@namespace};");
+
+		return string.Join("\n", usingDirectives);
+	}
 }

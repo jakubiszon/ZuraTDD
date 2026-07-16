@@ -28,6 +28,7 @@ internal class TestTemplateProcessor
 			using System.Threading.Tasks;
 			using Xunit;
 			using ZuraTDD;
+			using {{testSpecification.ImplicitTestCaseClass.Namespace}};
 
 			namespace {{testSpecification.OutputNamespace}};
 
@@ -36,7 +37,7 @@ internal class TestTemplateProcessor
 				[Fact(DisplayName = "{{testSpecification.TestName}}")]
 				public async Task {{testSpecification.TestPartSourceName}}_Runner()
 				{
-					var testCase = new {{testSpecification.TestCaseClassName}} (
+					var testCase = new {{testSpecification.ImplicitTestCaseClass.Name}} (
 						name: "{{testSpecification.TestName}}",
 						testParts: {{testSpecification.TestPartSourceName}}{{invocationBrackets}});
 
@@ -58,7 +59,8 @@ internal class TestTemplateProcessor
 			using System.Threading.Tasks;
 			using Microsoft.VisualStudio.TestTools.UnitTesting;
 			using ZuraTDD;
-
+			using {{testSpecification.ImplicitTestCaseClass.Namespace}};
+			
 			namespace {{testSpecification.OutputNamespace}};
 
 			public partial class {{testSpecification.OutputTypeName}}
@@ -66,7 +68,7 @@ internal class TestTemplateProcessor
 				[TestMethod(DisplayName = "{{testSpecification.TestName}}")]
 				public async Task {{testSpecification.TestPartSourceName}}_Runner()
 				{
-					var testCase = new {{testSpecification.TestCaseClassName}} (
+					var testCase = new {{testSpecification.ImplicitTestCaseClass.Name}} (
 						name: "{{testSpecification.TestName}}",
 						testParts: {{testSpecification.TestPartSourceName}}{{invocationBrackets}});
 

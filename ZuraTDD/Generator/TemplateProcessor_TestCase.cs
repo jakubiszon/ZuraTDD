@@ -7,16 +7,16 @@ internal partial class TemplateProcessor
 {
 	public static string PrepareTestCaseClassCode(TestCaseSpecification testCase)
 	{
-		var dependencies = testCase.DependenciesClass.Dependencies;
+		var dependencies = testCase.TestSubject.DependenciesClass.Dependencies;
 		var constructorArgs = string.Join(",", dependencies.Select(s => $"\n\t\t\tthis.Dependencies.{s.DependencyPropertyName}"));
 
-		var receives = testCase.TestableMethods.Select(method => Functions.TestSubjectReceivesCode(testCase, method));
+		var receives = testCase.TestSubject.TestableMethods.Select(method => Functions.TestSubjectReceivesCode(testCase, method));
 		var receivesCode = string.Join("\n\n", receives);
 
-		var whenSnippets = testCase.DependenciesClass.Dependencies.Select(Functions.DependencyWhenCode);
+		var whenSnippets = testCase.TestSubject.DependenciesClass.Dependencies.Select(Functions.DependencyWhenCode);
 		var whenCode = string.Join("\n\n", whenSnippets);
 
-		var expectSnippets = testCase.DependenciesClass.Dependencies
+		var expectSnippets = testCase.TestSubject.DependenciesClass.Dependencies
 			.Where(dependency => dependency.IsMockable)
 			.Select(Functions.DependencyExpectCode);
 		var expectCode = string.Join("\n\n", expectSnippets);
@@ -34,12 +34,12 @@ internal partial class TemplateProcessor
 			namespace {{testCase.OutputNamespace}};
 
 			/// <summary>
-			/// Implementation of the test case for <see cref="{{testCase.TestSubjectClassName}}" />.
+			/// Implementation of the test case for <see cref="{{testCase.TestSubject.TestSubjectClassName}}" />.
 			/// Import this class with "using static {{testCase.OutputNamespace}}.{{testCase.TestCaseClassName}};"
 			/// in order to simplify access to "Receives", "When" and "Expect" static classes.
 			/// </summary>
 			internal partial class {{testCase.TestCaseClassName}}
-				: TestCase<{{testCase.TestSubjectFullyQualifiedClassName}}, {{testCase.DependenciesClass.DependenciesClassName}}>
+				: TestCase<{{testCase.TestSubject.TestSubjectFullyQualifiedClassName}}, {{testCase.TestSubject.DependenciesClass.DependenciesFullyQualifiedName}}>
 			{
 				public {{testCase.TestCaseClassName}}(
 					string name,
@@ -51,13 +51,13 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Gets an instance of the class being tested.
 				/// </summary>
-				public override {{testCase.TestSubjectFullyQualifiedClassName}}
+				public override {{testCase.TestSubject.TestSubjectFullyQualifiedClassName}}
 					GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
-					return new {{testCase.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
+					return new {{testCase.TestSubject.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
 				}
 
-				protected override {{testCase.DependenciesClass.DependenciesClassName}}
+				protected override {{testCase.TestSubject.DependenciesClass.DependenciesFullyQualifiedName}}
 					BuildTestSubjectDependencies(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
 					return new(dependencySetups);
@@ -106,10 +106,9 @@ internal partial class TemplateProcessor
 			""";
 	}
 
-
 	public static string PrepareImplicitTestCaseClassCode(ZuraTestClassSpecification zuraClassSpec)
 	{
-		var dependencies = zuraClassSpec.DependenciesClass.Dependencies;
+		var dependencies = zuraClassSpec.TestSubject.DependenciesClass.Dependencies;
 		var constructorArgs = string.Join(",", dependencies.Select(s => $"\n\t\t\tthis.Dependencies.{s.DependencyPropertyName}"));
 
 		return
@@ -120,16 +119,16 @@ internal partial class TemplateProcessor
 			using System.Collections.Generic;
 			using ZuraTDD;
 
-			namespace {{zuraClassSpec.OutputNamespace}};
+			namespace {{zuraClassSpec.ImplicitTestCaseClass.Namespace}};
 
 			/// <summary>
-			/// Implicit TestCase for <see cref="{{zuraClassSpec.TestSubjectClassName}}" />
+			/// Implicit TestCase for <see cref="{{zuraClassSpec.TestSubject.TestSubjectClassName}}" />
 			/// generated from the [ZuraTestClass] attribute on {{zuraClassSpec.DecoratedClassName}}.
 			/// </summary>
-			internal class {{zuraClassSpec.TestCaseClassName}}
-				: TestCase<{{zuraClassSpec.TestSubjectFullyQualifiedClassName}}, {{zuraClassSpec.DependenciesClass.DependenciesClassName}}>
+			internal class {{zuraClassSpec.ImplicitTestCaseClass.Name}}
+				: TestCase<{{zuraClassSpec.TestSubject.TestSubjectFullyQualifiedClassName}}, {{zuraClassSpec.TestSubject.DependenciesClass.DependenciesFullyQualifiedName}}>
 			{
-				public {{zuraClassSpec.TestCaseClassName}}(
+				public {{zuraClassSpec.ImplicitTestCaseClass.Name}}(
 					string name,
 					params ITestPart[] testParts)
 					: base(name, testParts)
@@ -139,13 +138,13 @@ internal partial class TemplateProcessor
 				/// <summary>
 				/// Gets an instance of the class being tested.
 				/// </summary>
-				public override {{zuraClassSpec.TestSubjectFullyQualifiedClassName}}
+				public override {{zuraClassSpec.TestSubject.TestSubjectFullyQualifiedClassName}}
 					GetTestSubject(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
-					return new {{zuraClassSpec.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
+					return new {{zuraClassSpec.TestSubject.TestSubjectFullyQualifiedClassName}}({{constructorArgs}});
 				}
 
-				protected override {{zuraClassSpec.DependenciesClass.DependenciesClassName}}
+				protected override {{zuraClassSpec.TestSubject.DependenciesClass.DependenciesClassName}}
 					BuildTestSubjectDependencies(IEnumerable<INamedDependencySetup> dependencySetups)
 				{
 					return new(dependencySetups);
@@ -173,14 +172,14 @@ static file class Functions
 		return
 			$$"""
 					/// <summary>
-					/// Defines a call to the <see cref="{{testCase.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method.
+					/// Defines a call to the <see cref="{{testCase.TestSubject.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method.
 					/// </summary>
 					public static {{method.PrepareReceiveSpecificationType()}}
 						{{method.MethodName}}({{parameterList}})
 					{
 						#pragma warning disable CS8604
 						return new (
-							obj => (obj as {{testCase.TestSubjectClassName}})!.{{method.MethodName}}({{parameterValues}}));
+							obj => (obj as {{testCase.TestSubject.TestSubjectClassName}})!.{{method.MethodName}}({{parameterValues}}));
 						#pragma warning restore CS8604
 					}
 			""";
@@ -212,8 +211,8 @@ static file class Functions
 						/// A builder producing behaviors for <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
 						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} {{dependency.DependencyPropertyName}}
-							=> new {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}}("{{dependency.DependencyPropertyName}}");
+						internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} {{dependency.DependencyPropertyName}}
+							=> new {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}}("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 		else
@@ -224,8 +223,8 @@ static file class Functions
 						/// A builder allowing to specify an instance of <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
 						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder {{dependency.DependencyPropertyName}}
-							=> new {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder("{{dependency.DependencyPropertyName}}");
+						internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder {{dependency.DependencyPropertyName}}
+							=> new("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 	}
@@ -238,8 +237,8 @@ static file class Functions
 					/// A builder producing expectations for <see cref="{{mockedDependency.DeclaringNamespace}}.{{mockedDependency.DependencyType.TypeName}}" />
 					/// which will be passed as "{{mockedDependency.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
-						=> new {{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder("{{mockedDependency.DependencyPropertyName}}");
+					internal static {{mockedDependency.OutputNamespace}}.{{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
+						=> new("{{mockedDependency.DependencyPropertyName}}");
 			""";
 	}
 }

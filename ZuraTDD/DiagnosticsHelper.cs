@@ -4,6 +4,7 @@ namespace ZuraTDD;
 
 internal static class DiagnosticsHelper
 {
+	// TODO: this one is not used anymore
 	public static Diagnostic ZuraTest_IncorrectTypeArgument(
 		ITypeSymbol typeArgument,
 		Location? location)
@@ -91,8 +92,8 @@ internal static class DiagnosticsHelper
 		return Diagnostic.Create(
 			new DiagnosticDescriptor(
 				id: "ZURA006",
-				title: "Non-generic ZuraTest must be inside a class decorated with [ZuraTestClass<T>]",
-				messageFormat: "Method '{0}' decorated with non-generic [ZuraTest] must be inside a class decorated with [ZuraTestClass<T>]",
+				title: "ZuraTest decorated method must be inside a class decorated with [ZuraTestClass<T>]",
+				messageFormat: "Method '{0}' decorated with [ZuraTest] must be inside a class decorated with [ZuraTestClass<T>]",
 				category: "ZuraTDD.TestGenerator",
 				defaultSeverity: DiagnosticSeverity.Error,
 				isEnabledByDefault: true),
@@ -107,8 +108,8 @@ internal static class DiagnosticsHelper
 		return Diagnostic.Create(
 			new DiagnosticDescriptor(
 				id: "ZURA006",
-				title: "Non-generic ZuraTest must be inside a class decorated with [ZuraTestClass<T>]",
-				messageFormat: "Property '{0}' decorated with non-generic [ZuraTest] must be inside a class decorated with [ZuraTestClass<T>]",
+				title: "ZuraTest decorated property must be inside a class decorated with [ZuraTestClass<T>]",
+				messageFormat: "Property '{0}' decorated with [ZuraTest] must be inside a class decorated with [ZuraTestClass<T>]",
 				category: "ZuraTDD.TestGenerator",
 				defaultSeverity: DiagnosticSeverity.Error,
 				isEnabledByDefault: true),

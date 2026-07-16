@@ -5,14 +5,14 @@ using Microsoft.CodeAnalysis;
 namespace ZuraTDD.Generator.DataModel;
 
 /// <summary>
-/// Represents information about a class declared as implementing the <see cref="IMock{T}"/> interface.
+/// Represents information about a user defined class implementing the <see cref="IMock{T}"/> interface.
 /// This class will be used to mock the type specified as the generic parameter.
 /// </summary>
 internal class MockObjectSpecification
 {
 	/// <summary>
 	/// Returns the namespace in which the class was declared by the user.
-	/// It will also be the namespace of the generated code.
+	/// It will be the namespace of the generated partial class implementing the mock functionality.
 	/// </summary>
 	public string OutputNamespace { get; }
 
@@ -42,7 +42,6 @@ internal class MockObjectSpecification
 			?? throw new InvalidOperationException("Test case type does not implement IMock<T>");
 
 		MockedTypeSpecification = new MockedTypeSpecification(
-			OutputNamespace,
 			mockedType);
 	}
 }

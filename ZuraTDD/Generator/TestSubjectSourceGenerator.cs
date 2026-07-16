@@ -124,7 +124,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 
 		var isPartial = candidate.Modifiers.Any(token => token.ValueText == "partial");
 
-		if (isTestCase && isMock)
+		if (isTestCase && isMock) // TODO: or isZuraTestClass combined with either of the other two
 		{
 			// TODO restore diagnostics
 			//OutputMultipleGeneratorsNotAllowedDiagnostic(context, candidate, typeSymbol);
@@ -175,11 +175,11 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 			testCaseSpecification);
 
 		files.AddFile(
-			$"{testCaseSpecification.DependenciesClass.DependenciesClassName}.generated.cs",
+			testCaseSpecification.TestSubject.DependenciesClass.OutputFileName,
 			TemplateProcessor.PrepareTestSubjectDependenciesClassCode,
-			testCaseSpecification.DependenciesClass);
+			testCaseSpecification.TestSubject.DependenciesClass);
 
-		foreach (var dependency in testCaseSpecification.DependenciesClass.Dependencies)
+		foreach (var dependency in testCaseSpecification.TestSubject.DependenciesClass.Dependencies)
 		{
 			var dependencyFilesToAdd = GenerateDependencyCode(dependency);
 			files.AddFiles(dependencyFilesToAdd.GetItems());
@@ -218,21 +218,21 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		var spec = new ZuraTestClassSpecification(typeSymbol, subjectType);
 
 		files.AddFile(
-			$"{typeSymbol.Name}.ZuraTestClass.generated.cs",
+			$"{spec.DecoratedClassNamespace}.{typeSymbol.Name}.ZuraTestClass.generated.cs",
 			TemplateProcessor.PrepareZuraTestClassCode,
 			spec);
 
 		files.AddFile(
-			$"{spec.TestCaseClassName}.generated.cs",
+			spec.ImplicitTestCaseClass.OutputFileName,
 			TemplateProcessor.PrepareImplicitTestCaseClassCode,
 			spec);
 
 		files.AddFile(
-			$"{spec.DependenciesClass.DependenciesClassName}.generated.cs",
+			spec.TestSubject.DependenciesClass.OutputFileName,
 			TemplateProcessor.PrepareTestSubjectDependenciesClassCode,
-			spec.DependenciesClass);
+			spec.TestSubject.DependenciesClass);
 
-		foreach (var dependency in spec.DependenciesClass.Dependencies)
+		foreach (var dependency in spec.TestSubject.DependenciesClass.Dependencies)
 		{
 			var filesToAdd = GenerateDependencyCode(dependency);
 			files.AddFiles(filesToAdd.GetItems());
@@ -250,27 +250,27 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.MockedTypeMethodsTypeName}.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Methods.generated.cs",
 			TemplateProcessor.MockedTypeMethodsClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.BuilderTypeName}.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Builder.generated.cs",
 			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedFakeTypeName}.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Fake.generated.cs",
 			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.ExpectTypeName}.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Expect.generated.cs",
 			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{mockSpecification.TypeName}.generated.cs",
+			$"{mockSpecification.OutputNamespace}.{mockSpecification.TypeName}.generated.cs",
 			TemplateProcessor.GenerateMockCode,
 			mockSpecification);
 
@@ -290,7 +290,7 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.DependencyType.TypeName}_IsOnly_Builder.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_NamedInstanceBuilder.generated.cs",
 			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
@@ -303,27 +303,27 @@ public class TestSubjectSourceGenerator : IIncrementalGenerator
 		SourceFilesToCreate files = new ();
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType!.MockedTypeMethodsTypeName}.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Methods.generated.cs",
 			TemplateProcessor.MockedTypeMethodsClassCode,
 			dependencySpecification.MockedType!);
 
 		files.AddFile(
-			$"{dependencySpecification.MockedType.BuilderTypeName}.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Builder.generated.cs",
 			TemplateProcessor.MockedTypeBuilderClassesCode,
 			dependencySpecification.MockedType!);
 
 		files.AddFile(
-			$"{dependencySpecification.DependencyType.TypeName}_NamedInstanceBuilder.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_NamedInstanceBuilder.generated.cs",
 			TemplateProcessor.DependencyStaticBuilderCode,
 			dependencySpecification);
 
 		files.AddFile(
-			$"{dependencySpecification.DependencyType.TypeName}_Fake.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Fake.generated.cs",
 			TemplateProcessor.MockedTypeClassCode,
 			dependencySpecification.MockedType!);
 
 		files.AddFile(
-			$"{dependencySpecification.DependencyType.TypeName}_Expect.generated.cs",
+			$"{dependencySpecification.OutputFilePrefix}_Expect.generated.cs",
 			TemplateProcessor.MockedTypeExpectClassesCode,
 			dependencySpecification.MockedType!);
 

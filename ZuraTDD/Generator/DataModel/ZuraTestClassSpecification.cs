@@ -1,7 +1,5 @@
 using Microsoft.CodeAnalysis;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ZuraTDD.Generator.DataModel;
 
@@ -16,39 +14,17 @@ internal class ZuraTestClassSpecification
 		INamedTypeSymbol testClassSymbol,
 		INamedTypeSymbol subjectType)
 	{
-		OutputNamespace = testClassSymbol.ContainingNamespace.ToDisplayString();
+		DecoratedClassNamespace = testClassSymbol.ContainingNamespace.ToDisplayString();
 		DecoratedClassName = testClassSymbol.Name;
-		TestSubjectClassName = subjectType.ToDisplayString();
-		TestSubjectFullyQualifiedClassName = subjectType.ToDisplayString(
-			SymbolDisplayFormat.FullyQualifiedFormat);
-
-		TestCaseClassName = $"{subjectType.Name}TestCase";
-
-		TestableMethods = Functions.ExtractPublicMethods(subjectType);
-
-		DependenciesClass = new DependenciesClassSpecification(
-			OutputNamespace,
-			subjectType);
+		TestSubject = new TestCaseSubject(subjectType);
+		ImplicitTestCaseClass = new ImplicitTestCaseClass(subjectType);
 	}
 
-	public string OutputNamespace { get; }
+	public string DecoratedClassNamespace { get; }
 
 	public string DecoratedClassName { get; }
 
-	public string TestSubjectClassName { get; }
+	public TestCaseSubject TestSubject { get; }
 
-	public string TestSubjectFullyQualifiedClassName { get; }
-
-	/// <summary>
-	/// Name of the implicit TestCase class generated for the subject type.
-	/// Convention: {SubjectTypeName}TestCase
-	/// </summary>
-	public string TestCaseClassName { get; }
-
-	/// <summary>
-	/// Lists methods of the test subject which the system could potentially test.
-	/// </summary>
-	public IReadOnlyList<MethodSpecification> TestableMethods { get; }
-
-	public DependenciesClassSpecification DependenciesClass { get; }
+	public ImplicitTestCaseClass ImplicitTestCaseClass { get; }
 }

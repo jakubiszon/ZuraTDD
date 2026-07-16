@@ -14,7 +14,6 @@ internal class DependencySpecification
 	/// Constructor used when a type is passed as a constructor parameter of a test subject.
 	/// </summary>
 	public DependencySpecification(
-		string outputNamespace,
 		IParameterSymbol param)
 	{
 		var namedType = param.Type as INamedTypeSymbol
@@ -30,15 +29,12 @@ internal class DependencySpecification
 			.ToArray()
 			?? Array.Empty<string>();
 
-		OutputNamespace = outputNamespace;
 		DeclaringNamespace = param.Type.ContainingNamespace.ToDisplayString();
 		DependencyPropertyName = param.Name.ToString().Capitalize();
 		IsMockable = param.Type.TypeKind == TypeKind.Interface;
 
 		MockedType = IsMockable
-			? new MockedTypeSpecification(
-				outputNamespace,
-				param)
+			? new MockedTypeSpecification(param)
 			: null;
 	}
 
@@ -61,9 +57,16 @@ internal class DependencySpecification
 	public string DeclaringNamespace { get; }
 
 	/// <summary>
-	/// Gets the namespace that will be used for generated output.
+	/// Gets the namespace that will be used by the generated classes.
 	/// </summary>
-	public string OutputNamespace { get; }
+	public string OutputNamespace => $"ZuraTDD.Generated_{DependencyType.DeclaringNamespace.WithUnderscores()}";
+
+	/// <summary>
+	/// Gets the prefix for file names which will contain generated code
+	/// e.g. "NamedInstanceBuilder"
+	/// </summary>
+	public string OutputFilePrefix => MockedType?.OutputFilePrefix
+		?? $"{OutputNamespace}.{DependencyType.TypeName}";
 
 	/// <summary>
 	/// Name of the property in the TestSubjecyDependencies class generated for the test cases which reference the test subject.

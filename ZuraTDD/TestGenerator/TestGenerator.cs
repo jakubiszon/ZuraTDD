@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ZuraTDD.Generator.DataModel;
 using ZuraTDD.TestGenerator.DataModel;
 
 namespace ZuraTDD.TestGenerator;
@@ -142,8 +143,8 @@ public class TestGenerator : IIncrementalGenerator
 		}
 
 		var containingClass = methodSymbol.ContainingType;
-		var testCaseClassName = InferTestCaseFromZuraTestClass(containingClass, metadata);
-		if (testCaseClassName == null)
+		var implicitTestCaseClass = FindImplicitTestCaseClass(containingClass, metadata);
+		if (implicitTestCaseClass == null)
 		{
 			var diagnosticMessage = DiagnosticsHelper.ZuraTest_MustBeInZuraTestClass(methodSymbol, location);
 			return new ZuraTestAnalysis(diagnosticMessage);
@@ -162,7 +163,7 @@ public class TestGenerator : IIncrementalGenerator
 			methodSymbol,
 			zuraTestAttr,
 			metadata.TestFramework,
-			testCaseClassName);
+			implicitTestCaseClass);
 
 		return new ZuraTestAnalysis(testSpecification);
 	}
@@ -201,9 +202,8 @@ public class TestGenerator : IIncrementalGenerator
 
 		// Determine the TestCase class name
 		var containingClass = propertySymbol.ContainingType;
-		var testCaseClassName = InferTestCaseFromZuraTestClass(containingClass, metadata);
-
-		if (testCaseClassName == null)
+		var implicitTestCaseClass = FindImplicitTestCaseClass(containingClass, metadata);
+		if (implicitTestCaseClass == null)
 		{
 			var diagnosticMessage = DiagnosticsHelper.ZuraTest_MustBeInZuraTestClass(propertySymbol, location);
 			return new ZuraTestAnalysis(diagnosticMessage);
@@ -222,7 +222,7 @@ public class TestGenerator : IIncrementalGenerator
 			propertySymbol,
 			zuraTestAttr,
 			metadata.TestFramework,
-			testCaseClassName);
+			implicitTestCaseClass);
 
 		return new ZuraTestAnalysis(testSpecification);
 	}
@@ -231,7 +231,7 @@ public class TestGenerator : IIncrementalGenerator
 	/// Attempts to infer the TestCase class name from the containing class's [ZuraTestClass&lt;TSubject&gt;] attribute.
 	/// Convention: {SubjectTypeName}TestCase in the same namespace as the containing class.
 	/// </summary>
-	private static string? InferTestCaseFromZuraTestClass(
+	private static ImplicitTestCaseClass? FindImplicitTestCaseClass(
 		INamedTypeSymbol containingClass,
 		CompilationMetadata metadata)
 	{
@@ -249,13 +249,9 @@ public class TestGenerator : IIncrementalGenerator
 			return null;
 
 		var subjectType = attribute?.AttributeClass?.TypeArguments[0];
-		if (subjectType == null)
-			return null;
-
-		string subjectTypeName = subjectType.Name;
-		string namespaceName = containingClass.ContainingNamespace.ToDisplayString();
-
-		return $"{namespaceName}.{subjectTypeName}TestCase";
+		return subjectType != null
+			? new ImplicitTestCaseClass(subjectType)
+			: null;
 	}
 
 	private static bool ImplementsInterface(ITypeSymbol type, INamedTypeSymbol? interfaceType)

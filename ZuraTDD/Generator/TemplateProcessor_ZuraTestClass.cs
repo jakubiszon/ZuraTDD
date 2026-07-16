@@ -5,17 +5,21 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
+	/// <summary>
+	/// Returns additional code for the partial used-defined class decorated with
+	/// <see cref="ZuraTestClass{TSubject}"/> attribute.
+	/// </summary>
 	public static string PrepareZuraTestClassCode(ZuraTestClassSpecification spec)
 	{
-		var dependencies = spec.DependenciesClass.Dependencies;
+		var dependencies = spec.TestSubject.DependenciesClass.Dependencies;
 
-		var receives = spec.TestableMethods.Select(method => ZuraTestClassFunctions.TestSubjectReceivesCode(spec, method));
+		var receives = spec.TestSubject.TestableMethods.Select(method => ZuraTestClassFunctions.TestSubjectReceivesCode(spec, method));
 		var receivesCode = string.Join("\n\n", receives);
 
-		var whenSnippets = spec.DependenciesClass.Dependencies.Select(ZuraTestClassFunctions.DependencyWhenCode);
+		var whenSnippets = spec.TestSubject.DependenciesClass.Dependencies.Select(ZuraTestClassFunctions.DependencyWhenCode);
 		var whenCode = string.Join("\n\n", whenSnippets);
 
-		var expectSnippets = spec.DependenciesClass.Dependencies
+		var expectSnippets = spec.TestSubject.DependenciesClass.Dependencies
 			.Where(dependency => dependency.IsMockable)
 			.Select(ZuraTestClassFunctions.DependencyExpectCode);
 
@@ -29,11 +33,12 @@ internal partial class TemplateProcessor
 			using System.Collections.Generic;
 			using System.Threading;
 			using ZuraTDD;
+			{{spec.TestSubject.DependenciesClass.DependencyUsingDirectives(spec.DecoratedClassNamespace)}}
 
-			namespace {{spec.OutputNamespace}};
+			namespace {{spec.DecoratedClassNamespace}};
 
 			/// <summary>
-			/// Partial implementation of ZuraTestClass class for <see cref="{{spec.TestSubjectClassName}}" />.
+			/// Partial implementation of ZuraTestClass class for <see cref="{{spec.TestSubject.TestSubjectClassName}}" />.
 			/// This file defines the Receives, When, and Expect builders.
 			/// </summary>
 			public partial class {{spec.DecoratedClassName}}
@@ -97,14 +102,14 @@ static file class ZuraTestClassFunctions
 		return
 			$$"""
 					/// <summary>
-					/// Defines a call to the <see cref="{{spec.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method.
+					/// Defines a call to the <see cref="{{spec.TestSubject.TestSubjectFullyQualifiedClassName}}.{{method.MethodName}}"/> method.
 					/// </summary>
 					public static {{method.PrepareReceiveSpecificationType()}}
 						{{method.MethodName}}({{parameterList}})
 					{
 						#pragma warning disable CS8604
 						return new (
-							obj => (obj as {{spec.TestSubjectClassName}})!.{{method.MethodName}}({{parameterValues}}));
+							obj => (obj as {{spec.TestSubject.TestSubjectClassName}})!.{{method.MethodName}}({{parameterValues}}));
 						#pragma warning restore CS8604
 					}
 			""";
@@ -136,8 +141,8 @@ static file class ZuraTestClassFunctions
 						/// A builder producing behaviors for <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
 						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} {{dependency.DependencyPropertyName}}
-							=> new {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}}("{{dependency.DependencyPropertyName}}");
+						internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} {{dependency.DependencyPropertyName}}
+							=> new {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}}("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 		else
@@ -148,8 +153,8 @@ static file class ZuraTestClassFunctions
 						/// A builder allowing to specify an instance of <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
 						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder {{dependency.DependencyPropertyName}}
-							=> new {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder("{{dependency.DependencyPropertyName}}");
+						internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder {{dependency.DependencyPropertyName}}
+							=> new("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 	}
@@ -162,8 +167,8 @@ static file class ZuraTestClassFunctions
 					/// A builder producing expectations for <see cref="{{mockedDependency.DeclaringNamespace}}.{{mockedDependency.DependencyType.TypeName}}" />
 					/// which will be passed as "{{mockedDependency.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
-						=> new {{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder("{{mockedDependency.DependencyPropertyName}}");
+					internal static {{mockedDependency.OutputNamespace}}.{{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
+						=> new("{{mockedDependency.DependencyPropertyName}}");
 			""";
 	}
 }

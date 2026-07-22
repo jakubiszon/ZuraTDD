@@ -13,10 +13,10 @@ public class ControllerInsideWeirdNamespace
 		this.nestedNamespaceRepository = nestedNamespaceRepository;
 	}
 
-	public bool DependenciesReturnSameData()
+	public bool DependenciesReturnDifferentData()
 	{
 		var dataFromExampleRepository = exampleRepository.GetData1();
 		var dataFromNestedNamespaceRepository = nestedNamespaceRepository.GetData2();
-		return dataFromExampleRepository == dataFromNestedNamespaceRepository;
+		return dataFromExampleRepository != dataFromNestedNamespaceRepository;
 	}
 }

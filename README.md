@@ -25,7 +25,7 @@ Check out the [repository](https://github.com/jakubiszon/ZuraTDD) on GitHub.
 ## Quick Start
 1) Install the nuget package.
     ```
-    dotnet add package ZuraTDD --version 1.0.8
+    dotnet add package ZuraTDD --version 1.1.0
     ```
 1) Decorate a test class with `ZuraTestClass` attribute:
     ```cs

@@ -24,13 +24,13 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build project
-        run: dotnet build ZuraTDD --no-restore --configuration Release
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test --solution ZuraTDD.slnx --no-build --configuration Release --verbosity normal
+        run: dotnet test --no-build --configuration Release --verbosity normal
 
-      - name: Pack NuGet package
+      - name: Pack ZuraTDD NuGet
         run: dotnet pack ZuraTDD -c Release --no-build --output ./artifacts
 
       - name: NuGet OIDC

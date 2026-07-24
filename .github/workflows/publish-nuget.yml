@@ -36,5 +36,12 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack ZuraTDD -c Release --no-build --output ./artifacts
 
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: jakubiszon
+
       - name: Push package to NuGet.org
-        run: dotnet nuget push ./artifacts/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./artifacts/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{steps.login.outputs.NUGET_API_KEY}}

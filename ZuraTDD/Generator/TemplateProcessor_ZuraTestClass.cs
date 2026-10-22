@@ -32,17 +32,54 @@ internal partial class TemplateProcessor
 			using System;
 			using System.Collections.Generic;
 			using System.Threading;
+			using System.Linq;
 			using ZuraTDD;
+			using ZuraTDD.BuildingBlocks;
 			{{spec.TestSubject.DependenciesClass.DependencyUsingDirectives(spec.DecoratedClassNamespace)}}
 
 			namespace {{spec.DecoratedClassNamespace}};
 
 			/// <summary>
 			/// Partial implementation of ZuraTestClass class for <see cref="{{spec.TestSubject.TestSubjectClassName}}" />.
-			/// This file defines the Receives, When, and Expect builders.
+			/// This file defines the Receives, When, Expect builders and PrepareTestClass method.
 			/// </summary>
 			public partial class {{spec.DecoratedClassName}}
 			{
+				/// <summary>
+				/// Prepares the test subject instance together with a verify method which can be invoked
+				/// with expectations produced by the <c>Expect</c> builders.
+				/// </summary>
+				private static ({{spec.TestSubject.TestSubjectFullyQualifiedClassName}}, VerifyCallback) PrepareTestClass(params IDependencyConfiguration[] dependencyConfigurations)
+				{
+					var built = (dependencyConfigurations ?? Array.Empty<IDependencyConfiguration>())
+						.Select(dc => dc.Build())
+						.OfType<INamedDependencySetup>()
+						.ToArray();
+
+					var services = new {{spec.TestSubject.DependenciesClass.DependenciesFullyQualifiedName}}(built);
+
+					var subject = new {{spec.TestSubject.TestSubjectFullyQualifiedClassName}}({{string.Join(", ", spec.TestSubject.DependenciesClass.Dependencies.Select(d => "services." + d.DependencyPropertyName))}});
+
+					void VerifyImpl(params ExpectedMockedObjectMethodCall[] expectations)
+					{
+						var testResult = new TestResult<{{spec.TestSubject.DependenciesClass.DependenciesFullyQualifiedName}}, object?>(services, null, null);
+						foreach (var exp in expectations ?? Array.Empty<ExpectedMockedObjectMethodCall>())
+						{
+							if (exp is ITestResultExpectation ihe)
+							{
+								ihe.Verify(testResult);
+							}
+							else
+							{
+								// fallback: try to verify against the mocked object with the same name found in services
+								throw new ArgumentException("Expectation must be an ITestResultExpectation produced by the Expect builders.");
+							}
+						}
+					}
+
+					return (subject, VerifyImpl);
+				}
+
 				/// <summary>
 				/// A static class creating method calls for the tested object.
 				/// </summary>

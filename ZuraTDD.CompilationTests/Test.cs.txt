@@ -20,3 +20,14 @@ public interface IGenericSomething<T1, T2>
 public interface IMyStringCollection : IList<string>
 {
 }
+
+// the point of this class is to test if the constructor parameter generic types are correctly analysed
+// the models created to analyze constructor parameters should see IGenericConverter as using a generic type param and exposing a method using this param
+// despite the fact that from the point of view of this class - the generic type is known
+public class GenericConverterConsumer
+{
+	public GenericConverterConsumer(
+		IGenericConverter<long> converter)
+	{
+	}
+}

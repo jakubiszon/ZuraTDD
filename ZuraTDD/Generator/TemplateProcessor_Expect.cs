@@ -5,12 +5,16 @@ namespace ZuraTDD.Generator;
 
 internal partial class TemplateProcessor
 {
-	public static string MockedTypeExpectClassesCode(MockedTypeSpecification dependency)
+	public static string MockedTypeExpectClassesCode(MockedTypeSpecification mockedType)
 	{
-		var methods = dependency.Methods
-			.Select(method => Functions.ServiceBuilderMethodCode(dependency, method));
+		var methods = mockedType.Methods
+			.Select(method => Functions.ServiceBuilderMethodCode(mockedType, method));
 
 		var methodCode = string.Join("\n\n", methods);
+
+		var genericTypeParams = mockedType!.TypeInfo.GetMethodGenericTypeParametersString();
+		var genericParamConstraints = mockedType.TypeInfo.GetMethodGenericTypeParameterConstraints("\n\t")
+			.PrependNotEmpty("\n\t");
 
 		return
 			$$"""
@@ -19,36 +23,36 @@ internal partial class TemplateProcessor
 			using ZuraTDD;
 			using ZuraTDD.BuildingBlocks;
 			
-			namespace {{dependency.OutputNamespace}};
+			namespace {{mockedType.OutputNamespace}};
 
 			/// <summary>
-			/// An expectation setup object for <see cref="{{dependency.TypeInfo.TypeName}}" />.
+			/// An expectation setup object for <see cref="{{mockedType.TypeInfo.TypeName}}" />.
 			/// </summary>
-			internal class {{dependency.ExpectTypeName}}
-				: {{dependency.TypeInfo.TypeName}}_ExpectBuilder
+			internal class {{mockedType.ExpectTypeName}}{{genericTypeParams}}
+				: {{mockedType.TypeInfo.TypeName}}_ExpectBuilder{{genericTypeParams}}
 			{
-				public {{dependency.ExpectTypeName}}(
+				public {{mockedType.ExpectTypeName}}(
 					MockedObject existingFake)
 					: base(new ExpectedDependencyCallImmediateProcessor(existingFake))
 				{
 				}
 			}
 
-			internal class {{dependency.TypeInfo.TypeName}}_ExpectStaticBuilder
-				: {{dependency.TypeInfo.TypeName}}_ExpectBuilder
+			internal class {{mockedType.TypeInfo.TypeName}}_ExpectStaticBuilder{{genericTypeParams}}
+				: {{mockedType.TypeInfo.TypeName}}_ExpectBuilder{{genericTypeParams}}
 			{
-				public {{dependency.TypeInfo.TypeName}}_ExpectStaticBuilder(
+				public {{mockedType.TypeInfo.TypeName}}_ExpectStaticBuilder(
 					string dependencyName)
 					: base(new ExpectedDependencyCallNameProcessor(dependencyName))
 				{
 				}
 			}
 			
-			internal class {{dependency.TypeInfo.TypeName}}_ExpectBuilder
+			internal class {{mockedType.TypeInfo.TypeName}}_ExpectBuilder{{genericTypeParams}}
 			{
 				private IExpectedDependencyCallProcessor processor;
 
-				protected {{dependency.TypeInfo.TypeName}}_ExpectBuilder(
+				protected {{mockedType.TypeInfo.TypeName}}_ExpectBuilder(
 					IExpectedDependencyCallProcessor processor)
 				{
 					this.processor = processor;
@@ -62,6 +66,9 @@ internal partial class TemplateProcessor
 
 static file class Functions
 {
+	/// <summary>
+	/// Returns code which allows setting up expectations for calls to the specified method of the specified mocked type.
+	/// </summary>
 	public static string ServiceBuilderMethodCode(
 		MockedTypeSpecification service,
 		MethodSpecification method)

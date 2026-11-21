@@ -23,8 +23,9 @@ internal class MockedTypeSpecification
 	public MockedTypeSpecification(
 		IParameterSymbol param)
 	{
-		var namedType = param.Type as INamedTypeSymbol
-			?? param.Type.OriginalDefinition as INamedTypeSymbol;
+		// TODO: perhaps it should be the caller who should pass OriginalDefinition instead of the param
+		var namedType = param.Type.OriginalDefinition as INamedTypeSymbol
+			?? param.Type as INamedTypeSymbol;
 
 		TypeInfo = namedType != null
 			? new TypeInfo(namedType)

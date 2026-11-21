@@ -43,13 +43,15 @@ Check out the [repository](https://github.com/jakubiszon/ZuraTDD) on GitHub.
         // Receives builder is auto-generated, use it to tell what method to test
         Receives.CreateTodo(payload: new TodoModel(...)),
 
-        // When builder is used to tell how do dependencies behave
+        // When builder is used to define dependency behaviors
         When.TodoRepository.Exists() // skipping parameters will match any call to .Exists()
             .ReturnsInTask(false),
 
         When.TodoRepository.Insert() // skipping params, matching any call to .Insert()
             .Returns(Task.CompletedTask),
 
+        // Expect builder is used to specify expectations for dependency interactions
+        // as well as the result of the tested metho
         Expect.ResultMatching<StatusCodeResult>(result => result.StatusCode == 201),
     ];
     ```

@@ -31,7 +31,7 @@ internal partial class TemplateProcessor
 			/// Instance builder of <see cref="{{mockedType.TypeInfo.FullyQualifiedGenericTypeName}}" />.
 			/// </summary>
 			internal class {{mockedType.BuilderTypeName}}{{genericTypeParams}}
-				: {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder
+				: {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder{{genericTypeParams}}
 				, IBuild<{{mockedType.MockedFakeTypeName}}{{genericTypeParams}}>{{genericParamConstraints}}
 			{
 				public {{mockedType.BuilderTypeName}}()
@@ -53,8 +53,8 @@ internal partial class TemplateProcessor
 			/// <summary>
 			/// Abstract builder of <see cref="{{mockedType.TypeInfo.FullyQualifiedTypeName}}" />.
 			/// </summary>
-			internal abstract class {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder
-				: MockedObjectBuilder
+			internal abstract class {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder{{genericTypeParams}}
+				: MockedObjectBuilder{{genericParamConstraints}}
 			{
 				public {{mockedType.TypeInfo.TypeName}}_BehaviorBuilder(
 					IBehaviorSetupProcessor behaviorSetupProcessor)
@@ -90,7 +90,7 @@ internal partial class TemplateProcessor
 
 			namespace {{dependency.OutputNamespace}};
 
-			internal class {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} : {{dependency.DependencyType.TypeName}}_BehaviorBuilder{{genericParamConstraints}}
+			internal class {{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} : {{dependency.DependencyType.TypeName}}_BehaviorBuilder{{genericTypeParams}}{{genericParamConstraints}}
 			{
 				private readonly string dependencyName;
 

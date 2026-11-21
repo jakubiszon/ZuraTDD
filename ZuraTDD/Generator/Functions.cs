@@ -57,7 +57,7 @@ internal static class Functions
 	}
 
 	/// <summary>
-	/// Returns the <see langword="where" /> clases for all generic type parameters of the method.
+	/// Returns the <see langword="where" /> constraints for all generic type parameters of the method.
 	/// </summary>
 	public static string GetMethodGenericTypeParameterConstraints(this IUseGenericTypeParameters genericCodeBlock, string indentation = "\n\t\t")
 	{

@@ -38,7 +38,7 @@ internal partial class TemplateProcessor
 				{
 				}
 
-				public {{mockedType.ExpectTypeName}} GetExpectObject()
+				public {{mockedType.ExpectTypeName}}{{genericTypeParams}} GetExpectObject()
 				{
 					return new(this);
 				}

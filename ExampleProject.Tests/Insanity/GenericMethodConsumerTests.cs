@@ -1,7 +1,7 @@
 using ExampleProject.Insanity;
 using ZuraTDD;
 
-namespace ExampleProject.Tests;
+namespace ExampleProject.Tests.Insanity;
 
 [TestClass]
 [ZuraTestClass<GenericMethodConsumer>]

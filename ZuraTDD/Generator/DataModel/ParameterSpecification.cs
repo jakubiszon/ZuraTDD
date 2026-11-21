@@ -14,8 +14,6 @@ internal class ParameterSpecification
 
 	public string Type { get; }
 
-	public string FullyQualifiedTypeName { get; }
-
 	/// <summary>
 	/// Specifies whether the type of the parameter is a reference type.
 	/// </summary>
@@ -31,11 +29,12 @@ internal class ParameterSpecification
 
 	public ParameterSpecification(IParameterSymbol parameterSymbol)
 	{
-		Type = parameterSymbol.Type.ToDisplayString();
-		FullyQualifiedTypeName = Type == "void"
-			? "void"
-			: parameterSymbol.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+		Type = parameterSymbol.Type is ITypeParameterSymbol typeParam
+			? typeParam.Name
+			: parameterSymbol.Type.ToDisplayString();
+
 		Name = parameterSymbol.Name;
+
 		TypeOfOperatorTypeName = parameterSymbol.Type.ToDisplayString(TypeOfFormat);
 		IsReferenceType = parameterSymbol.Type.IsReferenceType;
 	}

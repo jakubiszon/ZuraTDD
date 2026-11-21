@@ -131,7 +131,7 @@ static file class ZuraTestClassFunctions
 	{
 		if (dependency.IsMockable)
 		{
-			var genericTypeParams = (0 < dependency.AppliedTypeParamNames.Count)
+			var genericTypeArgments = (0 < dependency.AppliedTypeParamNames.Count)
 				? $"<{string.Join(", ", dependency.AppliedTypeParamNames)}>"
 				: string.Empty;
 
@@ -141,8 +141,8 @@ static file class ZuraTestClassFunctions
 						/// A builder producing behaviors for <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
 						/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 						/// </summary>
-						internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}} {{dependency.DependencyPropertyName}}
-							=> new {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeParams}}("{{dependency.DependencyPropertyName}}");
+						internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeArgments}} {{dependency.DependencyPropertyName}}
+							=> new {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_NamedInstanceBuilder{{genericTypeArgments}}("{{dependency.DependencyPropertyName}}");
 				""";
 		}
 		else
@@ -159,16 +159,20 @@ static file class ZuraTestClassFunctions
 		}
 	}
 
-	public static string DependencyExpectCode(DependencySpecification mockedDependency)
+	public static string DependencyExpectCode(DependencySpecification dependency)
 	{
+			var genericTypeArgments = (0 < dependency.AppliedTypeParamNames.Count)
+				? $"<{string.Join(", ", dependency.AppliedTypeParamNames)}>"
+				: string.Empty;
+
 		return
 			$$"""
 					/// <summary>
-					/// A builder producing expectations for <see cref="{{mockedDependency.DeclaringNamespace}}.{{mockedDependency.DependencyType.TypeName}}" />
-					/// which will be passed as "{{mockedDependency.DependencyPropertyName}}" to the test subject.
+					/// A builder producing expectations for <see cref="{{dependency.DeclaringNamespace}}.{{dependency.DependencyType.TypeName}}" />
+					/// which will be passed as "{{dependency.DependencyPropertyName}}" to the test subject.
 					/// </summary>
-					internal static {{mockedDependency.OutputNamespace}}.{{mockedDependency.DependencyType.TypeName}}_ExpectStaticBuilder {{mockedDependency.DependencyPropertyName}}
-						=> new("{{mockedDependency.DependencyPropertyName}}");
+					internal static {{dependency.OutputNamespace}}.{{dependency.DependencyType.TypeName}}_ExpectStaticBuilder{{genericTypeArgments}} {{dependency.DependencyPropertyName}}
+						=> new("{{dependency.DependencyPropertyName}}");
 			""";
 	}
 }

@@ -41,7 +41,7 @@ static file class Functions
 	public static string MockedObjectMethodToken(
 		MethodSpecification method)
 	{
-		return method.GenericTypeParameters.Count == 0
+		return method.GenericTypeParameters.Count == 0 && method.DefiningType.GenericTypeParameters.Count == 0
 			? $$"""
 				public static readonly ZuraMethodInfo {{method.MethodCodeName}} = typeof({{method.DefiningType.FullyQualifiedTypeName}}).GetMethod(
 					"{{method.MethodName}}",

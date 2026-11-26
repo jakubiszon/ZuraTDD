@@ -11,4 +11,14 @@ public class GenericDependencyConsumer
 	{
 		this.genericDependency = genericDependency;
 	}
+
+	public int AddItemsAndReturnSumFromDependency(params int[] numbers)
+	{
+		foreach (int i in numbers)
+			genericDependency.AddItem(i);
+
+		return genericDependency
+			.GetItems()
+			.Sum();
+	}
 }
